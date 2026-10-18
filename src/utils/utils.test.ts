@@ -315,6 +315,11 @@ describe("parseParameterReference", () => {
     expect(result).toEqual({ codexId: CodexId("wheel"), index: 15 });
   });
 
+  it("should drop an index too large to hold exactly", () => {
+    const result = parseParameterReference("wheel[9007199254740992]");
+    expect(result).toEqual({ codexId: CodexId("wheel") });
+  });
+
   it("should handle parameter IDs with hyphens", () => {
     const result = parseParameterReference("my-param[2]");
     expect(result).toEqual({ codexId: CodexId("my-param"), index: 2 });

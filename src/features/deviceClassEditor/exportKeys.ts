@@ -125,6 +125,10 @@ function deriveName(
       const codexId = document.commands[entityId]?.codexId;
       return codexId ? `command_${codexId}` : undefined;
     }
+    case "structure3DNodes": {
+      const codexId = document.structure3DNodes[entityId]?.codexId;
+      return codexId ? `node_${codexId}` : undefined;
+    }
     case "enumChoices":
       return enumChoiceName(document, entityId, field);
     default:

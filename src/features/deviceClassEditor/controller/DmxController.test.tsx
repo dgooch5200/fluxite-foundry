@@ -1,7 +1,7 @@
 /**
  * @jest-environment happy-dom
  */
-import { render, screen, within } from "test/render";
+import { render, renderHook, screen, within } from "test/render";
 import userEvent from "@testing-library/user-event";
 import { expect, test, vi, beforeEach } from "vitest";
 import { DriverParamValue } from "@cpwg-community/delver";
@@ -17,6 +17,7 @@ import { updateAppPersistentState } from "app/store";
 import { resetAllStores } from "test/utils";
 import { MappableParameter } from "../dmxEditor/state";
 import { DmxController } from "./DmxController";
+import { useDmxParamStates } from "./state";
 
 vi.mock("../dmxEditor/state", () => ({
   useDmxController: vi.fn(),
@@ -102,8 +103,8 @@ function setUpController(params: TestParam[]) {
     driver: driver as never,
   });
 
-  render(<DmxController />);
-  return { driver, user: userEvent.setup() };
+  const { unmount } = render(<DmxController />);
+  return { driver, unmount, user: userEvent.setup() };
 }
 
 const PAN: TestParam = {
@@ -384,4 +385,29 @@ test("Switches the layout between horizontal and vertical", async () => {
   expect(
     screen.getByRole("button", { name: "Split Horizontal" }),
   ).toBeInTheDocument();
+});
+
+test("Shares its parameter states while it is on screen", async () => {
+  const { unmount, user } = setUpController([PAN, SHUTTER]);
+  const { result } = renderHook(() => useDmxParamStates());
+
+  expect(result.current?.pan.value).toEqual({ type: "numeric", value: 0 });
+
+  await user.click(screen.getByRole("switch", { name: "Shutter" }));
+  expect(result.current?.shutter.value).toEqual({ type: "bool", value: true });
+
+  unmount();
+  expect(result.current).toBeUndefined();
+});
+
+test("Keeps sharing its parameter states while another of its tabs is open", () => {
+  const { unmount } = setUpController([PAN]);
+  const other = render(<DmxController />);
+  const { result } = renderHook(() => useDmxParamStates());
+
+  unmount();
+  expect(result.current?.pan).toBeDefined();
+
+  other.unmount();
+  expect(result.current).toBeUndefined();
 });

@@ -10,6 +10,7 @@ import {
   DmxUnmappedParam,
   EntityId,
   fcDataTypes,
+  Parameter,
   ParameterReference,
 } from "app/persistentState";
 import { StringSelector } from "components/StringSelector";
@@ -50,11 +51,7 @@ import {
   getEffectiveEnd,
   normalizeEndValue,
 } from "./mappingUtils";
-import {
-  MappableDataType,
-  MappableParameter,
-  useMappableParameters,
-} from "./state";
+import { MappableParameter, useMappableParameters } from "./state";
 
 const MESSAGES = {
   addRange: msg({
@@ -260,8 +257,7 @@ export const DmxParameterMapping = ({
     const firstCandidate = unmappedParameterCandidates[0];
     const newParam = getNewUnmappedParam(
       firstCandidate.ref,
-      firstCandidate.mappable.paramClass.dataType,
-      firstCandidate.mappable.enumChoices,
+      firstCandidate.mappable,
     );
     onUpdate({
       ...mapping,
@@ -415,7 +411,7 @@ export const DmxParameterMapping = ({
         <MappingRangeEditorDialog
           isOpen={isAddingRange}
           onClose={() => setIsAddingRange(false)}
-          range={getNewRange(dataType, enumChoices)}
+          range={getNewRange(mappedParamMappable)}
           onSave={(newRange) => {
             onUpdate({
               ...mapping,
@@ -474,11 +470,21 @@ const RangeCard = ({
   );
 };
 
-function getNewRange(
-  dataType: MappableDataType,
-  enumChoices: EffectiveEnumChoice[],
-): DmxMappingRange {
-  switch (dataType) {
+// A number parameter's own minimum and maximum, so that what's new covers the
+// parameter's whole range.
+function numberBounds(param: Parameter): { start: number; end: number } {
+  return {
+    start: typeof param.minimum === "number" ? param.minimum : 0,
+    end: typeof param.maximum === "number" ? param.maximum : 1,
+  };
+}
+
+function getNewRange({
+  param,
+  paramClass,
+  enumChoices,
+}: MappableParameter): DmxMappingRange {
+  switch (paramClass.dataType) {
     case "boolean":
       return {
         start: false,
@@ -504,8 +510,7 @@ function getNewRange(
     case "number":
     default:
       return {
-        start: 0,
-        end: 1,
+        ...numberBounds(param),
         chunkValues: {
           type: "range",
           chunkStart: 0,
@@ -845,10 +850,9 @@ const UnmappedParameterTableRowEnum = ({
 
 function getNewUnmappedParam(
   param: ParameterReference,
-  dataType: string,
-  enumChoices: EffectiveEnumChoice[],
+  mappable: MappableParameter,
 ): DmxUnmappedParam {
-  switch (dataType) {
+  switch (mappable.paramClass.dataType) {
     case fcDataTypes.BOOLEAN:
       return {
         parameter: param,
@@ -856,7 +860,8 @@ function getNewUnmappedParam(
         end: true,
       };
     case fcDataTypes.ENUM: {
-      const lastIndex = enumChoices.length > 0 ? enumChoices.length - 1 : 0;
+      const lastIndex =
+        mappable.enumChoices.length > 0 ? mappable.enumChoices.length - 1 : 0;
       return {
         parameter: param,
         start: 0,
@@ -867,8 +872,7 @@ function getNewUnmappedParam(
     default:
       return {
         parameter: param,
-        start: 0,
-        end: 1,
+        ...numberBounds(mappable.param),
       };
   }
 }
@@ -886,11 +890,7 @@ function replaceUnmappedParam(
     ...mapping,
     unmappedParams: [
       ...mapping.unmappedParams!.slice(0, paramIndex),
-      getNewUnmappedParam(
-        resolved.ref,
-        resolved.mappable.paramClass.dataType,
-        resolved.mappable.enumChoices,
-      ),
+      getNewUnmappedParam(resolved.ref, resolved.mappable),
       ...mapping.unmappedParams!.slice(paramIndex + 1),
     ],
   };

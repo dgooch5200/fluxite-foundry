@@ -33,8 +33,10 @@ import {
   LocalizationKey,
   ParameterCountSchema,
   ParameterReference,
+  Structure3DControl,
 } from "app/persistentState";
 import { select, selectWithIds } from "app/stateUtils";
+import { serializeParameterReference } from "utils/utils";
 import { buildExportKeys, ExportKeys } from "./exportKeys";
 import {
   classReferenceCodexId,
@@ -48,6 +50,11 @@ import {
 import { z } from "zod";
 
 type InternalParameterCount = z.infer<typeof ParameterCountSchema>;
+
+// The E1.73-4 motion library, which defines the structure-3d structure class
+// and the 3d-model resource class.
+export const MOTION_LIBRARY = "org.esta.lib.motion";
+export const STRUCTURE_3D_CLASS = "structure-3d";
 
 function convertParamReference(
   editor: DeviceClassDocument,
@@ -167,6 +174,7 @@ export function exportDeviceClass(editor: DeviceClassDocument): DeviceClass {
   exportParameters(editor, codexClass, keys);
   exportResources(editor, codexClass);
   exportCommands(editor, codexClass, keys);
+  exportStructure3D(editor, codexClass, keys);
   exportDmxSerializer(editor, codexClass);
 
   return codexClass;
@@ -721,6 +729,101 @@ function exportCommands(
 
     codexClass.commands[cmd.codexId] = exportedCmd;
   }
+}
+
+function exportStructure3D(
+  editor: DeviceClassDocument,
+  codexClass: DeviceClass,
+  keys: ExportKeys,
+) {
+  const structure = editor.structure3D;
+  if (!structure) {
+    return;
+  }
+
+  codexClass.structures ??= {};
+  codexClass.structures[structure.codexId] = {
+    type: "Other",
+    value: {
+      library: MOTION_LIBRARY,
+      class: STRUCTURE_3D_CLASS,
+      access: structure.access as Access[],
+      lifetime: structure.lifetime as Lifetime,
+      default: {
+        nodes: exportStructure3DNodes(editor, structure.rootNodes, keys),
+      },
+    },
+  };
+}
+
+function exportStructure3DNodes(
+  editor: DeviceClassDocument,
+  nodeIds: EntityId[],
+  keys: ExportKeys,
+): Record<string, object> {
+  const nodes: Record<string, object> = {};
+
+  for (const nodeId of nodeIds) {
+    const node = editor.structure3DNodes[nodeId];
+    // A dangling child id has nothing to write.
+    if (!node) {
+      continue;
+    }
+    if (node.codexId in nodes) {
+      throw new Error(`Duplicate structure 3D node ID: ${node.codexId}`);
+    }
+
+    const { transform, visual } = node;
+    nodes[node.codexId] = {
+      "@friendlyName": keys.of(node.localized.friendlyName),
+      accessoryLocation: node.accessoryLocation,
+      ...(transform.type === "trs"
+        ? { translate: transform.translate, rotate: transform.rotate }
+        : { matrix: transform.matrix }),
+      control:
+        node.controls.length > 0
+          ? node.controls.map((control) =>
+              exportStructure3DControl(editor, control),
+            )
+          : undefined,
+      model: visual
+        ? {
+            visual: {
+              [visual.quality]:
+                editor.resources[visual.resource]?.codexId ??
+                entityIdAsCodexId(visual.resource),
+              nodeOrSceneName: visual.nodeOrSceneName,
+            },
+          }
+        : undefined,
+      nodes:
+        node.children.length > 0
+          ? exportStructure3DNodes(editor, node.children, keys)
+          : undefined,
+    };
+  }
+
+  return nodes;
+}
+
+function exportStructure3DControl(
+  editor: DeviceClassDocument,
+  control: Structure3DControl,
+): object {
+  const { target } = control;
+  return {
+    type: control.type,
+    axis: control.axis,
+    commonAxis: control.commonAxis,
+    ...(target.type === "parameter"
+      ? {
+          parameter: serializeParameterReference({
+            codexId: parameterCurrentCodexId(editor, target.parameter),
+            index: target.parameter.index,
+          }),
+        }
+      : { controlGroups: target.controlGroups }),
+  };
 }
 
 function exportDmxSerializer(

@@ -22,6 +22,7 @@ import {
 } from "components/scn-ui/Tooltip";
 import { SmallIconButton } from "components/SmallIconButton";
 import { Alert } from "components/scn-ui/Alert";
+import { getFileExtension } from "./state";
 
 const MESSAGES = {
   size: msg({ id: "deviceClassEditor.resourceDefault.size", message: "Size" }),
@@ -106,7 +107,7 @@ export const ResourceDefaultValue = ({
       return;
     }
 
-    if (!acceptsMediaType(file.type, mediaType)) {
+    if (!acceptsMediaType(file, mediaType)) {
       toast(
         _({
           ...MESSAGES.wrongType,
@@ -379,22 +380,32 @@ const OpaqueDataWidget = ({ id }: WidgetInteriorProps) => {
 function getAcceptedMediaType(mediaType?: string): string | undefined {
   if (!mediaType || mediaType === "application/octet-stream") {
     return undefined;
-  } else {
-    return mediaType;
   }
+  // The extension too, so pickers that don't know the media type (e.g. glTF)
+  // still offer the file.
+  const extension = getFileExtension(mediaType);
+  return extension ? `${mediaType},.${extension}` : mediaType;
 }
 
-function acceptsMediaType(
-  receivedType: string,
-  expectedType?: string,
-): boolean {
+/**
+ * Whether a selected file may be used as the value of a resource with the
+ * expected media type. Browsers report files they don't recognize, such as glTF
+ * models, as untyped or as generic binary, so those are matched on their
+ * extension.
+ */
+export function acceptsMediaType(file: File, expectedType?: string): boolean {
   if (
     !expectedType ||
-    expectedType === receivedType ||
+    expectedType === file.type ||
     expectedType === "application/octet-stream"
   ) {
     return true;
   }
 
-  return false;
+  const extension = getFileExtension(expectedType);
+  return (
+    (file.type === "" || file.type === "application/octet-stream") &&
+    extension !== null &&
+    file.name.toLowerCase().endsWith(`.${extension}`)
+  );
 }

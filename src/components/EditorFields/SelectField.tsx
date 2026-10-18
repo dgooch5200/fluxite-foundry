@@ -8,6 +8,11 @@ import {
 } from "components/scn-ui/Select";
 import { cn } from "utils/utils";
 
+// Radix reserves the empty string for "nothing selected", so an empty value
+// (such as a broken reference) is offered under this one instead.
+const EMPTY_VALUE = "\u0000empty";
+const itemValue = (value: string) => (value === "" ? EMPTY_VALUE : value);
+
 interface SelectFieldProps {
   values: string[];
   displayValues?: string[];
@@ -25,8 +30,10 @@ export const SelectField = ({
 }: SelectFieldProps & ComponentProps<typeof SelectTrigger>) => {
   return (
     <Select
-      onValueChange={(newValue) => onSelectionChanged(newValue)}
-      value={selectedValue}
+      onValueChange={(newValue) =>
+        onSelectionChanged(newValue === EMPTY_VALUE ? "" : newValue)
+      }
+      value={selectedValue === undefined ? undefined : itemValue(selectedValue)}
     >
       <SelectTrigger className={cn("w-xs bg-background", className)} {...props}>
         <SelectValue />
@@ -34,7 +41,7 @@ export const SelectField = ({
       <SelectContent>
         {values.map((value, index) => {
           return (
-            <SelectItem key={index} value={value}>
+            <SelectItem key={index} value={itemValue(value)}>
               {displayValues && index < displayValues.length
                 ? displayValues[index]
                 : value}

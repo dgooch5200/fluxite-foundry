@@ -70,6 +70,7 @@ export function resetAppRuntimeStore() {
   useAppRuntimeStore.setState(
     {
       dmxControllers: {},
+      dmxParamStates: {},
       sacnOutput: { settings: {} },
       dmxControllerLayouts: {},
       libraries: loadDefaultLibraries(),
@@ -135,6 +136,7 @@ export function createEmptyDeviceClassEditor() {
     commandClassArguments: {},
     commandClassReturnValues: {},
     enumChoices: {},
+    structure3DNodes: {},
     localizations: {
       [descriptionKey]: {
         strings: LocalizationDbSchema.parse({ "en-US": "Test description" }),

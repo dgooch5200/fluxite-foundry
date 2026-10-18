@@ -16,6 +16,8 @@ import {
   getDefaultWindowLayout,
   getUniqueItemId,
   OrgId,
+  parseParameterReference,
+  wrapDegrees,
 } from "utils/utils";
 import {
   importDocumentLocalizations,
@@ -49,10 +51,20 @@ import {
   LocalizationKey,
   Resource,
   ParameterCount,
+  structure3DAxes,
+  structure3DCommonAxes,
+  Structure3DControl,
+  Structure3DControlTarget,
+  structure3DControlTypes,
+  structure3DModelQualities,
+  Structure3DTransform,
+  Structure3DVisual,
+  Vec3,
 } from "app/persistentState";
 import { getDefaultDeviceClass } from "codex/codex";
 import { emptyLibraryIndex, importClasses, LibraryIndex } from "codex/library";
 import { assetStorage } from "app/assetStorage";
+import { STRUCTURE_3D_CLASS, MOTION_LIBRARY } from "./export";
 
 export interface ArchiveToImport {
   archiveFile: File;
@@ -170,6 +182,7 @@ export function getImportedDeviceClassEditor(
     commandClassArguments: {},
     commandClassReturnValues: {},
     enumChoices: {},
+    structure3DNodes: {},
     localizations,
     sourceLocale,
   };
@@ -188,6 +201,7 @@ export function getImportedDeviceClassEditor(
   importParameters(codexClass, editor, deviceLibraryIndex, locKeys);
   importResources(codexClass, editor, deviceLibraryIndex);
   importCommands(codexClass, editor, deviceLibraryIndex, locKeys);
+  importStructure3D(codexClass, editor, locKeys);
 
   if (dmx) {
     editor.dmxSerializer = convertEstaDmxToEditorState(editor, dmx);
@@ -432,6 +446,215 @@ function importCommands(
     editor.commands[cmdId] = newCmd;
     editor.commandEditors.push(cmdId);
   }
+}
+
+// ---------------------------------------------------------------------------
+// Structure 3D
+// ---------------------------------------------------------------------------
+
+// delver does not look inside a structure's content, so the structure-3d
+// fields arrive as unvalidated JSON. Each is checked as it is read and dropped
+// if malformed, because a document that fails the state schema fails
+// rehydration.
+
+type JsonObject = Record<string, unknown>;
+
+function isJsonObject(value: unknown): value is JsonObject {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function asString(value: unknown): string | undefined {
+  return typeof value === "string" ? value : undefined;
+}
+
+function isNumberArray(value: unknown): value is number[] {
+  return Array.isArray(value) && value.every((n) => typeof n === "number");
+}
+
+function asVec3(value: unknown): Vec3 | undefined {
+  return isNumberArray(value) && value.length === 3
+    ? [value[0], value[1], value[2]]
+    : undefined;
+}
+
+function isOneOf<T extends string>(
+  values: Record<string, T>,
+  value: unknown,
+): value is T {
+  return (Object.values(values) as unknown[]).includes(value);
+}
+
+function importStructure3D(
+  imported: DeviceClass,
+  editor: DeviceClassDocument,
+  locKeys: ImportedLocalizationKeys,
+) {
+  // structure-3d is not multipleAllowed, so only the first is kept.
+  const entry = Object.entries(imported.structures ?? {}).find(
+    ([, structure]) =>
+      structure.type === "Other" &&
+      structure.value.library === MOTION_LIBRARY &&
+      structure.value.class === STRUCTURE_3D_CLASS,
+  );
+  if (!entry || entry[1].type !== "Other") {
+    return;
+  }
+  const [codexId, { value: structure }] = entry;
+
+  const resourceIds = new Map(
+    Object.entries(editor.resources).map(([id, resource]) => [
+      resource.codexId as string,
+      EntityId(id),
+    ]),
+  );
+
+  // Flattens a `nodes` map into the node table, parents before children.
+  function importNodes(
+    nodes: unknown,
+    parent: EntityId | undefined,
+  ): EntityId[] {
+    if (!isJsonObject(nodes)) {
+      return [];
+    }
+
+    return Object.entries(nodes).flatMap(([nodeCodexId, node]) => {
+      if (!isJsonObject(node)) {
+        return [];
+      }
+
+      const id = newEntityId();
+      editor.structure3DNodes[id] = {
+        codexId: CodexId(nodeCodexId),
+        parent,
+        children: [],
+        transform: importTransform(node),
+        accessoryLocation: asString(node.accessoryLocation),
+        controls: importControls(editor, node.control),
+        visual: importVisual(node.model, resourceIds),
+        localized: {
+          friendlyName: locKeys.of(asString(node["@friendlyName"])),
+        },
+      };
+      editor.structure3DNodes[id].children = importNodes(node.nodes, id);
+      return [id];
+    });
+  }
+
+  editor.structure3D = {
+    codexId: CodexId(codexId),
+    access: structure.access,
+    lifetime: structure.lifetime,
+    rootNodes: importNodes(structure.default.nodes, undefined),
+  };
+}
+
+function importTransform(node: JsonObject): Structure3DTransform {
+  // A node giving both a matrix and translate/rotate is invalid. The matrix
+  // wins, being the whole transform.
+  if (
+    isNumberArray(node.matrix) &&
+    node.matrix.length >= 12 &&
+    node.matrix.length <= 16
+  ) {
+    return { type: "matrix", matrix: node.matrix };
+  }
+
+  const rotate = asVec3(node.rotate);
+  return {
+    type: "trs",
+    translate: asVec3(node.translate),
+    rotate: rotate?.map(wrapDegrees) as Vec3 | undefined,
+  };
+}
+
+function importControls(
+  editor: DeviceClassDocument,
+  control: unknown,
+): Structure3DControl[] {
+  // The schema says an array, but some files (the MAC Encore example among
+  // them) give a single control as a bare object.
+  const controls = Array.isArray(control)
+    ? control
+    : control === undefined
+      ? []
+      : [control];
+
+  return controls.flatMap((c) =>
+    isJsonObject(c) &&
+    isOneOf(structure3DControlTypes, c.type) &&
+    isOneOf(structure3DAxes, c.axis)
+      ? [
+          {
+            type: c.type,
+            axis: c.axis,
+            commonAxis: isOneOf(structure3DCommonAxes, c.commonAxis)
+              ? c.commonAxis
+              : undefined,
+            target: importControlTarget(editor, c),
+          },
+        ]
+      : [],
+  );
+}
+
+function importControlTarget(
+  editor: DeviceClassDocument,
+  control: JsonObject,
+): Structure3DControlTarget {
+  const parameter = asString(control.parameter);
+  const controlGroups = control.controlGroups;
+  if (
+    parameter === undefined &&
+    Array.isArray(controlGroups) &&
+    controlGroups.every((path) => typeof path === "string")
+  ) {
+    return { type: "controlGroups", controlGroups };
+  }
+
+  // A control naming neither a parameter nor control groups is kept as a
+  // broken parameter reference rather than dropped, so that its type and axes
+  // survive and the editor shows it as needing a parameter.
+  const ref = parseParameterReference(parameter ?? "");
+  return {
+    type: "parameter",
+    parameter: toEditorParameterReference(editor, ref.codexId, ref.index),
+  };
+}
+
+// The schema allows one quality per node, so a node giving several keeps the
+// best.
+const QUALITIES_BEST_FIRST = [
+  structure3DModelQualities.HIGH,
+  structure3DModelQualities.MEDIUM,
+  structure3DModelQualities.LOW,
+];
+
+function importVisual(
+  model: unknown,
+  resourceIds: Map<string, EntityId>,
+): Structure3DVisual | undefined {
+  // `model.bounds` is not imported. The draft-2027-1 schema nests `extents`
+  // inside `center` while also requiring it beside `center`, so no bounds
+  // value can validate, and export must follow the schema.
+  const visual = isJsonObject(model) ? model.visual : undefined;
+  if (!isJsonObject(visual)) {
+    return undefined;
+  }
+
+  const quality = QUALITIES_BEST_FIRST.find(
+    (q) => typeof visual[q] === "string",
+  );
+  if (!quality) {
+    return undefined;
+  }
+
+  const resourceCodexId = visual[quality] as string;
+  return {
+    quality,
+    resource:
+      resourceIds.get(resourceCodexId) ?? codexIdAsEntityId(resourceCodexId),
+    nodeOrSceneName: asString(visual.nodeOrSceneName),
+  };
 }
 
 // Resolves a codexId the document uses to reference one of its own classes to

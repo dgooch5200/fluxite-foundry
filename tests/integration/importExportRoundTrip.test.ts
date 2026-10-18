@@ -22,6 +22,7 @@ interface RoundTripTestCase {
   qualifiedId: string;
   version: string;
   allowValidationErrors?: boolean;
+  ignoreStructures?: boolean;
 }
 
 // Add new test cases here to extend testing
@@ -31,6 +32,16 @@ const testCases: RoundTripTestCase[] = [
     filePath:
       "src/e173/examples/draft-2027-1/device-classes/martin_mac_encore_performance_cld.fcd",
     qualifiedId: "com.martin.dev.encore-performance-cold",
+    version: "1.0.0",
+    // Its structure-3d breaks the schema (a control given as an object,
+    // bounds, several model qualities per node), so import normalizes it and
+    // it cannot come back unchanged.
+    ignoreStructures: true,
+  },
+  {
+    name: "Movable",
+    filePath: "src/e173/examples/draft-2027-1/device-classes/movable.fcd",
+    qualifiedId: "com.example.dev.movable",
     version: "1.0.0",
   },
   {
@@ -84,6 +95,9 @@ function normalizeDmxChunkIds(deviceClass: DeviceClass): DeviceClass {
         ...serializer,
         value: {
           ...serializer.value,
+          // The editor does not store the DMX serializer's lifetime yet, and
+          // always exports it as static.
+          lifetime: "static",
           default: normalizeEstaDmx(serializer.value.default),
         },
       };
@@ -158,9 +172,26 @@ function normalizeCondition(
 
 // Fields not currently imported/exported by the editor
 const IGNORED_FIELDS = new Set([
-  "structures", // physical structure visualization
   "categories", // localization categories added by parseFluxiteCodexDocument but not used
 ]);
+
+// Of the structures, the editor imports only structure-3d, so the others (e.g.
+// constraints) are left out of the comparison.
+function keepComparedStructures(
+  deviceClass: DeviceClass,
+  ignoreStructures: boolean,
+): DeviceClass {
+  const { structures, ...rest } = deviceClass;
+  const compared = Object.entries(structures ?? {}).filter(
+    ([, structure]) =>
+      !ignoreStructures &&
+      structure.type === "Other" &&
+      structure.value.class === "structure-3d",
+  );
+  return compared.length > 0
+    ? { ...rest, structures: Object.fromEntries(compared) }
+    : rest;
+}
 
 function removeIgnoredFields(obj: unknown): unknown {
   if (obj === null || obj === undefined) {
@@ -187,8 +218,19 @@ function removeIgnoredFields(obj: unknown): unknown {
   return obj;
 }
 
-function normalizeForComparison(deviceClass: DeviceClass): unknown {
-  const withNormalizedDmx = normalizeDmxChunkIds(deviceClass);
+function normalizeForComparison(
+  deviceClass: DeviceClass,
+  ignoreStructures: boolean,
+): unknown {
+  const withNormalizedDmx = normalizeDmxChunkIds(
+    keepComparedStructures(deviceClass, ignoreStructures),
+  );
+  // The editor does not tell an absent compatibility from an empty one, and
+  // always exports one.
+  withNormalizedDmx.info = {
+    ...withNormalizedDmx.info,
+    compatibility: withNormalizedDmx.info.compatibility ?? {},
+  };
   let result: unknown = withNormalizedDmx;
   result = removeUndefined(result);
   result = removeIgnoredFields(result);
@@ -198,9 +240,10 @@ function normalizeForComparison(deviceClass: DeviceClass): unknown {
 function compareDeviceClasses(
   original: DeviceClass,
   exported: DeviceClass,
+  ignoreStructures: boolean,
 ): void {
-  const normalizedOriginal = normalizeForComparison(original);
-  const normalizedExported = normalizeForComparison(exported);
+  const normalizedOriginal = normalizeForComparison(original, ignoreStructures);
+  const normalizedExported = normalizeForComparison(exported, ignoreStructures);
   expect(normalizedExported).toEqual(normalizedOriginal);
 }
 
@@ -265,7 +308,11 @@ describe("Import/Export Round Trip", () => {
 
       const exported = exportDeviceClass(editorState);
 
-      compareDeviceClasses(original, exported);
+      compareDeviceClasses(
+        original,
+        exported,
+        testCase.ignoreStructures ?? false,
+      );
     });
   });
 });

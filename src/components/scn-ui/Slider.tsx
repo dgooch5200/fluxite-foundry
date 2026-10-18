@@ -3,9 +3,9 @@ import * as SliderPrimitive from "@radix-ui/react-slider";
 
 import { cn } from "utils/utils";
 
-// Changed from the original to give the thumbs the slider's aria-label, since
-// the thumb is the element with the slider role and Radix does not pass the
-// root's label down to it.
+// Changed from the original to give the thumbs the slider's aria-label and
+// disabled state, since the thumb is the element with the slider role and Radix
+// does not pass the root's label or aria-disabled down to it.
 function Slider({
   className,
   defaultValue,
@@ -13,6 +13,7 @@ function Slider({
   min = 0,
   max = 100,
   "aria-label": ariaLabel,
+  disabled,
   ...props
 }: React.ComponentProps<typeof SliderPrimitive.Root>) {
   const _values = React.useMemo(
@@ -32,6 +33,7 @@ function Slider({
       value={value}
       min={min}
       max={max}
+      disabled={disabled}
       className={cn(
         "relative flex w-full touch-none items-center select-none data-[disabled]:opacity-50 data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-44 data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col",
         className,
@@ -56,6 +58,7 @@ function Slider({
           data-slot="slider-thumb"
           key={index}
           aria-label={ariaLabel}
+          aria-disabled={disabled}
           className="border-primary bg-background ring-ring/50 block size-4 shrink-0 rounded-full border shadow-sm transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50"
         />
       ))}

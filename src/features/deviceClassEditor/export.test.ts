@@ -65,6 +65,7 @@ function createMinimalEditor(): DeviceClassDocument {
     commandClassArguments: {},
     commandClassReturnValues: {},
     enumChoices: {},
+    structure3DNodes: {},
     localizations: {},
     sourceLocale: "en-US",
   };

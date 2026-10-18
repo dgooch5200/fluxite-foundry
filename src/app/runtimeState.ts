@@ -1,4 +1,8 @@
-import { DmxDriver, DelverError } from "@cpwg-community/delver";
+import {
+  DmxDriver,
+  DelverError,
+  DriverParamState,
+} from "@cpwg-community/delver";
 import { Patch } from "immer";
 import { MessageDescriptor } from "@lingui/core";
 import { LibraryStore } from "codex/library";
@@ -8,6 +12,10 @@ export interface AppRuntimeState {
   // One DMX test driver per open device class document, keyed by the document's
   // id. A document with no DMX serializer has no entry.
   dmxControllers: Record<EntityId, DmxController>;
+  // The parameter states of each document's running DMX test controller, keyed
+  // by `serializeParamRef`. A document whose controller isn't on screen has no
+  // entry.
+  dmxParamStates: Record<EntityId, Record<string, DriverParamState>>;
   // Live sACN output from the DMX test controller (only possible on desktop).
   sacnOutput: SacnOutputState;
   // How each document's DMX test controller arranges its panels. A document

@@ -7,6 +7,8 @@ import { DmxEditor } from "./dmxEditor/DmxEditor";
 import { DmxController } from "./controller/DmxController";
 import { ResourcesEditor } from "./resourcesEditor/ResourcesEditor";
 import { CommandsEditor } from "./commandsEditor/CommandsEditor";
+import { Structure3DEditor } from "features/structure3DEditor/Structure3DEditor";
+import { Structure3DViewport } from "features/structure3DEditor/Viewport";
 import { ClassesEditor } from "features/classEditors/ClassesEditor";
 import { DeviceClassClassEditing } from "./classEditing";
 
@@ -82,6 +84,22 @@ export const WIDGETS: Record<string, EditorWidget> = {
       message: "Create and edit commands for the device class",
     }),
     factory: () => <CommandsEditor />,
+  },
+  structure3DEditor: {
+    name: msg({
+      id: "deviceClassEditor.widget.structure3DEditor.name",
+      message: "Structure 3D",
+    }),
+    description: msg({
+      id: "deviceClassEditor.widget.structure3DEditor.description",
+      message:
+        "Edit the device's 3D structure: its parts, where they sit and what moves them",
+    }),
+    factory: () => (
+      <Structure3DEditor
+        renderViewport={(props) => <Structure3DViewport {...props} />}
+      />
+    ),
   },
   classesEditor: {
     name: msg({

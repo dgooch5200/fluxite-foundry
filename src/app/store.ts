@@ -258,6 +258,7 @@ function getSystemDarkModePreference(): boolean {
 function getDefaultRuntimeState(): AppRuntimeState {
   return {
     dmxControllers: {},
+    dmxParamStates: {},
     sacnOutput: { settings: {} },
     dmxControllerLayouts: {},
     libraries: loadDefaultLibraries(),

@@ -57,6 +57,8 @@ interface ItemClassSelectorProps extends ButtonProps {
   "aria-labelledby"?: string;
   onSelectedClassChanged: (newClass?: SelectedItemClass) => void;
   tooltipRenderer: (item: SelectedItemClass) => JSX.Element;
+  /** A short note shown beside each class's name, e.g. its unit. */
+  optionDetail?: (item: SelectedItemClass) => string;
   libraryStore: LibraryStore;
   localLibrary?: LocalLibrary;
 }
@@ -90,6 +92,7 @@ export function ItemClassSelector({
   kind,
   onSelectedClassChanged,
   tooltipRenderer,
+  optionDetail,
   libraryStore,
   localLibrary,
   ...props
@@ -169,6 +172,11 @@ export function ItemClassSelector({
                     >
                       <CheckIcon className={isSelected ? "" : "opacity-0"} />
                       {option.name}
+                      {optionDetail && (
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                          {optionDetail(option.selection)}
+                        </span>
+                      )}
                       <div className="flex-grow" />
                       <span className="text-gray-500 dark:text-gray-400">
                         {option.selection.codexId}
@@ -183,7 +191,13 @@ export function ItemClassSelector({
             })}
           </CommandGroup>
         )),
-    [groups, selectedClass, onSelectedClassChanged, tooltipRenderer],
+    [
+      groups,
+      selectedClass,
+      onSelectedClassChanged,
+      tooltipRenderer,
+      optionDetail,
+    ],
   );
 
   return (

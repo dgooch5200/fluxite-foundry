@@ -117,12 +117,15 @@ export function useResourceAssetId(resource?: Resource): string | undefined {
 // Write
 // ---------------------------------------------------------------------------
 
+/** Returns the new resource's ID, or undefined if it couldn't be created. */
 export function createNewResource(
   library: string | undefined,
   resourceClass: CodexId,
   codexId: CodexId,
   _friendlyName: string,
-) {
+): EntityId | undefined {
+  let created: EntityId | undefined;
+
   updateCurrentEditor(UNDO.addResource, (editor) => {
     if (
       Object.values(editor.resources).some((res) => res.codexId === codexId)
@@ -154,7 +157,10 @@ export function createNewResource(
     };
 
     editor.resourceEditors.push(resId);
+    created = resId;
   });
+
+  return created;
 }
 
 export function modifyResource(
@@ -225,7 +231,8 @@ function getFileName(assetId: string, mediaType?: string): string {
   }
 }
 
-function getFileExtension(mediaType?: string): string | null {
+/** The file extension (without the dot) used for assets of a media type. */
+export function getFileExtension(mediaType?: string): string | null {
   switch (mediaType) {
     case "image/png":
       return "png";
@@ -243,6 +250,10 @@ function getFileExtension(mediaType?: string): string | null {
       return "mp3";
     case "video/mp4":
       return "mp4";
+    case "model/gltf-binary":
+      return "glb";
+    case "model/gltf+json":
+      return "gltf";
     default:
       return null;
   }

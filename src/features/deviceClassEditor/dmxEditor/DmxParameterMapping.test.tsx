@@ -1,4 +1,8 @@
-import { testUndoLabel } from "test/utils";
+import {
+  createEmptyDeviceClassEditor,
+  resetAllStores,
+  testUndoLabel,
+} from "test/utils";
 import { render, screen, fireEvent } from "test/render";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi, beforeEach } from "vitest";
@@ -359,6 +363,73 @@ describe("DmxParameterMapping - Unmapped Parameter Table Rows", () => {
       expect(mockOnUpdate).toHaveBeenCalled();
       const updatedMapping = mockOnUpdate.mock.calls[0][0] as DmxMapping;
       expect(updatedMapping.unmappedParams?.[0].end).toBe(undefined);
+    });
+  });
+});
+
+describe("DmxParameterMapping - new ranges and entries", () => {
+  const PAN = CodexId("pan");
+  const TILT = CodexId("tilt");
+
+  // Gives a parameter its own minimum and maximum.
+  function setBounds(codexId: CodexId, minimum: number, maximum: number) {
+    updateCurrentEditor(testUndoLabel("Test Change"), (editor) => {
+      const param = Object.values(editor.parameters).find(
+        (p) => p.codexId === codexId,
+      )!;
+      param.minimum = minimum;
+      param.maximum = maximum;
+    });
+  }
+
+  beforeEach(() => {
+    resetAllStores();
+    createEmptyDeviceClassEditor();
+    createTestParamClass(
+      EntityId("offset"),
+      CodexId("offset"),
+      fcDataTypes.NUMBER,
+      "Offset",
+    );
+    createTestParameter(PAN, CodexId("offset"));
+    createTestParameter(TILT, CodexId("offset"));
+    setBounds(PAN, -270, 270);
+    setBounds(TILT, -128.5, 129.5);
+  });
+
+  const renderMapping = (onUpdate = vi.fn()) =>
+    render(
+      <DmxParameterMapping
+        mapping={{ mappedParam: paramRef(PAN), ranges: [] }}
+        onUpdate={onUpdate}
+        onRemove={vi.fn()}
+      />,
+    );
+
+  it("starts a new range from the parameter's minimum and maximum", async () => {
+    const user = userEvent.setup();
+    renderMapping();
+
+    await user.click(screen.getByRole("button", { name: "Add Range" }));
+
+    expect(screen.getByDisplayValue("-270")).toBeInTheDocument();
+    expect(screen.getByDisplayValue("270")).toBeInTheDocument();
+  });
+
+  it("starts a new unmapped entry from that parameter's minimum and maximum", async () => {
+    const user = userEvent.setup();
+    const onUpdate = vi.fn();
+    renderMapping(onUpdate);
+
+    await user.click(
+      screen.getByRole("button", { name: "Add Unmapped Parameter" }),
+    );
+
+    const updated = onUpdate.mock.calls[0][0] as DmxMapping;
+    expect(updated.unmappedParams?.[0]).toMatchObject({
+      parameter: paramRef(TILT),
+      start: -128.5,
+      end: 129.5,
     });
   });
 });

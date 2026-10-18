@@ -1,6 +1,6 @@
 import { msg } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { i18n } from "@lingui/core";
 import { isTauri } from "@tauri-apps/api/core";
 import { DriverParamValue } from "@cpwg-community/delver";
@@ -25,7 +25,14 @@ import { ParametersPanel } from "./ParametersPanel";
 import { ParamStates, paramStatesByRef } from "./parameterValues";
 import { SacnOutputControls } from "./sacnOutput/SacnOutputControls";
 import { useDmxSequenceManager } from "./sequenceManager/useDmxSequenceManager";
-import { setDmxControllerLayout, useDmxControllerLayout } from "./state";
+import {
+  hideDmxParamStates,
+  setDmxControllerLayout,
+  showDmxParamStates,
+  updateDmxParamStates,
+  useDmxControllerLayout,
+  useDmxParamStates,
+} from "./state";
 
 const MESSAGES = {
   setValueFailed: msg({
@@ -34,40 +41,40 @@ const MESSAGES = {
   }),
 };
 
-interface DmxControllerState {
-  paramStates: ParamStates;
-  // The states the driver started with - the reset button returns to these
-  initialParamStates: ParamStates;
-  dmxValues: Uint8Array;
-}
-
 export const DmxController = () => {
   const documentId = useCurrentEditorId();
   const mappableParams = useMappableParameters();
   const dmxController = useDmxController();
   const layout = useDmxControllerLayout(documentId);
-  const [controllerState, setControllerState] = useState<DmxControllerState>({
-    paramStates: new Map(),
-    initialParamStates: new Map(),
-    dmxValues: new Uint8Array(),
-  });
+  const storedParamStates = useDmxParamStates();
+  // The states the driver started with - the reset button returns to these
+  const [initialParamStates, setInitialParamStates] = useState<ParamStates>(
+    () => new Map(),
+  );
   const sequenceManager = useDmxSequenceManager();
 
-  // Initialize param states when the DMX driver changes
+  const paramStates = useMemo<ParamStates>(
+    () => new Map(Object.entries(storedParamStates ?? {})),
+    [storedParamStates],
+  );
+
+  // Initialize param states when the DMX driver changes. The live states are
+  // kept in the runtime store while the controller is on screen, so that other
+  // views can follow them.
   useEffect(() => {
-    if (dmxController.state === "available") {
-      const paramStates = paramStatesByRef(
-        dmxController.driver.getParamStates(),
-      );
-      const dmxValues = dmxController.driver.getDmxValues();
-      setControllerState({
-        paramStates,
-        initialParamStates: paramStates,
-        dmxValues,
-      });
-      sequenceManager.actions.setBaseDmxValues(dmxValues);
+    if (!documentId || dmxController.state !== "available") {
+      return;
     }
-  }, [dmxController, sequenceManager.actions]);
+
+    const driverParamStates = dmxController.driver.getParamStates();
+    showDmxParamStates(documentId, driverParamStates);
+    setInitialParamStates(paramStatesByRef(driverParamStates));
+    sequenceManager.actions.setBaseDmxValues(
+      dmxController.driver.getDmxValues(),
+    );
+
+    return () => hideDmxParamStates(documentId);
+  }, [documentId, dmxController, sequenceManager.actions]);
 
   // Use sequence-aware DMX values (base values with sequence overrides)
   const finalDmxValues = sequenceManager.dmxValues;
@@ -97,17 +104,9 @@ export const DmxController = () => {
         return;
       }
 
-      setControllerState((prev) => {
-        const newParamStates = new Map(prev.paramStates);
-        for (const update of paramStatesByRef(result.paramStateUpdates)) {
-          newParamStates.set(...update);
-        }
-        return {
-          ...prev,
-          paramStates: newParamStates,
-          dmxValues: result.dmxValues,
-        };
-      });
+      if (documentId) {
+        updateDmxParamStates(documentId, result.paramStateUpdates);
+      }
 
       // Update base DMX values for sequence manager
       sequenceManager.actions.setBaseDmxValues(result.dmxValues);
@@ -117,7 +116,7 @@ export const DmxController = () => {
         sequenceManager.actions.queueSequences(result.queuedDmxSequences);
       }
     },
-    [dmxController, sequenceManager.actions],
+    [documentId, dmxController, sequenceManager.actions],
   );
 
   switch (dmxController.state) {
@@ -190,8 +189,8 @@ export const DmxController = () => {
         <ParametersPanel
           className="min-w-0 flex-1"
           mappableParams={Object.values(mappableParams)}
-          paramStates={controllerState.paramStates}
-          initialParamStates={controllerState.initialParamStates}
+          paramStates={paramStates}
+          initialParamStates={initialParamStates}
           onParamChange={handleParamChange}
           onResetAll={() => documentId && resetDmxDriver(documentId)}
         />

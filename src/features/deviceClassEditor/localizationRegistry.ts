@@ -137,6 +137,22 @@ export const DEVICE_CLASS_LOCALIZATIONS: LocalizationRegistry<DeviceClassDocumen
       },
     },
 
+    structure3DNodes: {
+      kind: "table",
+      label: msg({
+        id: "localizations.entity.structure3DNode",
+        message: "Structure 3D node",
+      }),
+      fields: {
+        friendlyName: {
+          label: msg({
+            id: "localizations.field.friendlyName",
+            message: "Friendly name",
+          }),
+        },
+      },
+    },
+
     enumChoices: {
       kind: "table",
       label: msg({

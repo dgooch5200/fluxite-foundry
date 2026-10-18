@@ -73,11 +73,7 @@ export default defineConfig([
   {
     // Localization rules for the app's UI. See docs/ui-localization.md.
     files: ["src/**/*.tsx"],
-    ignores: [
-      "**/*.test.tsx",
-      "src/test/**",
-      "src/features/deviceClassEditor/device3DView/**",
-    ],
+    ignores: ["**/*.test.tsx", "src/test/**"],
 
     plugins: { lingui },
 

@@ -129,6 +129,22 @@ describe("migrateState", () => {
   });
 
   describe("when the state is already at the current version", () => {
+    it("drops a view setting it no longer knows rather than resetting", () => {
+      const state = getDefaultState();
+      const stale = {
+        ...state,
+        session: {
+          ...state.session,
+          structure3DView: { finish: "no-longer-a-finish", height: 400 },
+        },
+      };
+
+      expect(migrateState(stale, VERSION)).toEqual({
+        ...state,
+        session: { ...state.session, structure3DView: { height: 400 } },
+      });
+    });
+
     it("returns it unchanged and records an empty report", () => {
       const state = getDefaultState();
 

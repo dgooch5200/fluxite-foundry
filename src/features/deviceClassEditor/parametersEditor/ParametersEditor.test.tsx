@@ -28,6 +28,7 @@ function createLocalParameterClass() {
     draft.parameterClasses[CLASS_ID] = {
       codexId: CodexId("local-intensity"),
       dataType: "number",
+      unit: { name: "degree" },
       localized: { name: NAME_KEY },
     };
   });
@@ -115,11 +116,17 @@ describe("creating a parameter against a local class", () => {
     await user.click(within(dialog).getByRole("combobox", { name: "Class" }));
 
     // The document's own classes are listed under their own heading, ahead of
-    // any imported library.
+    // any imported library, each with the data type and unit it gives.
     expect(screen.getByText("This Device Class")).toBeInTheDocument();
     await user.click(
-      await screen.findByRole("option", { name: /Local Intensity/ }),
+      await screen.findByRole("option", {
+        name: /Local Intensity.*Number · degree/,
+      }),
     );
+
+    // The parameter takes its unit from the class.
+    expect(within(dialog).getByText("Number")).toBeInTheDocument();
+    expect(within(dialog).getByText("degree")).toBeInTheDocument();
 
     await user.click(within(dialog).getByRole("button", { name: "Add" }));
 
@@ -145,6 +152,10 @@ describe("creating a parameter against a local class", () => {
     expect(screen.getByRole("textbox", { name: "Library" })).toHaveValue(
       "Device Library",
     );
+    expect(screen.getByRole("textbox", { name: "Data Type" })).toHaveValue(
+      "Number",
+    );
+    expect(screen.getByRole("textbox", { name: "Unit" })).toHaveValue("degree");
     expect(screen.queryByText(/not found/)).not.toBeInTheDocument();
   });
 });

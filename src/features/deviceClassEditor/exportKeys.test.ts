@@ -79,6 +79,21 @@ describe("export keys", () => {
       expect(nameOf(key)).toBe("param_dimmer");
     });
 
+    test("for a structure 3D node", () => {
+      const key = addString("Yoke");
+      updateCurrentEditor(testUndoLabel("Test Change"), (editor) => {
+        editor.structure3DNodes[EntityId("node-1")] = {
+          codexId: CodexId("yoke"),
+          children: [],
+          transform: { type: "trs" },
+          controls: [],
+          localized: { friendlyName: key },
+        };
+      });
+
+      expect(nameOf(key)).toBe("node_yoke");
+    });
+
     test("for an enum choice, through its parent", () => {
       const key = addString("Open");
       const classId = EntityId("class-1");

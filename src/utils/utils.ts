@@ -268,8 +268,10 @@ export function parseParameterReference(
   const codexId = CodexId(match[1]);
   const indexStr = match[2];
 
-  if (indexStr !== undefined) {
-    return { codexId, index: parseInt(indexStr, 10) };
+  // An index too large to hold exactly is no index at all.
+  const index = indexStr === undefined ? NaN : parseInt(indexStr, 10);
+  if (Number.isSafeInteger(index)) {
+    return { codexId, index };
   }
 
   return { codexId };
@@ -289,6 +291,11 @@ export function serializeParameterReference(
     return `${ref.codexId}[${ref.index}]`;
   }
   return ref.codexId;
+}
+
+/** An angle in degrees wrapped into [0, 360), e.g. -90 -> 270. */
+export function wrapDegrees(degrees: number): number {
+  return ((degrees % 360) + 360) % 360;
 }
 
 /** Reload the app. */

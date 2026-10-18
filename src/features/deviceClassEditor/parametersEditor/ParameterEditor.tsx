@@ -16,6 +16,8 @@ import { LabeledCheckbox } from "components/LabeledCheckbox";
 import { SelectField } from "components/EditorFields/SelectField";
 import { Alert, AlertDescription, AlertTitle } from "components/scn-ui/Alert";
 import { validateNewItemId } from "utils/inputValidation";
+import { unitToString } from "utils/utils";
+import { getDataTypeFriendlyName } from "codex/util/enums";
 import { useAuthoringLocale } from "app/store";
 import {
   CodexId,
@@ -115,6 +117,27 @@ export const ParameterEditor = ({ id }: Props) => {
             tooltipRenderer={() => (
               <ParameterClassDisplay paramClass={paramClass} />
             )}
+          />
+        </FieldSet>
+        {/* Set by the class, so shown here but changed in the class editor */}
+        <FieldSet>
+          <Label htmlFor={`${idPrefix}-data-type`}>
+            <Trans id="deviceClassEditor.paramEditor.dataType">Data Type</Trans>
+          </Label>
+          <AppInput
+            id={`${idPrefix}-data-type`}
+            disabled
+            value={getDataTypeFriendlyName(paramClass.dataType)}
+          />
+        </FieldSet>
+        <FieldSet>
+          <Label htmlFor={`${idPrefix}-unit`}>
+            <Trans id="deviceClassEditor.paramEditor.unit">Unit</Trans>
+          </Label>
+          <AppInput
+            id={`${idPrefix}-unit`}
+            disabled
+            value={unitToString(paramClass.unit)}
           />
         </FieldSet>
         <FieldSet>
