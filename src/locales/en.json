@@ -3768,6 +3768,17 @@
     ],
     "translation": "Firmware Versions"
   },
+  "deviceClassEditor.structure3DViewport.meshRepaired": {
+    "message": "Fixed {fixedFolds, plural, one {# fold} other {# folds}}, merged {mergedVertices, plural, one {# duplicate vertex} other {# duplicate vertices}} and removed {removedFaces, plural, one {# bad face} other {# bad faces}}.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/Viewport.tsx"
+      ]
+    ],
+    "translation": "Fixed {fixedFolds, plural, one {# fold} other {# folds}}, merged {mergedVertices, plural, one {# duplicate vertex} other {# duplicate vertices}} and removed {removedFaces, plural, one {# bad face} other {# bad faces}}."
+  },
   "navbar.exportCodex.archiveFileType": {
     "message": "Fluxite Codex Archive",
     "placeholders": {},
@@ -5894,6 +5905,61 @@
     ],
     "translation": "Remove Mapping Group"
   },
+  "deviceClassEditor.structure3DViewport.repairMesh": {
+    "message": "Repair mesh",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/Viewport.tsx"
+      ]
+    ],
+    "translation": "Repair mesh"
+  },
+  "deviceClassEditor.structure3D.undo.repairMesh": {
+    "message": "Repair Mesh",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/state.ts"
+      ]
+    ],
+    "translation": "Repair Mesh"
+  },
+  "deviceClassEditor.structure3DViewport.repairNormals": {
+    "message": "Repair normals",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/Viewport.tsx"
+      ]
+    ],
+    "translation": "Repair normals"
+  },
+  "deviceClassEditor.structure3D.undo.repairNormals": {
+    "message": "Repair Normals",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/state.ts"
+      ]
+    ],
+    "translation": "Repair Normals"
+  },
+  "deviceClassEditor.structure3DViewport.repairing": {
+    "message": "Repairing the model…",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/Viewport.tsx"
+      ]
+    ],
+    "translation": "Repairing the model…"
+  },
   "deviceClassEditor.commandEditor.required": {
     "message": "Required",
     "placeholders": {},
@@ -7079,6 +7145,28 @@
     ],
     "translation": "The model can't be shown: {reason}. Only GLB files, and .gltf files with everything embedded, can be shown."
   },
+  "deviceClassEditor.structure3DViewport.repairFailed": {
+    "message": "The model couldn't be repaired: {reason}",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/Viewport.tsx"
+      ]
+    ],
+    "translation": "The model couldn't be repaired: {reason}"
+  },
+  "deviceClassEditor.structure3DViewport.nothingToRepair": {
+    "message": "The model had nothing to repair.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/Viewport.tsx"
+      ]
+    ],
+    "translation": "The model had nothing to repair."
+  },
   "deviceClassEditor.structure3DNodeEditor.nameNotInModel": {
     "message": "The model has no node or scene named {name}.",
     "placeholders": {},
@@ -7495,6 +7583,17 @@
       ]
     ],
     "translation": "Translate and Rotate"
+  },
+  "deviceClassEditor.structure3DViewport.normalsRepaired": {
+    "message": "Turned {flippedFaces, plural, one {# face} other {# faces}} outward and fixed {fixedNormals, plural, one {# normal} other {# normals}}.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/Viewport.tsx"
+      ]
+    ],
+    "translation": "Turned {flippedFaces, plural, one {# face} other {# faces}} outward and fixed {fixedNormals, plural, one {# normal} other {# normals}}."
   },
   "deviceClassEditor.structure3DNodeEditor.controlType": {
     "message": "Type",

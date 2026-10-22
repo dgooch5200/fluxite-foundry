@@ -1,8 +1,9 @@
 import { useMemo } from "react";
 import { Draft } from "immer";
-import { i18n } from "@lingui/core";
+import { i18n, MessageDescriptor } from "@lingui/core";
 import { msg } from "@lingui/core/macro";
 import { kebabCase } from "change-case";
+import { Object3D } from "three";
 import { assetStorage } from "app/assetStorage";
 import { openFile } from "app/openFile";
 import {
@@ -53,6 +54,14 @@ import {
   Structure3DIssue,
   validateStructure3D,
 } from "./validation";
+import {
+  MeshRepairSummary,
+  NormalsRepairSummary,
+  repairMesh,
+  repairNormals,
+} from "./meshRepair";
+import { exportGlb, gltfObject } from "./sceneGraph";
+import { parseGltfAsset } from "./useGltf";
 
 const UNDO = {
   createStructure: msg({
@@ -78,6 +87,14 @@ const UNDO = {
   importModel: msg({
     id: "deviceClassEditor.structure3D.undo.importModel",
     message: "Import glTF Model",
+  }),
+  repairMesh: msg({
+    id: "deviceClassEditor.structure3D.undo.repairMesh",
+    message: "Repair Mesh",
+  }),
+  repairNormals: msg({
+    id: "deviceClassEditor.structure3D.undo.repairNormals",
+    message: "Repair Normals",
   }),
 };
 
@@ -360,6 +377,82 @@ export async function importGltfModel(nodeId: EntityId) {
       draft.visual = { quality: "high", resource: resourceId };
     });
   });
+}
+
+/**
+ * Cleans up the mesh of the model shown at the node: welds duplicate vertices
+ * and removes faces that are degenerate or doubled. Undefined if there was
+ * nothing to repair.
+ */
+export function repairModelMesh(
+  nodeId: EntityId,
+): Promise<MeshRepairSummary | undefined> {
+  return repairModel(nodeId, UNDO.repairMesh, repairMesh);
+}
+
+/**
+ * Turns the faces of the model shown at the node outward and gives them
+ * normals that match. Undefined if there was nothing to repair.
+ */
+export function repairModelNormals(
+  nodeId: EntityId,
+): Promise<NormalsRepairSummary | undefined> {
+  return repairModel(nodeId, UNDO.repairNormals, repairNormals);
+}
+
+/**
+ * Repairs the part of the model file that the node shows, and stores the
+ * repaired file as the model resource's new one. Other nodes showing the same
+ * file see the repair too.
+ */
+async function repairModel<Summary extends Record<string, number>>(
+  nodeId: EntityId,
+  label: MessageDescriptor,
+  repair: (object: Object3D) => Summary,
+): Promise<Summary | undefined> {
+  const state = useAppPersistentStore.getState();
+  const documentId = state.session.selectedDocumentId;
+  const editor = getCurrentEditor(state);
+  const visual = editor?.structure3DNodes[nodeId]?.visual;
+  const file = visual && editor.resources[visual.resource]?.default;
+  const assetId = file && editor.resourceAssets[file];
+  if (!visual || !file || !assetId) {
+    return undefined;
+  }
+
+  // A fresh copy, since the one the view draws is shared.
+  const gltf = await parseGltfAsset(assetId);
+  const object = gltfObject(gltf, visual.nodeOrSceneName);
+  const summary = object && repair(object);
+  if (!summary || Object.values(summary).every((count) => count === 0)) {
+    return undefined;
+  }
+
+  const originalFileName = (await assetStorage.getAsset(assetId))
+    ?.originalFileName;
+  const repairedAssetId = await assetStorage.storeAsset(
+    await exportGlb(gltf),
+    "model/gltf-binary",
+    originalFileName?.replace(/\.[^.]*$/, ".glb"),
+  );
+
+  // As with an import, the document may have changed meanwhile. The stored
+  // asset is left for startup cleanup.
+  const latest = useAppPersistentStore.getState();
+  if (
+    latest.session.selectedDocumentId !== documentId ||
+    getCurrentEditor(latest)?.resources[visual.resource]?.default !== file
+  ) {
+    return undefined;
+  }
+
+  asOneChange(label, () => {
+    modifyResource(visual.resource, (draft) => {
+      draft.mediaType = "model/gltf-binary";
+    });
+    updateResourceAsset(visual.resource, repairedAssetId);
+  });
+  return summary;
 }
 
 /** Deletes a node along with everything beneath it. */

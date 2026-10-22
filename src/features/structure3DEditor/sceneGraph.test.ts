@@ -1,5 +1,7 @@
 import { describe, test, expect } from "vitest";
 import {
+  AnimationClip,
+  BoxGeometry,
   BufferGeometry,
   Float32BufferAttribute,
   Group,
@@ -7,8 +9,12 @@ import {
   Mesh,
   MeshStandardMaterial,
   Object3D,
+  QuaternionKeyframeTrack,
+  Scene,
   Vector3,
 } from "three";
+import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter.js";
+import { GLTFLoader } from "three-stdlib";
 import {
   CodexId,
   EntityId,
@@ -18,6 +24,7 @@ import {
 import {
   addMissingNormals,
   buildStructureObject,
+  exportGlb,
   shadeSmooth,
   findGltfObject,
   gltfObjectNames,
@@ -322,5 +329,41 @@ describe("shadeSmooth", () => {
 
     expect(edgeNormals(new Mesh(original))).toEqual(flatBefore);
     expect(copy.geometry).toBe(mesh.geometry);
+  });
+});
+
+describe("exportGlb", () => {
+  test("writes the file back with its names and animations", async () => {
+    // The loader renames "Moving Head" to "Moving_Head" and points the
+    // animation at that name.
+    const head = new Mesh(new BoxGeometry(), new MeshStandardMaterial());
+    head.name = "Moving Head";
+    const scene = new Scene();
+    scene.name = "Main Scene";
+    scene.add(head);
+    const spin = new AnimationClip("Spin", 1, [
+      new QuaternionKeyframeTrack(
+        `${head.uuid}.quaternion`,
+        [0, 1],
+        [0, 0, 0, 1, 0, 1, 0, 0],
+      ),
+    ]);
+    const file = await new GLTFExporter().parseAsync(scene, {
+      binary: true,
+      animations: [spin],
+    });
+    const loaded = await new GLTFLoader().parseAsync(file as ArrayBuffer, "");
+
+    const exported = await new GLTFLoader().parseAsync(
+      await exportGlb(loaded),
+      "",
+    );
+
+    expect(gltfObjectNames(exported)).toContain("Moving Head");
+    // The loader keeps no original for a scene's name, so it's read from the
+    // file.
+    expect(exported.parser.json.scenes[0].name).toBe("Main Scene");
+    expect(exported.animations).toHaveLength(1);
+    expect(exported.animations[0].tracks).toHaveLength(1);
   });
 });

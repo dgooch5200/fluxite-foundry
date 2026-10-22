@@ -13,6 +13,7 @@ import { MessageDescriptor } from "@lingui/core";
 import { msg } from "@lingui/core/macro";
 import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
+import { toast } from "sonner";
 import {
   Canvas,
   createPortal,
@@ -30,6 +31,7 @@ import {
   ContrastIcon,
   FocusIcon,
   PaletteIcon,
+  WrenchIcon,
   ZoomInIcon,
   ZoomOutIcon,
 } from "lucide-react";
@@ -67,6 +69,8 @@ import { Button } from "components/scn-ui/Button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
@@ -80,6 +84,7 @@ import {
   serializeParamRef,
 } from "features/deviceClassEditor/controller/parameterValues";
 import { parameterCurrentCodexId } from "features/deviceClassEditor/referenceResolution";
+import { errorMessage } from "utils/utils";
 import {
   buildStructureObject,
   findGltfObject,
@@ -89,6 +94,8 @@ import {
 } from "./sceneGraph";
 import { frameObject, OrbitDirection, orbitCamera, zoomCamera } from "./camera";
 import {
+  repairModelMesh,
+  repairModelNormals,
   setStructure3DViewSettings,
   useStructure3D,
   useStructure3DNodes,
@@ -157,6 +164,36 @@ const MESSAGES = {
   faceOrientation: msg({
     id: "deviceClassEditor.structure3DViewport.faceOrientation",
     message: "Face orientation",
+  }),
+  repairMesh: msg({
+    id: "deviceClassEditor.structure3DViewport.repairMesh",
+    message: "Repair mesh",
+  }),
+  repairNormals: msg({
+    id: "deviceClassEditor.structure3DViewport.repairNormals",
+    message: "Repair normals",
+  }),
+  repairing: msg({
+    id: "deviceClassEditor.structure3DViewport.repairing",
+    message: "Repairing the model…",
+  }),
+  meshRepaired: msg({
+    id: "deviceClassEditor.structure3DViewport.meshRepaired",
+    message:
+      "Fixed {fixedFolds, plural, one {# fold} other {# folds}}, merged {mergedVertices, plural, one {# duplicate vertex} other {# duplicate vertices}} and removed {removedFaces, plural, one {# bad face} other {# bad faces}}.",
+  }),
+  normalsRepaired: msg({
+    id: "deviceClassEditor.structure3DViewport.normalsRepaired",
+    message:
+      "Turned {flippedFaces, plural, one {# face} other {# faces}} outward and fixed {fixedNormals, plural, one {# normal} other {# normals}}.",
+  }),
+  nothingToRepair: msg({
+    id: "deviceClassEditor.structure3DViewport.nothingToRepair",
+    message: "The model had nothing to repair.",
+  }),
+  repairFailed: msg({
+    id: "deviceClassEditor.structure3DViewport.repairFailed",
+    message: "The model couldn't be repaired: {reason}",
   }),
 };
 
@@ -287,6 +324,8 @@ export const Structure3DViewport = ({
   const [pose, setPose] = useState<Record<string, number>>({});
   // Only for a quick look, so not remembered.
   const [faceOrientation, setFaceOrientation] = useState(false);
+  // The model last right-clicked, and where in the view.
+  const [modelMenu, setModelMenu] = useState<ModelMenuTarget>();
 
   // While the DMX controller runs, it poses the controls it has values for and
   // the sliders pose the rest.
@@ -428,14 +467,36 @@ export const Structure3DViewport = ({
 
   useEffect(() => () => selectionBox?.dispose(), [selectionBox]);
 
+  // The node an object in the view belongs to: a model part belongs to the
+  // nearest node above it.
+  const clickedNodeId = (event: ThreeEvent<MouseEvent>) => {
+    let object: Object3D | null = event.object;
+    while (object && !object.userData.nodeId) object = object.parent;
+    return object?.userData.nodeId as EntityId | undefined;
+  };
+
   const selectClicked = (event: ThreeEvent<MouseEvent>) => {
     // Only the nearest object hit picks.
     event.stopPropagation();
     // A drag orbits the camera rather than picking.
     if (event.delta > 2) return;
-    let object: Object3D | null = event.object;
-    while (object && !object.userData.nodeId) object = object.parent;
-    if (object) onSelectNode(object.userData.nodeId);
+    const nodeId = clickedNodeId(event);
+    if (nodeId) onSelectNode(nodeId);
+  };
+
+  const openModelMenu = (event: ThreeEvent<MouseEvent>) => {
+    event.stopPropagation();
+    // A right drag pans the camera rather than opening the menu.
+    if (event.delta > 2) return;
+    const nodeId = clickedNodeId(event);
+    // Models are meshes; a node without one shows its axes, which are lines.
+    if (!nodeId || !(event.object instanceof Mesh)) return;
+    onSelectNode(nodeId);
+    setModelMenu({
+      nodeId,
+      x: event.nativeEvent.offsetX,
+      y: event.nativeEvent.offsetY,
+    });
   };
 
   return (
@@ -457,7 +518,15 @@ export const Structure3DViewport = ({
             key={gridColor}
             args={[4, 20, gridColor, gridColor]}
           />
-          <primitive object={root} onClick={selectClicked} />
+          <primitive
+            // Mounted afresh for each build. R3F 9.3 swaps a primitive's
+            // object without moving its click handlers to the new one, which
+            // left clicks hitting the tree from before.
+            key={root.uuid}
+            object={root}
+            onClick={selectClicked}
+            onContextMenu={openModelMenu}
+          />
           {selectionBox && <primitive object={selectionBox} />}
         </Canvas>
         <ViewButtons
@@ -489,6 +558,15 @@ export const Structure3DViewport = ({
           faceOrientation={faceOrientation}
           onFaceOrientationChange={setFaceOrientation}
         />
+        {modelMenu && (
+          <ModelMenu
+            // Opened afresh at each click, so it moves to where it was clicked
+            key={`${modelMenu.x},${modelMenu.y}`}
+            {...modelMenu}
+            nodeCodexId={nodes[modelMenu.nodeId]?.codexId ?? ""}
+            onClose={() => setModelMenu(undefined)}
+          />
+        )}
       </div>
       <ResizeHandle
         height={height}
@@ -791,6 +869,91 @@ const ViewButtons = ({
         )}
       </div>
     </div>
+  );
+};
+
+interface ModelMenuTarget {
+  nodeId: EntityId;
+  // Where the model was right-clicked, in pixels from the view's top left
+  x: number;
+  y: number;
+}
+
+interface ModelMenuProps extends ModelMenuTarget {
+  nodeCodexId: string;
+  onClose: () => void;
+}
+
+/** What can be done to the model shown at a node, opened by right-clicking it. */
+export const ModelMenu = ({
+  nodeId,
+  x,
+  y,
+  nodeCodexId,
+  onClose,
+}: ModelMenuProps) => {
+  const { _ } = useLingui();
+
+  const runRepair = async <Summary extends Record<string, number>>(
+    repair: (nodeId: EntityId) => Promise<Summary | undefined>,
+    repaired: MessageDescriptor,
+  ) => {
+    // Rewriting a large model takes a moment.
+    const progress = toast.loading(_(MESSAGES.repairing));
+    try {
+      const summary = await repair(nodeId);
+      toast.success(
+        summary
+          ? _({ ...repaired, values: summary })
+          : _(MESSAGES.nothingToRepair),
+        { id: progress },
+      );
+    } catch (error) {
+      toast.error(
+        _({
+          ...MESSAGES.repairFailed,
+          values: { reason: errorMessage(error) },
+        }),
+        { id: progress },
+      );
+    }
+  };
+
+  return (
+    // Not modal, so a right click on another model moves the menu there.
+    <DropdownMenu
+      open
+      modal={false}
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DropdownMenuTrigger asChild>
+        <span
+          className="pointer-events-none absolute"
+          style={{ left: x, top: y }}
+        />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start">
+        <DropdownMenuLabel>{nodeCodexId}</DropdownMenuLabel>
+        <DropdownMenuItem
+          onSelect={() =>
+            void runRepair(repairModelMesh, MESSAGES.meshRepaired)
+          }
+        >
+          <WrenchIcon />
+          {_(MESSAGES.repairMesh)}
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onSelect={() =>
+            void runRepair(repairModelNormals, MESSAGES.normalsRepaired)
+          }
+        >
+          <ArrowUpFromDotIcon />
+          {_(MESSAGES.repairNormals)}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 

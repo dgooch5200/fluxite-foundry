@@ -7,16 +7,21 @@ import {
   Mesh,
   MeshStandardMaterial,
   Object3D,
+  PropertyBinding,
   Quaternion,
+  Scene,
   Vector3,
 } from "three";
+import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter.js";
 import { toCreasedNormals } from "three/examples/jsm/utils/BufferGeometryUtils.js";
+import { GLTF } from "three-stdlib";
 import {
   EntityId,
   Structure3DControl,
   Structure3DNode,
   Structure3DTransform,
 } from "app/persistentState";
+import { SMOOTH_ANGLE } from "./meshRepair";
 
 // The structure is Z-up and three.js is Y-up. The viewport puts this on the
 // object returned by buildStructureObject so the structure stands upright.
@@ -161,10 +166,10 @@ export function gltfObjectNames(gltf: GltfScenes): string[] {
 }
 
 /**
- * A copy of the glTF scene or node a structure node shows. An empty or absent
- * name means the default scene.
+ * The glTF scene or node a structure node shows, as it is in the loaded file.
+ * An empty or absent name means the default scene.
  */
-export function findGltfObject(
+export function gltfObject(
   gltf: GltfScenes,
   name?: string,
 ): Object3D | undefined {
@@ -178,6 +183,18 @@ export function findGltfObject(
       }),
     );
   }
+  return found;
+}
+
+/**
+ * A copy of the glTF scene or node a structure node shows. An empty or absent
+ * name means the default scene.
+ */
+export function findGltfObject(
+  gltf: GltfScenes,
+  name?: string,
+): Object3D | undefined {
+  const found = gltfObject(gltf, name);
   if (!found) {
     return undefined;
   }
@@ -195,6 +212,65 @@ export function findGltfObject(
   copy.quaternion.identity();
   copy.scale.copy(scale);
   return copy;
+}
+
+/**
+ * Writes a loaded glTF file back out as a GLB, under the names it had in the
+ * file. This takes the loaded objects apart, so they can't be used after.
+ */
+// ponytail: three writes what it can read back, so extensions it doesn't know
+// are dropped and images are encoded again. Edit the file's JSON and buffers
+// directly (e.g. with glTF-Transform) if that loses something that matters.
+export async function exportGlb(gltf: GLTF): Promise<ArrayBuffer> {
+  // Animation tracks find their node by its name, which is about to go back to
+  // the file's own, so they find it by its uuid instead.
+  for (const track of gltf.animations.flatMap((clip) => clip.tracks)) {
+    const { nodeName } = PropertyBinding.parseTrackName(track.name);
+    const node = gltf.scenes
+      .map((scene) => PropertyBinding.findNode(scene, nodeName))
+      .find((found): found is Object3D => found instanceof Object3D);
+    if (node && track.name.startsWith(nodeName)) {
+      track.name = node.uuid + track.name.slice(nodeName.length);
+    }
+  }
+
+  gltf.scenes.forEach((scene) =>
+    scene.traverse((object) => {
+      if (typeof object.userData.name === "string") {
+        object.name = object.userData.name;
+        delete object.userData.name;
+      }
+    }),
+  );
+
+  // The exporter writes a three.js Scene as a glTF scene and makes its first
+  // one the default; the loader made each a Group.
+  const sceneNames = gltf.scenes.map(
+    (scene, index): string =>
+      gltf.parser.json.scenes?.[index]?.name ?? scene.name,
+  );
+  const ordered = gltf.scene
+    ? [gltf.scene, ...gltf.scenes.filter((scene) => scene !== gltf.scene)]
+    : gltf.scenes;
+  const scenes = ordered.map((group) => {
+    const scene = new Scene();
+    scene.name = sceneNames[gltf.scenes.indexOf(group)] ?? group.name;
+    scene.userData = group.userData;
+    scene.add(...group.children);
+    return scene;
+  });
+
+  const data = await new GLTFExporter().parseAsync(scenes, {
+    binary: true,
+    // Hidden parts of the file are still part of it.
+    onlyVisible: false,
+    animations: gltf.animations,
+    includeCustomExtensions: true,
+  });
+  if (!(data instanceof ArrayBuffer)) {
+    throw new Error("GLTFExporter did not produce a GLB");
+  }
+  return data;
 }
 
 /**
@@ -219,9 +295,6 @@ export function addMissingNormals(object: Object3D) {
     }
   });
 }
-
-// Blender's default: faces meeting at a sharper angle keep a hard edge.
-const SMOOTH_ANGLE = MathUtils.degToRad(30);
 
 // Each geometry of a loaded file, smoothed once and shared by every copy.
 const smoothedGeometries = new WeakMap<BufferGeometry, BufferGeometry>();
