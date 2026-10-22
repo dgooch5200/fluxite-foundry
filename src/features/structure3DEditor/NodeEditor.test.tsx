@@ -8,7 +8,7 @@ import {
   testUndoLabel,
 } from "test/utils";
 import { assetStorage } from "app/assetStorage";
-import { EntityId } from "app/persistentState";
+import { CodexId, EntityId } from "app/persistentState";
 import { openFile } from "app/openFile";
 import { initUndo, undo } from "app/undo";
 import { updateCurrentEditor } from "features/deviceClassEditor/state";
@@ -16,9 +16,15 @@ import { NodeEditor } from "./NodeEditor";
 import { MOTION_LIBRARY } from "features/deviceClassEditor/export";
 import { MODEL_RESOURCE_CLASS } from "./validation";
 import {
+  addEmitters,
+  addMotionParameters,
   addMotionResource,
   addStructureWithRoot,
+  CELL_1,
+  CELL_1_RED,
+  CELL_2,
   currentEditor,
+  PAN,
   ROOT,
 } from "./testFixtures";
 
@@ -32,6 +38,10 @@ vi.mock("three-stdlib", () => ({
 }));
 
 const MODEL = EntityId("model-resource");
+const GROUP_0 = {
+  type: "controlGroups" as const,
+  controlGroups: ["control-groups?/groups/0"],
+};
 const EDITOR = EntityId("test-editor-id");
 
 // A model whose default scene holds a base with a head on it.
@@ -139,6 +149,239 @@ describe("NodeEditor model", () => {
     expect(
       currentEditor().structure3DNodes[ROOT].visual?.nodeOrSceneName,
     ).toBeUndefined();
+  });
+});
+
+describe("NodeEditor beam", () => {
+  beforeEach(() => {
+    resetAllStores();
+    createEmptyDeviceClassEditor();
+  });
+
+  it("places a beam at emitters and gives it an aperture", async () => {
+    const user = userEvent.setup();
+    addEmitters();
+    addStructureWithRoot({
+      controls: [
+        {
+          type: "beam",
+          axis: "z",
+          target: GROUP_0,
+        },
+      ],
+    });
+    render(<NodeEditor id={ROOT} issues={[]} />);
+
+    await user.click(
+      screen.getByRole("combobox", { name: "Add emitter or group" }),
+    );
+    expect(
+      screen.getAllByRole("option").map((option) => option.textContent),
+    ).toEqual(["cell-1", "cell-1 / red", "cell-2"]);
+    await user.click(screen.getByRole("option", { name: "cell-1 / red" }));
+    await user.click(
+      screen.getByRole("combobox", { name: "Add emitter or group" }),
+    );
+    await user.click(screen.getByRole("option", { name: "cell-2" }));
+    await user.click(screen.getByRole("combobox", { name: "Aperture" }));
+    await user.click(screen.getByRole("option", { name: "Circle" }));
+    const diameter = screen.getByRole("textbox", { name: "Diameter (m)" });
+    await user.clear(diameter);
+    await user.type(diameter, "0.2{Enter}");
+
+    expect(currentEditor().structure3DNodes[ROOT].controls).toEqual([
+      {
+        type: "beam",
+        axis: "z",
+        target: GROUP_0,
+        emitters: [{ group: CELL_1, emitter: CELL_1_RED }, { group: CELL_2 }],
+        aperture: { shape: "circle", diameter: 0.2 },
+      },
+    ]);
+
+    await user.click(screen.getByRole("button", { name: "Remove cell-2" }));
+    await user.click(
+      screen.getByRole("button", { name: "Remove cell-1 / red" }),
+    );
+
+    expect(
+      currentEditor().structure3DNodes[ROOT].controls[0],
+    ).not.toHaveProperty("emitters");
+  });
+
+  it("drives each type of control the way the standard says", async () => {
+    const user = userEvent.setup();
+    addMotionParameters();
+    addStructureWithRoot({
+      controls: [
+        {
+          type: "rotate",
+          axis: "z",
+          target: { type: "parameter", parameter: { id: PAN } },
+        },
+      ],
+    });
+    render(<NodeEditor id={ROOT} issues={[]} />);
+    const drivenByOptions = async () => {
+      await user.click(screen.getByRole("combobox", { name: "Driven By" }));
+      const options = screen
+        .getAllByRole("option")
+        .map((option) => option.textContent);
+      await user.keyboard("{Escape}");
+      return options;
+    };
+
+    expect(await drivenByOptions()).toEqual(["Parameter"]);
+    expect(
+      screen.queryByRole("combobox", { name: "Aperture" }),
+    ).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole("combobox", { name: "Type" }));
+    await user.click(screen.getByRole("option", { name: "Beam" }));
+
+    expect(currentEditor().structure3DNodes[ROOT].controls[0].target).toEqual({
+      type: "controlGroups",
+      controlGroups: [],
+    });
+    expect(await drivenByOptions()).toEqual(["Control Groups"]);
+    expect(
+      screen.getByRole("combobox", { name: "Aperture" }),
+    ).toBeInTheDocument();
+
+    await user.click(screen.getByRole("combobox", { name: "Type" }));
+    await user.click(screen.getByRole("option", { name: "Rotate" }));
+
+    expect(currentEditor().structure3DNodes[ROOT].controls[0].target).toEqual({
+      type: "parameter",
+      parameter: { id: PAN },
+    });
+  });
+});
+
+describe("NodeEditor repeat", () => {
+  beforeEach(() => {
+    resetAllStores();
+    createEmptyDeviceClassEditor();
+  });
+
+  it("repeats a node a step apart, naming its index", async () => {
+    const user = userEvent.setup();
+    addStructureWithRoot();
+    render(<NodeEditor id={ROOT} issues={[]} />);
+
+    await user.click(screen.getByRole("checkbox", { name: "Repeat" }));
+    const count = screen.getByRole("textbox", { name: "Count" });
+    await user.clear(count);
+    await user.type(count, "60{Enter}");
+    const stepX = screen.getByRole("textbox", { name: "Step translate X" });
+    await user.clear(stepX);
+    await user.type(stepX, "0.02{Enter}");
+    await user.type(
+      screen.getByRole("textbox", { name: "Index Name" }),
+      "i{Enter}",
+    );
+
+    expect(currentEditor().structure3DNodes[ROOT].repeat).toEqual({
+      count: 60,
+      step: { translate: [0.02, 0, 0] },
+      index: "i",
+    });
+
+    await user.click(screen.getByRole("checkbox", { name: "Repeat" }));
+
+    expect(currentEditor().structure3DNodes[ROOT]).not.toHaveProperty("repeat");
+  });
+
+  it("lets each copy name its own emitters and parameter element", async () => {
+    const user = userEvent.setup();
+    addEmitters();
+    updateCurrentEditor(testUndoLabel("Add tilt"), (editor) => {
+      editor.parameters[EntityId("tilt-parameter")] = {
+        codexId: CodexId("tilt"),
+        class: {
+          type: "imported",
+          library: MOTION_LIBRARY,
+          codexId: CodexId("motion/rotate/offset"),
+        },
+        count: { type: "fixed", value: 4 },
+        access: ["write"],
+        lifetime: "runtime",
+        localized: {},
+      };
+    });
+    addStructureWithRoot({
+      repeat: { count: 4, step: { translate: [0.1, 0, 0] }, index: "i" },
+      controls: [
+        { type: "beam", axis: "z", target: GROUP_0 },
+        {
+          type: "rotate",
+          axis: "x",
+          target: { type: "parameter", parameter: { id: PAN } },
+        },
+      ],
+    });
+    render(<NodeEditor id={ROOT} issues={[]} />);
+
+    // "{{" types a literal "{".
+    await user.type(
+      screen.getByRole("textbox", { name: "Add emitter by path" }),
+      "emitters?/emitterGroups/px-${{i}{Enter}",
+    );
+    expect(screen.getByText("px-${i}")).toBeInTheDocument();
+    await user.click(screen.getByRole("combobox", { name: "Parameter" }));
+    await user.click(screen.getByRole("option", { name: "tilt[${i}]" }));
+
+    const [beam, rotate] = currentEditor().structure3DNodes[ROOT].controls;
+    expect(beam.emitters).toEqual([{ group: "px-${i}" }]);
+    expect(rotate.target).toEqual({
+      type: "parameter",
+      parameter: { id: "tilt[${i}]" },
+    });
+  });
+});
+
+describe("NodeEditor matrix", () => {
+  beforeEach(() => {
+    resetAllStores();
+    createEmptyDeviceClassEditor();
+  });
+
+  it("lays the matrix out row-major, across then down", async () => {
+    const user = userEvent.setup();
+    // prettier-ignore
+    addStructureWithRoot({
+      transform: {
+        type: "matrix",
+        matrix: [
+          1, 0, 0, 4,
+          0, 1, 0, 5,
+          0, 0, 1, 6,
+        ],
+      },
+    });
+    render(<NodeEditor id={ROOT} issues={[]} />);
+
+    const cell = (row: number, column: number) =>
+      screen.getByRole("textbox", {
+        name: `Matrix row ${row}, column ${column}`,
+      });
+    expect(cell(1, 4)).toHaveValue("4");
+    expect(cell(3, 4)).toHaveValue("6");
+    expect(cell(4, 4)).toHaveValue("1");
+
+    await user.clear(cell(2, 4));
+    await user.type(cell(2, 4), "7{Enter}");
+
+    // prettier-ignore
+    expect(currentEditor().structure3DNodes[ROOT].transform).toEqual({
+      type: "matrix",
+      matrix: [
+        1, 0, 0, 4,
+        0, 1, 0, 7,
+        0, 0, 1, 6,
+        0, 0, 0, 1,
+      ],
+    });
   });
 });
 

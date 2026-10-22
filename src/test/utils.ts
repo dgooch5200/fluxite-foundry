@@ -137,6 +137,8 @@ export function createEmptyDeviceClassEditor() {
     commandClassReturnValues: {},
     enumChoices: {},
     structure3DNodes: {},
+    emitterGroups: {},
+    emitters: {},
     localizations: {
       [descriptionKey]: {
         strings: LocalizationDbSchema.parse({ "en-US": "Test description" }),

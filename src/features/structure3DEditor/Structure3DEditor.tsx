@@ -1,28 +1,14 @@
-import { ReactNode, useId, useState } from "react";
+import { ReactNode, useState } from "react";
 import { Trans } from "@lingui/react/macro";
-import { capitalCase } from "change-case";
 import { PlusIcon } from "lucide-react";
-import {
-  Access,
-  accesses,
-  CodexId,
-  EntityId,
-  Lifetime,
-  lifetimes,
-  Structure3D,
-} from "app/persistentState";
-import { FieldSet } from "components/FieldSet";
-import { LabeledCheckbox } from "components/LabeledCheckbox";
-import { ValidatedInput } from "components/ValidatedInput";
-import { SelectField } from "components/EditorFields/SelectField";
+import { EntityId } from "app/persistentState";
 import { Button } from "components/scn-ui/Button";
-import { Label } from "components/scn-ui/Label";
 import {
   SidebarLayout,
   SidebarLayoutMain,
   SidebarLayoutSidebar,
 } from "components/SidebarLayout";
-import { validateNewItemId } from "utils/inputValidation";
+import { StructureFields } from "features/deviceClassEditor/StructureFields";
 import {
   createStructure3D,
   modifyStructure3D,
@@ -91,7 +77,7 @@ export const Structure3DEditor = ({ renderViewport }: Props) => {
               issues={issues[selected] ?? []}
             />
           ) : (
-            <StructureEditor structure={structure} />
+            <StructureFields structure={structure} modify={modifyStructure3D} />
           )}
         </div>
       </SidebarLayoutMain>
@@ -116,86 +102,3 @@ const EmptyState = () => (
     </Button>
   </div>
 );
-
-/** The form for the structure as a whole. */
-const StructureEditor = ({ structure }: { structure: Structure3D }) => {
-  const idPrefix = useId();
-
-  const setAccess = (access: Access, checked: boolean) =>
-    modifyStructure3D((draft) => {
-      draft.access = draft.access.filter((value) => value !== access);
-      if (checked) {
-        draft.access.push(access);
-      }
-    });
-
-  return (
-    <div className="flex flex-wrap gap-4">
-      <FieldSet>
-        <Label htmlFor={`${idPrefix}-id`}>
-          <Trans id="deviceClassEditor.structure3DEditor.id">ID</Trans>
-        </Label>
-        <ValidatedInput
-          id={`${idPrefix}-id`}
-          value={structure.codexId}
-          onConfirm={(newValue) =>
-            modifyStructure3D((draft) => {
-              draft.codexId = CodexId(newValue);
-            })
-          }
-          validator={(input) => validateNewItemId(input, [])}
-        />
-      </FieldSet>
-      <FieldSet>
-        <Label id={`${idPrefix}-access`}>
-          <Trans id="deviceClassEditor.structure3DEditor.access">Access</Trans>
-        </Label>
-        <div
-          role="group"
-          aria-labelledby={`${idPrefix}-access`}
-          className="flex h-9 items-center gap-4 px-1"
-        >
-          <LabeledCheckbox
-            checked={structure.access.includes(accesses.READ)}
-            onChange={(checked) => setAccess(accesses.READ, checked)}
-          >
-            <Trans id="deviceClassEditor.structure3DEditor.read">Read</Trans>
-          </LabeledCheckbox>
-          <LabeledCheckbox
-            disabled={structure.lifetime === lifetimes.STATIC}
-            checked={structure.access.includes(accesses.WRITE)}
-            onChange={(checked) => setAccess(accesses.WRITE, checked)}
-          >
-            <Trans id="deviceClassEditor.structure3DEditor.write">Write</Trans>
-          </LabeledCheckbox>
-        </div>
-      </FieldSet>
-      <FieldSet>
-        <Label htmlFor={`${idPrefix}-lifetime`}>
-          <Trans id="deviceClassEditor.structure3DEditor.lifetime">
-            Lifetime
-          </Trans>
-        </Label>
-        <SelectField
-          id={`${idPrefix}-lifetime`}
-          values={Object.values(lifetimes)}
-          displayValues={Object.values(lifetimes).map((value) =>
-            capitalCase(value),
-          )}
-          selectedValue={structure.lifetime}
-          onSelectionChanged={(value) =>
-            modifyStructure3D((draft) => {
-              draft.lifetime = value as Lifetime;
-              // A static item can't be written.
-              if (value === lifetimes.STATIC) {
-                draft.access = draft.access.filter(
-                  (access) => access !== accesses.WRITE,
-                );
-              }
-            })
-          }
-        />
-      </FieldSet>
-    </div>
-  );
-};

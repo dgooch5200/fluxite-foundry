@@ -1,0 +1,479 @@
+{
+  "e173doc": {
+    "deviceClasses": {
+      "com.example.dev.batten-4": {
+        "1.0.0": {
+          "libraries": {
+            "org.esta.lib.core": "1.0.0",
+            "org.esta.lib.motion": "1.0.0",
+            "org.esta.lib.intensity-color": "1.0.0"
+          },
+          "@description": "batten_description",
+          "publishDate": "2026-10-22T00:00:00Z",
+          "author": "Emitter location proposal",
+          "info": {
+            "manufacturer": {
+              "name": "Example"
+            },
+            "model": {
+              "name": "Four-Cell Batten",
+              "category": "other",
+              "subcategory": "other"
+            }
+          },
+          "history": {
+            "2026-10-22T00:00:00Z": "Example for the emitter location proposal"
+          },
+          "parameters": {
+            "cell-1-red": {
+              "library": "org.esta.lib.intensity-color",
+              "class": "color/additive/emitter",
+              "access": [
+                "readTarget",
+                "write"
+              ],
+              "lifetime": "runtime",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            },
+            "cell-1-green": {
+              "library": "org.esta.lib.intensity-color",
+              "class": "color/additive/emitter",
+              "access": [
+                "readTarget",
+                "write"
+              ],
+              "lifetime": "runtime",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            },
+            "cell-1-blue": {
+              "library": "org.esta.lib.intensity-color",
+              "class": "color/additive/emitter",
+              "access": [
+                "readTarget",
+                "write"
+              ],
+              "lifetime": "runtime",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            },
+            "cell-1-white": {
+              "library": "org.esta.lib.intensity-color",
+              "class": "color/additive/emitter",
+              "access": [
+                "readTarget",
+                "write"
+              ],
+              "lifetime": "runtime",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            },
+            "cell-2-red": {
+              "library": "org.esta.lib.intensity-color",
+              "class": "color/additive/emitter",
+              "access": [
+                "readTarget",
+                "write"
+              ],
+              "lifetime": "runtime",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            },
+            "cell-2-green": {
+              "library": "org.esta.lib.intensity-color",
+              "class": "color/additive/emitter",
+              "access": [
+                "readTarget",
+                "write"
+              ],
+              "lifetime": "runtime",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            },
+            "cell-2-blue": {
+              "library": "org.esta.lib.intensity-color",
+              "class": "color/additive/emitter",
+              "access": [
+                "readTarget",
+                "write"
+              ],
+              "lifetime": "runtime",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            },
+            "cell-2-white": {
+              "library": "org.esta.lib.intensity-color",
+              "class": "color/additive/emitter",
+              "access": [
+                "readTarget",
+                "write"
+              ],
+              "lifetime": "runtime",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            },
+            "cell-3-red": {
+              "library": "org.esta.lib.intensity-color",
+              "class": "color/additive/emitter",
+              "access": [
+                "readTarget",
+                "write"
+              ],
+              "lifetime": "runtime",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            },
+            "cell-3-green": {
+              "library": "org.esta.lib.intensity-color",
+              "class": "color/additive/emitter",
+              "access": [
+                "readTarget",
+                "write"
+              ],
+              "lifetime": "runtime",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            },
+            "cell-3-blue": {
+              "library": "org.esta.lib.intensity-color",
+              "class": "color/additive/emitter",
+              "access": [
+                "readTarget",
+                "write"
+              ],
+              "lifetime": "runtime",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            },
+            "cell-3-white": {
+              "library": "org.esta.lib.intensity-color",
+              "class": "color/additive/emitter",
+              "access": [
+                "readTarget",
+                "write"
+              ],
+              "lifetime": "runtime",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            },
+            "cell-4-red": {
+              "library": "org.esta.lib.intensity-color",
+              "class": "color/additive/emitter",
+              "access": [
+                "readTarget",
+                "write"
+              ],
+              "lifetime": "runtime",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            },
+            "cell-4-green": {
+              "library": "org.esta.lib.intensity-color",
+              "class": "color/additive/emitter",
+              "access": [
+                "readTarget",
+                "write"
+              ],
+              "lifetime": "runtime",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            },
+            "cell-4-blue": {
+              "library": "org.esta.lib.intensity-color",
+              "class": "color/additive/emitter",
+              "access": [
+                "readTarget",
+                "write"
+              ],
+              "lifetime": "runtime",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            },
+            "cell-4-white": {
+              "library": "org.esta.lib.intensity-color",
+              "class": "color/additive/emitter",
+              "access": [
+                "readTarget",
+                "write"
+              ],
+              "lifetime": "runtime",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0
+            }
+          },
+          "structures": {
+            "control-groups": {
+              "library": "org.esta.lib.core",
+              "class": "control-groups",
+              "access": [
+                "read"
+              ],
+              "lifetime": "static",
+              "default": {
+                "groups": [
+                  {
+                    "parameters": [
+                      "cell-1-red",
+                      "cell-1-green",
+                      "cell-1-blue",
+                      "cell-1-white"
+                    ]
+                  },
+                  {
+                    "parameters": [
+                      "cell-2-red",
+                      "cell-2-green",
+                      "cell-2-blue",
+                      "cell-2-white"
+                    ]
+                  },
+                  {
+                    "parameters": [
+                      "cell-3-red",
+                      "cell-3-green",
+                      "cell-3-blue",
+                      "cell-3-white"
+                    ]
+                  },
+                  {
+                    "parameters": [
+                      "cell-4-red",
+                      "cell-4-green",
+                      "cell-4-blue",
+                      "cell-4-white"
+                    ]
+                  }
+                ]
+              }
+            },
+            "emitters": {
+              "library": "org.esta.lib.intensity-color",
+              "class": "emitters",
+              "access": [
+                "read"
+              ],
+              "lifetime": "static",
+              "default": {
+                "emitterGroups": {
+                  "cell-1": {
+                    "emitters": {
+                      "red": {
+                        "directControl": "cell-1-red",
+                        "commonColor": "red"
+                      },
+                      "green": {
+                        "directControl": "cell-1-green",
+                        "commonColor": "green"
+                      },
+                      "blue": {
+                        "directControl": "cell-1-blue",
+                        "commonColor": "blue"
+                      },
+                      "white": {
+                        "directControl": "cell-1-white",
+                        "commonColor": "white"
+                      }
+                    }
+                  },
+                  "cell-2": {
+                    "emitters": {
+                      "red": {
+                        "directControl": "cell-2-red",
+                        "commonColor": "red"
+                      },
+                      "green": {
+                        "directControl": "cell-2-green",
+                        "commonColor": "green"
+                      },
+                      "blue": {
+                        "directControl": "cell-2-blue",
+                        "commonColor": "blue"
+                      },
+                      "white": {
+                        "directControl": "cell-2-white",
+                        "commonColor": "white"
+                      }
+                    }
+                  },
+                  "cell-3": {
+                    "emitters": {
+                      "red": {
+                        "directControl": "cell-3-red",
+                        "commonColor": "red"
+                      },
+                      "green": {
+                        "directControl": "cell-3-green",
+                        "commonColor": "green"
+                      },
+                      "blue": {
+                        "directControl": "cell-3-blue",
+                        "commonColor": "blue"
+                      },
+                      "white": {
+                        "directControl": "cell-3-white",
+                        "commonColor": "white"
+                      }
+                    }
+                  },
+                  "cell-4": {
+                    "emitters": {
+                      "red": {
+                        "directControl": "cell-4-red",
+                        "commonColor": "red"
+                      },
+                      "green": {
+                        "directControl": "cell-4-green",
+                        "commonColor": "green"
+                      },
+                      "blue": {
+                        "directControl": "cell-4-blue",
+                        "commonColor": "blue"
+                      },
+                      "white": {
+                        "directControl": "cell-4-white",
+                        "commonColor": "white"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "structure-3d": {
+              "library": "org.esta.lib.motion",
+              "class": "structure-3d",
+              "access": [
+                "read"
+              ],
+              "lifetime": "static",
+              "default": {
+                "nodes": {
+                  "body": {
+                    "nodes": {
+                      "cell-1": {
+                        "translate": [
+                          -0.375,
+                          0,
+                          0.04
+                        ],
+                        "control": [
+                          {
+                            "type": "beam",
+                            "axis": "z",
+                            "controlGroups": [
+                              "control-groups?/groups/0"
+                            ],
+                            "emitters": [
+                              "emitters?/emitterGroups/cell-1"
+                            ],
+                            "aperture": {
+                              "width": 0.24,
+                              "height": 0.06
+                            }
+                          }
+                        ]
+                      },
+                      "cell-2": {
+                        "translate": [
+                          -0.125,
+                          0,
+                          0.04
+                        ],
+                        "control": [
+                          {
+                            "type": "beam",
+                            "axis": "z",
+                            "controlGroups": [
+                              "control-groups?/groups/1"
+                            ],
+                            "emitters": [
+                              "emitters?/emitterGroups/cell-2"
+                            ],
+                            "aperture": {
+                              "width": 0.24,
+                              "height": 0.06
+                            }
+                          }
+                        ]
+                      },
+                      "cell-3": {
+                        "translate": [
+                          0.125,
+                          0,
+                          0.04
+                        ],
+                        "control": [
+                          {
+                            "type": "beam",
+                            "axis": "z",
+                            "controlGroups": [
+                              "control-groups?/groups/2"
+                            ],
+                            "emitters": [
+                              "emitters?/emitterGroups/cell-3"
+                            ],
+                            "aperture": {
+                              "width": 0.24,
+                              "height": 0.06
+                            }
+                          }
+                        ]
+                      },
+                      "cell-4": {
+                        "translate": [
+                          0.375,
+                          0,
+                          0.04
+                        ],
+                        "control": [
+                          {
+                            "type": "beam",
+                            "axis": "z",
+                            "controlGroups": [
+                              "control-groups?/groups/3"
+                            ],
+                            "emitters": [
+                              "emitters?/emitterGroups/cell-4"
+                            ],
+                            "aperture": {
+                              "width": 0.24,
+                              "height": 0.06
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "localizations": {
+            "en-US": {
+              "strings": {
+                "batten_description": "A 1 m batten with four RGBW cells. Each cell is one beam, driven by its own control group and made of its emitter group."
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$schema": "https://gitlab.com/esta-cpwg/e173/-/raw/main/schemas/draft-2027-1/full/codex-document.json"
+}

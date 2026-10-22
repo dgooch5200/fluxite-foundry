@@ -17,6 +17,8 @@ interface SelectFieldProps {
   values: string[];
   displayValues?: string[];
   selectedValue?: string;
+  // Shown while nothing is selected
+  placeholder?: string;
   onSelectionChanged: (newValue: string) => void;
 }
 
@@ -24,6 +26,7 @@ export const SelectField = ({
   values,
   displayValues,
   selectedValue,
+  placeholder,
   onSelectionChanged,
   className,
   ...props
@@ -36,7 +39,7 @@ export const SelectField = ({
       value={selectedValue === undefined ? undefined : itemValue(selectedValue)}
     >
       <SelectTrigger className={cn("w-xs bg-background", className)} {...props}>
-        <SelectValue />
+        <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
         {values.map((value, index) => {

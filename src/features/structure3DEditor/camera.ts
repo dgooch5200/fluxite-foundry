@@ -33,14 +33,20 @@ export function zoomCamera(controls: OrbitControls, direction: "in" | "out") {
 }
 
 /**
- * Turns the camera on an object and moves it, along the direction it already
- * looks from, close enough that the whole object fills the view.
+ * Turns the camera on an object, or on several together, and moves it along the
+ * direction it already looks from, close enough that they fill the view.
  */
-export function frameObject(controls: OrbitControls, object: Object3D) {
+export function frameObject(
+  controls: OrbitControls,
+  objects: Object3D | Object3D[],
+) {
   const camera = controls.object;
   if (!(camera instanceof PerspectiveCamera)) return;
-  object.updateWorldMatrix(true, true);
-  const box = new Box3().setFromObject(object);
+  const box = new Box3();
+  for (const object of [objects].flat()) {
+    object.updateWorldMatrix(true, true);
+    box.expandByObject(object);
+  }
   if (box.isEmpty()) return;
   const sphere = box.getBoundingSphere(new Sphere());
 

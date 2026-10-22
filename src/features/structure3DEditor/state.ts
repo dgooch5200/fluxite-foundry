@@ -1,8 +1,9 @@
 import { useMemo } from "react";
 import { Draft } from "immer";
-import { i18n } from "@lingui/core";
+import { i18n, MessageDescriptor } from "@lingui/core";
 import { msg } from "@lingui/core/macro";
 import { kebabCase } from "change-case";
+import { Object3D } from "three";
 import { assetStorage } from "app/assetStorage";
 import { openFile } from "app/openFile";
 import {
@@ -53,6 +54,16 @@ import {
   Structure3DIssue,
   validateStructure3D,
 } from "./validation";
+import {
+  MeshRepairSummary,
+  NormalsRepairSummary,
+  repairMesh,
+  repairNormals,
+} from "./meshRepair";
+import { exportGlb, gltfObject } from "./sceneGraph";
+import { indexNamesAt } from "./repeats";
+import { codexIdAsEntityId } from "features/deviceClassEditor/referenceResolution";
+import { parseGltfAsset } from "./useGltf";
 
 const UNDO = {
   createStructure: msg({
@@ -79,6 +90,14 @@ const UNDO = {
     id: "deviceClassEditor.structure3D.undo.importModel",
     message: "Import glTF Model",
   }),
+  repairMesh: msg({
+    id: "deviceClassEditor.structure3D.undo.repairMesh",
+    message: "Repair Mesh",
+  }),
+  repairNormals: msg({
+    id: "deviceClassEditor.structure3D.undo.repairNormals",
+    message: "Repair Normals",
+  }),
 };
 
 const GLTF_FILE_TYPE = msg({
@@ -89,6 +108,7 @@ const GLTF_FILE_TYPE = msg({
 const NO_NODES: Record<EntityId, Structure3DNode> = {};
 const NO_RESOURCES: Record<EntityId, Resource> = {};
 const NO_ISSUES: Record<EntityId, Structure3DIssue[]> = {};
+const NO_INDEX_NAMES: string[] = [];
 
 /** A parameter, or one element of an array parameter, that can drive a control. */
 export interface ControlParameterOption {
@@ -128,14 +148,16 @@ export function useStructure3DNodeFriendlyName(id: EntityId): string {
   );
 }
 
-/** The codexIds of the node's siblings, not including its own. */
-export function useStructure3DSiblingCodexIds(id: EntityId): string[] {
+/**
+ * The codexIds of every other node of the structure. E1.73-4 has node IDs be
+ * unique throughout the structure, not just among siblings.
+ */
+export function useStructure3DOtherNodeCodexIds(id: EntityId): string[] {
   return (
     useCurrentEditorPartShallow((editor) =>
-      siblingIds(editor, id)
-        .filter((siblingId) => siblingId !== id)
-        .map((siblingId) => editor.structure3DNodes[siblingId]?.codexId)
-        .filter((codexId) => codexId !== undefined),
+      Object.entries(editor.structure3DNodes)
+        .filter(([nodeId]) => nodeId !== id)
+        .map(([, node]) => node.codexId),
     ) ?? []
   );
 }
@@ -144,7 +166,14 @@ export function useResources(): Record<EntityId, Resource> {
   return useCurrentEditorPart((editor) => editor.resources) ?? NO_RESOURCES;
 }
 
-export function useControlParameterOptions(): ControlParameterOption[] {
+/**
+ * The parameters, and elements of array parameters, a control can be driven
+ * by. Given the index names of repeats at a node, each array parameter is also
+ * offered with its element filled in per copy, as "tilt[${i}]".
+ */
+export function useControlParameterOptions(
+  indexNames: readonly string[] = NO_INDEX_NAMES,
+): ControlParameterOption[] {
   const parameters = useCurrentEditorPart((editor) => editor.parameters);
   const libraries = useLibraries();
   const deviceLibrary = useDeviceLibrary();
@@ -167,7 +196,7 @@ export function useControlParameterOptions(): ControlParameterOption[] {
         parameter.count?.type === "fixed" ? parameter.count.value : 1;
       const indices = count > 1 ? [...Array(count).keys()] : [undefined];
 
-      return indices.map((index) => ({
+      const elements = indices.map((index) => ({
         ref: index === undefined ? { id } : { id, index },
         label: serializeParameterReference({
           codexId: parameter.codexId,
@@ -175,8 +204,28 @@ export function useControlParameterOptions(): ControlParameterOption[] {
         }),
         unit,
       }));
+      // A reference holding a placeholder is kept by its codexId, as import
+      // keeps one.
+      // ponytail: so it doesn't follow the parameter if it's renamed; store
+      // the index name beside the parameter's ID if that matters.
+      const perCopy = parameter.count
+        ? indexNames.map((name) => {
+            const text = `${parameter.codexId}[\${${name}}]`;
+            return { ref: { id: codexIdAsEntityId(text) }, label: text, unit };
+          })
+        : [];
+      return [...elements, ...perCopy];
     });
-  }, [parameters, libraries, deviceLibrary, store]);
+  }, [parameters, libraries, deviceLibrary, store, indexNames]);
+}
+
+/** The index names references at the node can use: its own repeat's and those above. */
+export function useStructure3DIndexNames(id: EntityId): string[] {
+  return (
+    useCurrentEditorPartShallow((editor) =>
+      indexNamesAt(editor.structure3DNodes, id),
+    ) ?? NO_INDEX_NAMES
+  );
 }
 
 /** The issues of each node of the structure that has any. */
@@ -251,9 +300,7 @@ export function addStructure3DNode(parent?: EntityId): EntityId {
     editor.structure3DNodes[id] = {
       codexId: CodexId(
         getUniqueItemId(
-          siblings
-            .map((sibling) => editor.structure3DNodes[sibling]?.codexId)
-            .filter((codexId) => codexId !== undefined),
+          Object.values(editor.structure3DNodes).map((node) => node.codexId),
           "node",
         ),
       ),
@@ -362,6 +409,82 @@ export async function importGltfModel(nodeId: EntityId) {
   });
 }
 
+/**
+ * Cleans up the mesh of the model shown at the node: welds duplicate vertices
+ * and removes faces that are degenerate or doubled. Undefined if there was
+ * nothing to repair.
+ */
+export function repairModelMesh(
+  nodeId: EntityId,
+): Promise<MeshRepairSummary | undefined> {
+  return repairModel(nodeId, UNDO.repairMesh, repairMesh);
+}
+
+/**
+ * Turns the faces of the model shown at the node outward and gives them
+ * normals that match. Undefined if there was nothing to repair.
+ */
+export function repairModelNormals(
+  nodeId: EntityId,
+): Promise<NormalsRepairSummary | undefined> {
+  return repairModel(nodeId, UNDO.repairNormals, repairNormals);
+}
+
+/**
+ * Repairs the part of the model file that the node shows, and stores the
+ * repaired file as the model resource's new one. Other nodes showing the same
+ * file see the repair too.
+ */
+async function repairModel<Summary extends Record<string, number>>(
+  nodeId: EntityId,
+  label: MessageDescriptor,
+  repair: (object: Object3D) => Summary,
+): Promise<Summary | undefined> {
+  const state = useAppPersistentStore.getState();
+  const documentId = state.session.selectedDocumentId;
+  const editor = getCurrentEditor(state);
+  const visual = editor?.structure3DNodes[nodeId]?.visual;
+  const file = visual && editor.resources[visual.resource]?.default;
+  const assetId = file && editor.resourceAssets[file];
+  if (!visual || !file || !assetId) {
+    return undefined;
+  }
+
+  // A fresh copy, since the one the view draws is shared.
+  const gltf = await parseGltfAsset(assetId);
+  const object = gltfObject(gltf, visual.nodeOrSceneName);
+  const summary = object && repair(object);
+  if (!summary || Object.values(summary).every((count) => count === 0)) {
+    return undefined;
+  }
+
+  const originalFileName = (await assetStorage.getAsset(assetId))
+    ?.originalFileName;
+  const repairedAssetId = await assetStorage.storeAsset(
+    await exportGlb(gltf),
+    "model/gltf-binary",
+    originalFileName?.replace(/\.[^.]*$/, ".glb"),
+  );
+
+  // As with an import, the document may have changed meanwhile. The stored
+  // asset is left for startup cleanup.
+  const latest = useAppPersistentStore.getState();
+  if (
+    latest.session.selectedDocumentId !== documentId ||
+    getCurrentEditor(latest)?.resources[visual.resource]?.default !== file
+  ) {
+    return undefined;
+  }
+
+  asOneChange(label, () => {
+    modifyResource(visual.resource, (draft) => {
+      draft.mediaType = "model/gltf-binary";
+    });
+    updateResourceAsset(visual.resource, repairedAssetId);
+  });
+  return summary;
+}
+
 /** Deletes a node along with everything beneath it. */
 export function deleteStructure3DNode(id: EntityId) {
   updateCurrentEditor(UNDO.deleteNode, (editor) => {
@@ -397,18 +520,6 @@ export function deleteStructure3DNode(id: EntityId) {
 // ---------------------------------------------------------------------------
 // Utils
 // ---------------------------------------------------------------------------
-
-function siblingIds(
-  editor: Pick<DeviceClassDocument, "structure3D" | "structure3DNodes">,
-  id: EntityId,
-): EntityId[] {
-  const parent = editor.structure3DNodes[id]?.parent;
-  return (
-    (parent
-      ? editor.structure3DNodes[parent]?.children
-      : editor.structure3D?.rootNodes) ?? []
-  );
-}
 
 function collectSubtree(
   editor: Pick<DeviceClassDocument, "structure3DNodes">,

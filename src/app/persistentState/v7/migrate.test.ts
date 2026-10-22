@@ -73,19 +73,24 @@ function stateWithDocument(): V6.AppPersistentState {
 }
 
 describe("migrateV6toV7", () => {
-  test("gives each device class document an empty structure 3D node table", () => {
+  test("gives each device class document empty structure 3D and emitter tables", () => {
     const result = migrateV6toV7(stateWithDocument());
 
-    expect(result.documents["doc1" as V7.EntityId].structure3DNodes).toEqual(
-      {},
-    );
+    expect(result.documents["doc1" as V7.EntityId]).toMatchObject({
+      structure3DNodes: {},
+      emitterGroups: {},
+      emitters: {},
+    });
   });
 
-  test("leaves the structure 3D structure absent", () => {
+  test("leaves the structure 3D and emitters structures absent", () => {
     const result = migrateV6toV7(stateWithDocument());
 
     expect(result.documents["doc1" as V7.EntityId]).not.toHaveProperty(
       "structure3D",
+    );
+    expect(result.documents["doc1" as V7.EntityId]).not.toHaveProperty(
+      "emittersStructure",
     );
   });
 
@@ -94,8 +99,12 @@ describe("migrateV6toV7", () => {
 
     const result = migrateV6toV7(state);
 
-    const { structure3DNodes: _, ...rest } =
-      result.documents["doc1" as V7.EntityId];
+    const {
+      structure3DNodes: _nodes,
+      emitterGroups: _groups,
+      emitters: _emitters,
+      ...rest
+    } = result.documents["doc1" as V7.EntityId];
     expect(rest).toEqual(state.documents["doc1" as V6.EntityId]);
   });
 

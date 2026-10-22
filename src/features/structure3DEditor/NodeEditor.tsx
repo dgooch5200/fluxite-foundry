@@ -1,5 +1,6 @@
 import { ReactNode, useId } from "react";
 import { Draft } from "immer";
+import { MessageDescriptor } from "@lingui/core";
 import { msg } from "@lingui/core/macro";
 import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
@@ -15,11 +16,14 @@ import { toast } from "sonner";
 import { useAuthoringLocale } from "app/store";
 import {
   CodexId,
+  EmitterReference,
   EntityId,
   ParameterReference,
+  Structure3DAperture,
   Structure3DControl,
   Structure3DControlType,
   Structure3DNode,
+  Structure3DRepeat,
   Structure3DTransform,
   Structure3DVisual,
   structure3DAxes,
@@ -29,6 +33,7 @@ import {
   Vec3,
 } from "app/persistentState";
 import { FieldSet } from "components/FieldSet";
+import { LabeledCheckbox } from "components/LabeledCheckbox";
 import { NumberInput } from "components/NumberInput";
 import { RenderError } from "components/RenderError";
 import { ValidatedInput } from "components/ValidatedInput";
@@ -47,6 +52,14 @@ import {
   wrapDegrees,
 } from "utils/utils";
 import { entityIdAsCodexId } from "features/deviceClassEditor/referenceResolution";
+import {
+  EMITTER_PATH,
+  emitterReferenceFromPath,
+  emitterReferenceLabel,
+  useEmitterGroups,
+  useEmitterOptions,
+  useEmitters,
+} from "features/emittersEditor/state";
 import { gltfObjectNames } from "./sceneGraph";
 import { useGltf } from "./useGltf";
 import {
@@ -58,7 +71,8 @@ import {
   useResources,
   useStructure3DNode,
   useStructure3DNodeFriendlyName,
-  useStructure3DSiblingCodexIds,
+  useStructure3DIndexNames,
+  useStructure3DOtherNodeCodexIds,
 } from "./state";
 import {
   isCompatibleUnit,
@@ -113,6 +127,43 @@ const MESSAGES = {
     message:
       "Write a path into a control groups structure, like control-groups?/groups/0",
   }),
+  addEmitterPath: msg({
+    id: "deviceClassEditor.structure3DNodeEditor.addEmitterPath",
+    message: "Add emitter by path",
+  }),
+  invalidEmitterPath: msg({
+    id: "deviceClassEditor.structure3DNodeEditor.invalidEmitterPath",
+    message: "Write a path into the emitters structure, such as {example}",
+  }),
+  invalidIndexName: msg({
+    id: "deviceClassEditor.structure3DNodeEditor.invalidIndexName",
+    message:
+      "Start with a letter, followed by letters, digits, - or _. Leave empty for none.",
+  }),
+  stepTranslateAxis: msg({
+    id: "deviceClassEditor.structure3DNodeEditor.stepTranslateAxis",
+    message: "Step translate {axis}",
+  }),
+  stepRotateAxis: msg({
+    id: "deviceClassEditor.structure3DNodeEditor.stepRotateAxis",
+    message: "Step rotate {axis}",
+  }),
+  addEmitter: msg({
+    id: "deviceClassEditor.structure3DNodeEditor.addEmitter",
+    message: "Add emitter or group",
+  }),
+  removeEmitter: msg({
+    id: "deviceClassEditor.structure3DNodeEditor.removeEmitter",
+    message: "Remove {emitter}",
+  }),
+  apertureCircle: msg({
+    id: "deviceClassEditor.structure3DNodeEditor.apertureCircle",
+    message: "Circle",
+  }),
+  apertureRectangle: msg({
+    id: "deviceClassEditor.structure3DNodeEditor.apertureRectangle",
+    message: "Rectangle",
+  }),
   defaultScene: msg({
     id: "deviceClassEditor.structure3DNodeEditor.defaultScene",
     message: "Default scene",
@@ -139,7 +190,20 @@ const NONE = "<none>";
 const AXES = Object.values(structure3DAxes);
 
 // From the structure-3d schema
-const CONTROL_GROUP_PATH = /^[^?]+\?(\/groups\/\d+)+?$/;
+// A path may number a group with a repeat's index, as "/groups/${i}".
+const CONTROL_GROUP_PATH =
+  /^[^?]+\?(\/groups\/(\d+|\$\{[A-Za-z][A-Za-z0-9_-]*\}))+$/;
+// From the proposed schema: what a repeat's index can be named.
+const INDEX_NAME = /^[A-Za-z][A-Za-z0-9_-]*$/;
+// An example path, not text for people to read.
+// eslint-disable-next-line lingui/no-unlocalized-strings
+const EMITTER_PATH_EXAMPLE = "emitters?/emitterGroups/px-${i}";
+
+// A new repeat starts with copies this far apart along X, in meters.
+const DEFAULT_REPEAT_STEP = 0.1;
+
+// A new aperture starts at this size, in meters.
+const DEFAULT_APERTURE_SIZE = 0.1;
 
 // prettier-ignore
 const IDENTITY_MATRIX = [
@@ -158,7 +222,8 @@ interface Props {
 export const NodeEditor = ({ id, issues }: Props) => {
   const node = useStructure3DNode(id);
   const friendlyName = useStructure3DNodeFriendlyName(id);
-  const siblingCodexIds = useStructure3DSiblingCodexIds(id);
+  const otherCodexIds = useStructure3DOtherNodeCodexIds(id);
+  const indexNames = useStructure3DIndexNames(id);
   const locale = useAuthoringLocale();
   const idPrefix = useId();
 
@@ -185,7 +250,7 @@ export const NodeEditor = ({ id, issues }: Props) => {
             onConfirm={(newValue) =>
               modify((draft) => (draft.codexId = CodexId(newValue)))
             }
-            validator={(input) => validateNewItemId(input, siblingCodexIds)}
+            validator={(input) => validateNewItemId(input, otherCodexIds)}
           />
         </FieldSet>
         <FieldSet>
@@ -227,9 +292,18 @@ export const NodeEditor = ({ id, issues }: Props) => {
           />
         </FieldSet>
       </div>
+      <FieldIssues
+        issues={[...issuesFor("id"), ...issuesFor("accessoryLocation")]}
+      />
       <TransformFields transform={node.transform} modify={modify} />
+      <RepeatFields
+        repeat={node.repeat}
+        issues={issuesFor("repeat")}
+        modify={modify}
+      />
       <ControlsFields
         controls={node.controls}
+        indexNames={indexNames}
         issuesFor={issuesFor}
         modify={modify}
       />
@@ -259,7 +333,7 @@ const TransformFields = ({ transform, modify }: TransformFieldsProps) => {
   const labelId = useId();
 
   // Switching starts the other kind of transform from identity, rather than
-  // converting, as a matrix can hold things translate and rotate can't.
+  // converting.
   const setType = (type: Structure3DTransform["type"]) =>
     modify((draft) => {
       if (draft.transform.type !== type) {
@@ -407,7 +481,7 @@ const MatrixFields = ({ matrix, onCommit }: MatrixFieldsProps) => {
     <div className="grid w-fit grid-cols-4 gap-2">
       {[0, 1, 2, 3].flatMap((row) =>
         [0, 1, 2, 3].map((column) => {
-          const index = column * 4 + row;
+          const index = row * 4 + column;
           return (
             <NumberInput
               key={index}
@@ -431,14 +505,11 @@ const MatrixFields = ({ matrix, onCommit }: MatrixFieldsProps) => {
   );
 };
 
-// A matrix's 16 values, column-major as in glTF. The schema also allows 12
-// values, which leave out the bottom row.
+// A matrix's 16 values, row-major ("across then down") as E1.73-4 has it. The
+// schema also allows 12 values, which leave out the bottom row of 0, 0, 0, 1.
 function matrixCells(matrix: number[]): number[] {
   if (matrix.length === 12) {
-    return [0, 1, 2, 3].flatMap((column) => [
-      ...matrix.slice(column * 3, column * 3 + 3),
-      column === 3 ? 1 : 0,
-    ]);
+    return [...matrix, 0, 0, 0, 1];
   }
   return IDENTITY_MATRIX.map((identity, index) => matrix[index] ?? identity);
 }
@@ -449,17 +520,20 @@ function matrixCells(matrix: number[]): number[] {
 
 interface ControlsFieldsProps {
   controls: Structure3DControl[];
+  // The index names of the repeats at and above the node
+  indexNames: string[];
   issuesFor: (field: Structure3DIssueField) => Structure3DIssue[];
   modify: Modify;
 }
 
 const ControlsFields = ({
   controls,
+  indexNames,
   issuesFor,
   modify,
 }: ControlsFieldsProps) => {
   const labelId = useId();
-  const parameterOptions = useControlParameterOptions();
+  const parameterOptions = useControlParameterOptions(indexNames);
 
   const addControl = () =>
     modify((draft) => {
@@ -491,6 +565,7 @@ const ControlsFields = ({
                 key={index}
                 control={control}
                 parameterOptions={parameterOptions}
+                inRepeat={indexNames.length > 0}
                 issues={issuesFor(`control.${index}`)}
                 onChange={(recipe) =>
                   modify((draft) => {
@@ -522,6 +597,8 @@ const ControlsFields = ({
 interface ControlItemProps {
   control: Structure3DControl;
   parameterOptions: ControlParameterOption[];
+  // Whether a repeat at or above the node has an index name to use
+  inRepeat: boolean;
   issues: Structure3DIssue[];
   onChange: (recipe: (draft: Draft<Structure3DControl>) => void) => void;
   onRemove: () => void;
@@ -530,6 +607,7 @@ interface ControlItemProps {
 const ControlItem = ({
   control,
   parameterOptions,
+  inRepeat,
   issues,
   onChange,
   onRemove,
@@ -541,6 +619,14 @@ const ControlItem = ({
   const compatibleOptions = (type: Structure3DControlType) =>
     parameterOptions.filter((option) => isCompatibleUnit(type, option.unit));
 
+  // Picks a parameter that fits the control, if there is one to pick.
+  const driveByParameter = (draft: Draft<Structure3DControl>) => {
+    const option = compatibleOptions(draft.type)[0] ?? parameterOptions[0];
+    if (option) {
+      draft.target = { type: "parameter", parameter: option.ref };
+    }
+  };
+
   const setDrivenBy = (drivenBy: string) =>
     onChange((draft) => {
       if (drivenBy === draft.target.type) {
@@ -548,19 +634,43 @@ const ControlItem = ({
       }
       if (drivenBy === "controlGroups") {
         draft.target = { type: "controlGroups", controlGroups: [] };
-        return;
-      }
-      const option = compatibleOptions(draft.type)[0] ?? parameterOptions[0];
-      if (option) {
-        draft.target = { type: "parameter", parameter: option.ref };
+      } else {
+        driveByParameter(draft);
       }
     });
 
-  // A parameter can only be offered when there is one to pick.
+  // E1.73-4 Table 8-8: beams are driven by control groups, linear and rotate
+  // controls by a parameter, so changing the type changes what drives it. Only
+  // a beam has emitters and an aperture.
+  const setType = (type: Structure3DControlType) =>
+    onChange((draft) => {
+      draft.type = type;
+      if (type === structure3DControlTypes.BEAM) {
+        if (draft.target.type !== "controlGroups") {
+          draft.target = { type: "controlGroups", controlGroups: [] };
+        }
+        return;
+      }
+      delete draft.emitters;
+      delete draft.aperture;
+      if (draft.target.type !== "parameter") {
+        driveByParameter(draft);
+      }
+    });
+
+  const isBeam = control.type === structure3DControlTypes.BEAM;
+  const emitters = control.emitters ?? [];
+
+  // What drives this type of control, and whatever drives it already if that
+  // doesn't fit, so the form doesn't misreport the data; its issue is shown
+  // beside the control.
+  const drivenBy = isBeam ? "controlGroups" : "parameter";
   const drivenByValues =
-    parameterOptions.length > 0 || target.type === "parameter"
-      ? ["parameter", "controlGroups"]
-      : ["controlGroups"];
+    target.type === drivenBy ? [drivenBy] : [drivenBy, target.type];
+  const drivenByNames: Record<string, MessageDescriptor> = {
+    parameter: MESSAGES.drivenByParameter,
+    controlGroups: MESSAGES.drivenByControlGroups,
+  };
 
   return (
     <Item variant="outline" role="listitem" className="flex-col items-stretch">
@@ -580,9 +690,7 @@ const ControlItem = ({
             )}
             selectedValue={control.type}
             onSelectionChanged={(value) =>
-              onChange((draft) => {
-                draft.type = value as Structure3DControlType;
-              })
+              setType(value as Structure3DControlType)
             }
           />
         </FieldSet>
@@ -643,17 +751,13 @@ const ControlItem = ({
             className="w-40"
             values={drivenByValues}
             displayValues={drivenByValues.map((value) =>
-              _(
-                value === "parameter"
-                  ? MESSAGES.drivenByParameter
-                  : MESSAGES.drivenByControlGroups,
-              ),
+              _(drivenByNames[value]!),
             )}
             selectedValue={target.type}
             onSelectionChanged={setDrivenBy}
           />
         </FieldSet>
-        {target.type === "parameter" ? (
+        {target.type === "parameter" && (
           <FieldSet>
             <Label htmlFor={`${idPrefix}-parameter`}>
               <Trans id="deviceClassEditor.structure3DNodeEditor.parameter">
@@ -672,7 +776,8 @@ const ControlItem = ({
               }
             />
           </FieldSet>
-        ) : (
+        )}
+        {target.type === "controlGroups" && (
           <FieldSet>
             <Label id={`${idPrefix}-controlGroups`}>
               <Trans id="deviceClassEditor.structure3DNodeEditor.controlGroups">
@@ -692,6 +797,39 @@ const ControlItem = ({
               }
             />
           </FieldSet>
+        )}
+        {(isBeam || emitters.length > 0) && (
+          <FieldSet>
+            <Label id={`${idPrefix}-emitters`}>
+              <Trans id="deviceClassEditor.structure3DNodeEditor.emitters">
+                Emitters
+              </Trans>
+            </Label>
+            <EmitterReferencesField
+              aria-labelledby={`${idPrefix}-emitters`}
+              refs={emitters}
+              allowPaths={inRepeat}
+              onChange={(refs) =>
+                onChange((draft) => {
+                  if (refs.length > 0) draft.emitters = refs;
+                  else delete draft.emitters;
+                })
+              }
+            />
+          </FieldSet>
+        )}
+        {(isBeam || control.aperture) && (
+          <ApertureFields
+            aperture={control.aperture}
+            onChange={(aperture) =>
+              onChange((draft) => {
+                // Deleting an absent key records no change, where assigning
+                // undefined would.
+                if (aperture) draft.aperture = aperture;
+                else delete draft.aperture;
+              })
+            }
+          />
         )}
         <Button
           size="icon"
@@ -827,6 +965,336 @@ function validateControlGroupPath(input: string): InputValidationResult {
     ? { isValid: true }
     : { isValid: false, feedback: MESSAGES.invalidControlGroupPath };
 }
+
+interface EmitterReferencesFieldProps {
+  "aria-labelledby": string;
+  refs: EmitterReference[];
+  // Whether a path can be typed, so each copy of a repeated node can name its
+  // own group, as "emitters?/emitterGroups/px-${i}"
+  allowPaths: boolean;
+  onChange: (refs: EmitterReference[]) => void;
+}
+
+/**
+ * The emitter groups and emitters a beam is placed at, picked from the device
+ * class's emitters or, in a repeated node, given by a path. One that no longer
+ * exists is still listed, so the form doesn't misreport the data; its issue is
+ * shown beside the control.
+ */
+const EmitterReferencesField = ({
+  "aria-labelledby": labelledBy,
+  refs,
+  allowPaths,
+  onChange,
+}: EmitterReferencesFieldProps) => {
+  const { _ } = useLingui();
+  const options = useEmitterOptions();
+  const emitterGroups = useEmitterGroups();
+  const emitters = useEmitters();
+
+  const key = (ref: EmitterReference) => `${ref.group}/${ref.emitter ?? ""}`;
+  const chosen = new Set(refs.map(key));
+  const available = options.filter((option) => !chosen.has(key(option.ref)));
+
+  return (
+    <div
+      role="group"
+      aria-labelledby={labelledBy}
+      className="flex flex-col gap-2"
+    >
+      {refs.map((ref, index) => {
+        const label = emitterReferenceLabel({ emitterGroups, emitters }, ref);
+        return (
+          <div key={key(ref)} className="flex items-center gap-1">
+            <span className="min-w-36 text-sm">{label}</span>
+            <Button
+              size="icon"
+              variant="ghost"
+              aria-label={_({
+                ...MESSAGES.removeEmitter,
+                values: { emitter: label },
+              })}
+              onClick={() => onChange(refs.filter((_r, i) => i !== index))}
+            >
+              <XIcon />
+            </Button>
+          </div>
+        );
+      })}
+      {options.length === 0 ? (
+        <p className="text-sm text-muted-foreground">
+          <Trans id="deviceClassEditor.structure3DNodeEditor.noEmitterOptions">
+            The device class has no emitters yet. Add them in the Emitters tab.
+          </Trans>
+        </p>
+      ) : (
+        available.length > 0 && (
+          <SelectField
+            // Starts empty again once an emitter has been added.
+            key={refs.length}
+            className="w-48"
+            aria-label={_(MESSAGES.addEmitter)}
+            placeholder={_(MESSAGES.addEmitter)}
+            values={available.map((option) => key(option.ref))}
+            displayValues={available.map((option) => option.label)}
+            onSelectionChanged={(value) => {
+              const option = available.find(
+                (option) => key(option.ref) === value,
+              );
+              if (option) onChange([...refs, option.ref]);
+            }}
+          />
+        )
+      )}
+      {allowPaths && (
+        <ValidatedInput
+          // Starts empty again once an emitter has been added.
+          key={`path-${refs.length}`}
+          aria-label={_(MESSAGES.addEmitterPath)}
+          placeholder={EMITTER_PATH_EXAMPLE}
+          value=""
+          validator={(input) =>
+            input === "" || EMITTER_PATH.test(input)
+              ? { isValid: true }
+              : {
+                  isValid: false,
+                  feedback: {
+                    ...MESSAGES.invalidEmitterPath,
+                    values: { example: EMITTER_PATH_EXAMPLE },
+                  },
+                }
+          }
+          onConfirm={(path) => {
+            const ref =
+              path &&
+              emitterReferenceFromPath({ emitterGroups, emitters }, path);
+            if (ref) onChange([...refs, ref]);
+          }}
+        />
+      )}
+    </div>
+  );
+};
+
+interface RepeatFieldsProps {
+  repeat?: Structure3DRepeat;
+  issues: Structure3DIssue[];
+  modify: Modify;
+}
+
+/** Whether the node stands for several copies, and how they're laid out. */
+const RepeatFields = ({ repeat, issues, modify }: RepeatFieldsProps) => {
+  const { _ } = useLingui();
+  const idPrefix = useId();
+
+  const modifyRepeat = (recipe: (draft: Draft<Structure3DRepeat>) => void) =>
+    modify((draft) => {
+      if (draft.repeat) recipe(draft.repeat);
+    });
+
+  return (
+    <FieldSet>
+      <LabeledCheckbox
+        checked={repeat !== undefined}
+        onChange={(checked) =>
+          modify((draft) => {
+            if (checked) {
+              draft.repeat = {
+                count: 2,
+                step: { translate: [DEFAULT_REPEAT_STEP, 0, 0] },
+              };
+            } else {
+              delete draft.repeat;
+            }
+          })
+        }
+      >
+        <Trans id="deviceClassEditor.structure3DNodeEditor.repeat">
+          Repeat
+        </Trans>
+      </LabeledCheckbox>
+      {repeat && (
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-wrap gap-4">
+            <FieldSet>
+              <Label htmlFor={`${idPrefix}-count`}>
+                <Trans id="deviceClassEditor.structure3DNodeEditor.repeatCount">
+                  Count
+                </Trans>
+              </Label>
+              <NumberInput
+                id={`${idPrefix}-count`}
+                className="w-24"
+                hideControls
+                integer
+                min={1}
+                value={repeat.count}
+                onCommit={(count) =>
+                  modifyRepeat((draft) => {
+                    draft.count = count;
+                  })
+                }
+              />
+            </FieldSet>
+            <FieldSet>
+              <Label htmlFor={`${idPrefix}-index`}>
+                <Trans id="deviceClassEditor.structure3DNodeEditor.repeatIndex">
+                  Index Name
+                </Trans>
+              </Label>
+              <ValidatedInput
+                id={`${idPrefix}-index`}
+                className="w-36"
+                value={repeat.index ?? ""}
+                validator={(input) =>
+                  input === "" || INDEX_NAME.test(input)
+                    ? { isValid: true }
+                    : { isValid: false, feedback: MESSAGES.invalidIndexName }
+                }
+                onConfirm={(index) =>
+                  modifyRepeat((draft) => {
+                    if (index) draft.index = index;
+                    else delete draft.index;
+                  })
+                }
+              />
+            </FieldSet>
+          </div>
+          <Vec3Fields
+            label={
+              <Trans id="deviceClassEditor.structure3DNodeEditor.repeatStepTranslate">
+                Step: Translate
+              </Trans>
+            }
+            axisLabel={(axis) =>
+              _({ ...MESSAGES.stepTranslateAxis, values: { axis } })
+            }
+            value={repeat.step.translate}
+            onCommit={(value) =>
+              modifyRepeat((draft) => {
+                draft.step.translate = value;
+              })
+            }
+          />
+          <Vec3Fields
+            label={
+              <Trans id="deviceClassEditor.structure3DNodeEditor.repeatStepRotate">
+                Step: Rotate (degrees)
+              </Trans>
+            }
+            axisLabel={(axis) =>
+              _({ ...MESSAGES.stepRotateAxis, values: { axis } })
+            }
+            value={repeat.step.rotate}
+            // The schema only allows angles from 0 to 360.
+            onCommit={(value) =>
+              modifyRepeat((draft) => {
+                draft.step.rotate = value.map(wrapDegrees) as Vec3;
+              })
+            }
+          />
+        </div>
+      )}
+      <FieldIssues issues={issues} />
+    </FieldSet>
+  );
+};
+
+interface ApertureFieldsProps {
+  aperture?: Structure3DAperture;
+  onChange: (aperture: Structure3DAperture | undefined) => void;
+}
+
+/** The area a beam's light leaves from: none, a circle or a rectangle. */
+const ApertureFields = ({ aperture, onChange }: ApertureFieldsProps) => {
+  const { _ } = useLingui();
+  const idPrefix = useId();
+
+  const setShape = (shape: string) => {
+    if (shape === (aperture?.shape ?? NONE)) return;
+    onChange(
+      shape === "circle"
+        ? { shape, diameter: DEFAULT_APERTURE_SIZE }
+        : shape === "rectangle"
+          ? {
+              shape,
+              width: DEFAULT_APERTURE_SIZE,
+              height: DEFAULT_APERTURE_SIZE,
+            }
+          : undefined,
+    );
+  };
+
+  const sizeField = (
+    key: string,
+    label: ReactNode,
+    value: number,
+    onCommit: (value: number) => void,
+  ) => (
+    <FieldSet key={key}>
+      <Label htmlFor={`${idPrefix}-${key}`}>{label}</Label>
+      <NumberInput
+        id={`${idPrefix}-${key}`}
+        className="w-24"
+        hideControls
+        min={0}
+        value={value}
+        onCommit={onCommit}
+      />
+    </FieldSet>
+  );
+
+  return (
+    <>
+      <FieldSet>
+        <Label htmlFor={`${idPrefix}-shape`}>
+          <Trans id="deviceClassEditor.structure3DNodeEditor.aperture">
+            Aperture
+          </Trans>
+        </Label>
+        <SelectField
+          id={`${idPrefix}-shape`}
+          className="w-32"
+          values={[NONE, "circle", "rectangle"]}
+          displayValues={[
+            _(MESSAGES.none),
+            _(MESSAGES.apertureCircle),
+            _(MESSAGES.apertureRectangle),
+          ]}
+          selectedValue={aperture?.shape ?? NONE}
+          onSelectionChanged={setShape}
+        />
+      </FieldSet>
+      {aperture?.shape === "circle" &&
+        sizeField(
+          "diameter",
+          <Trans id="deviceClassEditor.structure3DNodeEditor.apertureDiameter">
+            Diameter (m)
+          </Trans>,
+          aperture.diameter,
+          (diameter) => onChange({ ...aperture, diameter }),
+        )}
+      {aperture?.shape === "rectangle" && [
+        sizeField(
+          "width",
+          <Trans id="deviceClassEditor.structure3DNodeEditor.apertureWidth">
+            Width (m)
+          </Trans>,
+          aperture.width,
+          (width) => onChange({ ...aperture, width }),
+        ),
+        sizeField(
+          "height",
+          <Trans id="deviceClassEditor.structure3DNodeEditor.apertureHeight">
+            Height (m)
+          </Trans>,
+          aperture.height,
+          (height) => onChange({ ...aperture, height }),
+        ),
+      ]}
+    </>
+  );
+};
 
 // ---------------------------------------------------------------------------
 // Model

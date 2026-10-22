@@ -80,6 +80,28 @@
     ],
     "translation": "{count} included (replaces stored assets)"
   },
+  "deviceClassEditor.structure3D.issue.emitterPlacedTwice": {
+    "message": "{emitter} is also placed at node {node}. An emitter can only be at one node.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/validation.ts"
+      ]
+    ],
+    "translation": "{emitter} is also placed at node {node}. An emitter can only be at one node."
+  },
+  "deviceClassEditor.structure3D.issue.emitterMissing": {
+    "message": "{emitter} isn't in the device class's emitters. Choose another one.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/validation.ts"
+      ]
+    ],
+    "translation": "{emitter} isn't in the device class's emitters. Choose another one."
+  },
   "importFluxiteCodex.feedback.errorList": {
     "message": "{errors}",
     "placeholders": {},
@@ -147,6 +169,17 @@
       ]
     ],
     "translation": "{name} [{index}]"
+  },
+  "deviceClassEditor.structure3D.issue.parameterMissingInCopy": {
+    "message": "{parameter} isn't one of the device class's parameters.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/validation.ts"
+      ]
+    ],
+    "translation": "{parameter} isn't one of the device class's parameters."
   },
   "deviceClassEditor.structure3DViewport.poseLabel": {
     "message": "{parameter} on {node}",
@@ -258,6 +291,17 @@
     ],
     "translation": "A 3D structure describes the physical parts of a device: where each part sits, which parameters move it, and the 3D model that shows it. This device class has no 3D structure yet."
   },
+  "deviceClassEditor.structure3D.issue.beamNeedsControlGroups": {
+    "message": "A beam control should be driven by control groups.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/validation.ts"
+      ]
+    ],
+    "translation": "A beam control should be driven by control groups."
+  },
   "paramClassCategory.hasSpace": {
     "message": "A category must not contain a space.",
     "placeholders": {},
@@ -313,6 +357,17 @@
     ],
     "translation": "A linear control should be driven by a parameter measured in meters."
   },
+  "deviceClassEditor.structure3D.issue.needsParameter": {
+    "message": "A linear or rotate control should be driven by a parameter.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/validation.ts"
+      ]
+    ],
+    "translation": "A linear or rotate control should be driven by a parameter."
+  },
   "itemClasses.parameterClasses.duplicateId": {
     "message": "A parameter class with the ID {codexId} already exists.",
     "placeholders": {},
@@ -323,6 +378,28 @@
       ]
     ],
     "translation": "A parameter class with the ID {codexId} already exists."
+  },
+  "deviceClassEditor.structure3D.issue.repeatIndexTaken": {
+    "message": "A repeat above this one already uses the index name {name}.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/validation.ts"
+      ]
+    ],
+    "translation": "A repeat above this one already uses the index name {name}."
+  },
+  "deviceClassEditor.structure3D.issue.repeatCount": {
+    "message": "A repeat's count should be a whole number of at least 1.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/validation.ts"
+      ]
+    ],
+    "translation": "A repeat's count should be a whole number of at least 1."
   },
   "itemClasses.resourceClasses.duplicateId": {
     "message": "A resource class with the ID {codexId} already exists.",
@@ -394,13 +471,13 @@
     ],
     "translation": "About {APP_NAME}"
   },
-  "deviceClassEditor.structure3DEditor.access": {
+  "deviceClassEditor.structureFields.access": {
     "message": "Access",
     "placeholders": {},
     "comments": [],
     "origin": [
       [
-        "src/features/structure3DEditor/Structure3DEditor.tsx"
+        "src/features/deviceClassEditor/StructureFields.tsx"
       ]
     ],
     "translation": "Access"
@@ -672,7 +749,7 @@
     "translation": "Add Argument"
   },
   "deviceClassEditor.structure3D.issue.noControlGroups": {
-    "message": "Add at least one control group, or drive this control by a parameter.",
+    "message": "Add at least one control group.",
     "placeholders": {},
     "comments": [],
     "origin": [
@@ -680,7 +757,7 @@
         "src/features/structure3DEditor/validation.ts"
       ]
     ],
-    "translation": "Add at least one control group, or drive this control by a parameter."
+    "translation": "Add at least one control group."
   },
   "deviceClassEditor.structure3DEditor.tree.addChildNode": {
     "message": "Add Child Node",
@@ -824,6 +901,72 @@
       ]
     ],
     "translation": "Add DMX Slot Group"
+  },
+  "deviceClassEditor.emittersEditor.addEmitter": {
+    "message": "Add Emitter",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/emittersEditor/EmittersEditor.tsx"
+      ]
+    ],
+    "translation": "Add Emitter"
+  },
+  "deviceClassEditor.emitters.undo.addEmitter": {
+    "message": "Add Emitter",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/emittersEditor/state.ts"
+      ]
+    ],
+    "translation": "Add Emitter"
+  },
+  "deviceClassEditor.structure3DNodeEditor.addEmitterPath": {
+    "message": "Add emitter by path",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/NodeEditor.tsx"
+      ]
+    ],
+    "translation": "Add emitter by path"
+  },
+  "deviceClassEditor.emittersEditor.addGroup": {
+    "message": "Add Emitter Group",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/emittersEditor/EmittersEditor.tsx"
+      ]
+    ],
+    "translation": "Add Emitter Group"
+  },
+  "deviceClassEditor.emitters.undo.addGroup": {
+    "message": "Add Emitter Group",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/emittersEditor/state.ts"
+      ]
+    ],
+    "translation": "Add Emitter Group"
+  },
+  "deviceClassEditor.structure3DNodeEditor.addEmitter": {
+    "message": "Add emitter or group",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/NodeEditor.tsx"
+      ]
+    ],
+    "translation": "Add emitter or group"
   },
   "deviceClassEditor.undo.addEnumChoice": {
     "message": "Add Enum Choice",
@@ -1159,6 +1302,17 @@
     ],
     "translation": "An error occurred while trying to load the default set of ESTA libraries. This is a bug in {APP_NAME}. Please open an issue in the <0>repository</0>."
   },
+  "deviceClassEditor.structure3D.issue.repeatIndexName": {
+    "message": "An index name should start with a letter, followed by letters, digits, - or _.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/validation.ts"
+      ]
+    ],
+    "translation": "An index name should start with a letter, followed by letters, digits, - or _."
+  },
   "navbar.importCodex.unknownError": {
     "message": "An unknown error occurred importing the selected file.",
     "placeholders": {},
@@ -1207,6 +1361,28 @@
       ]
     ],
     "translation": "And"
+  },
+  "deviceClassEditor.structure3D.issue.idNotUnique": {
+    "message": "Another node has this ID. Each node needs its own, anywhere in the structure.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/validation.ts"
+      ]
+    ],
+    "translation": "Another node has this ID. Each node needs its own, anywhere in the structure."
+  },
+  "deviceClassEditor.structure3DNodeEditor.aperture": {
+    "message": "Aperture",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/NodeEditor.tsx"
+      ]
+    ],
+    "translation": "Aperture"
   },
   "navbar.mainMenu.label": {
     "message": "App Menu",
@@ -1619,6 +1795,17 @@
     ],
     "translation": "Choice name"
   },
+  "deviceClassEditor.structure3DNodeEditor.apertureCircle": {
+    "message": "Circle",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/NodeEditor.tsx"
+      ]
+    ],
+    "translation": "Circle"
+  },
   "deviceClassEditor.newResource.class": {
     "message": "Class",
     "placeholders": {},
@@ -1895,6 +2082,17 @@
     ],
     "translation": "Common Axis"
   },
+  "deviceClassEditor.emittersEditor.commonColor": {
+    "message": "Common Color",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/emittersEditor/EmittersEditor.tsx"
+      ]
+    ],
+    "translation": "Common Color"
+  },
   "deviceClassEditor.deviceInfo.compatibilityHeading": {
     "message": "Compatibility",
     "placeholders": {},
@@ -1983,6 +2181,21 @@
     ],
     "translation": "Control Groups"
   },
+  "deviceClassEditor.emittersEditor.controlGroupsKept": {
+    "message": "Control groups kept as imported: {controlGroupCount}. Editing them here is not supported yet.",
+    "placeholders": {
+      "controlGroupCount": [
+        "controlGroupCount"
+      ]
+    },
+    "comments": [],
+    "origin": [
+      [
+        "src/features/emittersEditor/EmittersEditor.tsx"
+      ]
+    ],
+    "translation": "Control groups kept as imported: {controlGroupCount}. Editing them here is not supported yet."
+  },
   "deviceClassEditor.structure3DNodeEditor.controls": {
     "message": "Controls",
     "placeholders": {},
@@ -2059,6 +2272,17 @@
       ]
     ],
     "translation": "Couldn't import the model: {reason}"
+  },
+  "deviceClassEditor.structure3DNodeEditor.repeatCount": {
+    "message": "Count",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/NodeEditor.tsx"
+      ]
+    ],
+    "translation": "Count"
   },
   "itemClasses.commandClasses.newDialog.description": {
     "message": "Create a new command class by providing an ID and a name",
@@ -2169,6 +2393,28 @@
       ]
     ],
     "translation": "Create and edit the item classes the device class defines"
+  },
+  "deviceClassEditor.emittersEditor.create": {
+    "message": "Create Emitters",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/emittersEditor/EmittersEditor.tsx"
+      ]
+    ],
+    "translation": "Create Emitters"
+  },
+  "deviceClassEditor.emitters.undo.createStructure": {
+    "message": "Create Emitters",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/emittersEditor/state.ts"
+      ]
+    ],
+    "translation": "Create Emitters"
   },
   "deviceClassEditor.structure3DEditor.create": {
     "message": "Create Structure 3D",
@@ -2532,6 +2778,28 @@
       ]
     ],
     "translation": "Delete Editor"
+  },
+  "deviceClassEditor.emitters.undo.deleteEmitter": {
+    "message": "Delete Emitter",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/emittersEditor/state.ts"
+      ]
+    ],
+    "translation": "Delete Emitter"
+  },
+  "deviceClassEditor.emitters.undo.deleteGroup": {
+    "message": "Delete Emitter Group",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/emittersEditor/state.ts"
+      ]
+    ],
+    "translation": "Delete Emitter Group"
   },
   "deviceClassEditor.undo.deleteEnumChoice": {
     "message": "Delete Enum Choice",
@@ -2902,6 +3170,17 @@
     ],
     "translation": "Device Library"
   },
+  "deviceClassEditor.structure3DNodeEditor.apertureDiameter": {
+    "message": "Diameter (m)",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/NodeEditor.tsx"
+      ]
+    ],
+    "translation": "Diameter (m)"
+  },
   "deviceClassEditor.structure3DNodeEditor.displayName": {
     "message": "Display Name",
     "placeholders": {},
@@ -3166,6 +3445,39 @@
     ],
     "translation": "Edit DMX Parameter Mapping"
   },
+  "deviceClassEditor.emitters.undo.editEmitter": {
+    "message": "Edit Emitter",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/emittersEditor/state.ts"
+      ]
+    ],
+    "translation": "Edit Emitter"
+  },
+  "deviceClassEditor.emitters.undo.editGroup": {
+    "message": "Edit Emitter Group",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/emittersEditor/state.ts"
+      ]
+    ],
+    "translation": "Edit Emitter Group"
+  },
+  "deviceClassEditor.emitters.undo.editStructure": {
+    "message": "Edit Emitters",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/emittersEditor/state.ts"
+      ]
+    ],
+    "translation": "Edit Emitters"
+  },
   "deviceClassEditor.undo.editEnumChoice": {
     "message": "Edit Enum Choice",
     "placeholders": {},
@@ -3298,6 +3610,17 @@
     ],
     "translation": "Edit the device's 3D structure: its parts, where they sit and what moves them"
   },
+  "deviceClassEditor.widget.emittersEditor.description": {
+    "message": "Edit the device's light sources: their groups, colors and intensity parameters",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/deviceClassEditor/widgets.tsx"
+      ]
+    ],
+    "translation": "Edit the device's light sources: their groups, colors and intensity parameters"
+  },
   "deviceClassEditor.widget.dmxEditor.description": {
     "message": "Edit the DMX mapping of the device class",
     "placeholders": {},
@@ -3319,6 +3642,50 @@
       ]
     ],
     "translation": "Editing: {editorName} -- {appName}"
+  },
+  "deviceClassEditor.emittersEditor.groups": {
+    "message": "Emitter Groups",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/emittersEditor/EmittersEditor.tsx"
+      ]
+    ],
+    "translation": "Emitter Groups"
+  },
+  "deviceClassEditor.structure3DNodeEditor.emitters": {
+    "message": "Emitters",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/NodeEditor.tsx"
+      ]
+    ],
+    "translation": "Emitters"
+  },
+  "deviceClassEditor.widget.emittersEditor.name": {
+    "message": "Emitters",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/deviceClassEditor/widgets.tsx"
+      ]
+    ],
+    "translation": "Emitters"
+  },
+  "deviceClassEditor.emittersEditor.emptyState": {
+    "message": "Emitters are the light sources of a device: their colors, the parameters that control them, and their spectral data. A beam in the 3D structure can be placed at an emitter group or emitter. This device class has no emitters yet.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/emittersEditor/EmittersEditor.tsx"
+      ]
+    ],
+    "translation": "Emitters are the light sources of a device: their colors, the parameters that control them, and their spectral data. A beam in the 3D structure can be placed at an emitter group or emitter. This device class has no emitters yet."
   },
   "deviceClassEditor.dmxMapping.rangeEnd": {
     "message": "End",
@@ -3768,6 +4135,17 @@
     ],
     "translation": "Firmware Versions"
   },
+  "deviceClassEditor.structure3DViewport.meshRepaired": {
+    "message": "Fixed {fixedFolds, plural, one {# fold} other {# folds}}, merged {mergedVertices, plural, one {# duplicate vertex} other {# duplicate vertices}} and removed {removedFaces, plural, one {# bad face} other {# bad faces}}.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/Viewport.tsx"
+      ]
+    ],
+    "translation": "Fixed {fixedFolds, plural, one {# fold} other {# folds}}, merged {mergedVertices, plural, one {# duplicate vertex} other {# duplicate vertices}} and removed {removedFaces, plural, one {# bad face} other {# bad faces}}."
+  },
   "navbar.exportCodex.archiveFileType": {
     "message": "Fluxite Codex Archive",
     "placeholders": {},
@@ -3877,6 +4255,17 @@
     ],
     "translation": "Get started by adding a new editor, or import an existing Fluxite Codex file using the import option to the right."
   },
+  "deviceClassEditor.structure3D.issue.repeatStepEmpty": {
+    "message": "Give the repeat a step: how far each copy moves or turns from the one before.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/validation.ts"
+      ]
+    ],
+    "translation": "Give the repeat a step: how far each copy moves or turns from the one before."
+  },
   "deviceClassEditor.structure3D.gltfFileType": {
     "message": "glTF Model",
     "placeholders": {},
@@ -3909,6 +4298,28 @@
       ]
     ],
     "translation": "Gray"
+  },
+  "deviceClassEditor.emittersEditor.groupId": {
+    "message": "Group ID",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/emittersEditor/EmittersEditor.tsx"
+      ]
+    ],
+    "translation": "Group ID"
+  },
+  "deviceClassEditor.structure3DNodeEditor.apertureHeight": {
+    "message": "Height (m)",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/NodeEditor.tsx"
+      ]
+    ],
+    "translation": "Height (m)"
   },
   "deviceClassEditor.dmxDisplay.hex": {
     "message": "Hex",
@@ -3954,13 +4365,24 @@
     ],
     "translation": "ID"
   },
-  "deviceClassEditor.structure3DEditor.id": {
+  "deviceClassEditor.emittersEditor.emitterId": {
     "message": "ID",
     "placeholders": {},
     "comments": [],
     "origin": [
       [
-        "src/features/structure3DEditor/Structure3DEditor.tsx"
+        "src/features/emittersEditor/EmittersEditor.tsx"
+      ]
+    ],
+    "translation": "ID"
+  },
+  "deviceClassEditor.structureFields.id": {
+    "message": "ID",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/deviceClassEditor/StructureFields.tsx"
       ]
     ],
     "translation": "ID"
@@ -4372,6 +4794,17 @@
     ],
     "translation": "Indefinite"
   },
+  "deviceClassEditor.structure3DNodeEditor.repeatIndex": {
+    "message": "Index Name",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/NodeEditor.tsx"
+      ]
+    ],
+    "translation": "Index Name"
+  },
   "validation.notANumber": {
     "message": "Input must be a valid number",
     "placeholders": {},
@@ -4437,6 +4870,17 @@
       ]
     ],
     "translation": "Instances"
+  },
+  "deviceClassEditor.emittersEditor.directControl": {
+    "message": "Intensity Parameter",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/emittersEditor/EmittersEditor.tsx"
+      ]
+    ],
+    "translation": "Intensity Parameter"
   },
   "deviceClassEditor.sacnOutput.interface": {
     "message": "Interface",
@@ -4539,13 +4983,13 @@
     ],
     "translation": "License:"
   },
-  "deviceClassEditor.structure3DEditor.lifetime": {
+  "deviceClassEditor.structureFields.lifetime": {
     "message": "Lifetime",
     "placeholders": {},
     "comments": [],
     "origin": [
       [
-        "src/features/structure3DEditor/Structure3DEditor.tsx"
+        "src/features/deviceClassEditor/StructureFields.tsx"
       ]
     ],
     "translation": "Lifetime"
@@ -5220,6 +5664,17 @@
     ],
     "translation": "No registered media type matches the query."
   },
+  "deviceClassEditor.structure3D.issue.unknownIndex": {
+    "message": "No repeat at or above this node has the index name {name}.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/validation.ts"
+      ]
+    ],
+    "translation": "No repeat at or above this node has the index name {name}."
+  },
   "deviceClassEditor.structure3DNodeEditor.none": {
     "message": "None",
     "placeholders": {},
@@ -5227,6 +5682,17 @@
     "origin": [
       [
         "src/features/structure3DEditor/NodeEditor.tsx"
+      ]
+    ],
+    "translation": "None"
+  },
+  "deviceClassEditor.emittersEditor.none": {
+    "message": "None",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/emittersEditor/EmittersEditor.tsx"
       ]
     ],
     "translation": "None"
@@ -5310,6 +5776,28 @@
       ]
     ],
     "translation": "On"
+  },
+  "deviceClassEditor.structure3D.issue.apertureNeedsBeam": {
+    "message": "Only a beam control can have an aperture.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/validation.ts"
+      ]
+    ],
+    "translation": "Only a beam control can have an aperture."
+  },
+  "deviceClassEditor.structure3D.issue.emittersNeedBeam": {
+    "message": "Only a beam control can name emitters.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/validation.ts"
+      ]
+    ],
+    "translation": "Only a beam control can name emitters."
   },
   "importFluxiteCodex.feedback.unsupportedFileType": {
     "message": "Only Fluxite Codex Document or Archive files are supported",
@@ -5700,13 +6188,13 @@
     ],
     "translation": "Range start"
   },
-  "deviceClassEditor.structure3DEditor.read": {
+  "deviceClassEditor.structureFields.read": {
     "message": "Read",
     "placeholders": {},
     "comments": [],
     "origin": [
       [
-        "src/features/structure3DEditor/Structure3DEditor.tsx"
+        "src/features/deviceClassEditor/StructureFields.tsx"
       ]
     ],
     "translation": "Read"
@@ -5743,6 +6231,17 @@
       ]
     ],
     "translation": "Read Target"
+  },
+  "deviceClassEditor.structure3DNodeEditor.apertureRectangle": {
+    "message": "Rectangle",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/NodeEditor.tsx"
+      ]
+    ],
+    "translation": "Rectangle"
   },
   "menu.redo": {
     "message": "Redo",
@@ -5792,6 +6291,17 @@
     ],
     "translation": "Referenced class not found. It may have been deleted."
   },
+  "deviceClassEditor.emittersEditor.relativeBrightness": {
+    "message": "Relative Brightness",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/emittersEditor/EmittersEditor.tsx"
+      ]
+    ],
+    "translation": "Relative Brightness"
+  },
   "deviceClassEditor.resourceDefault.remove": {
     "message": "Remove",
     "placeholders": {},
@@ -5839,6 +6349,17 @@
     ],
     "translation": "Remove"
   },
+  "deviceClassEditor.structure3DNodeEditor.removeEmitter": {
+    "message": "Remove {emitter}",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/NodeEditor.tsx"
+      ]
+    ],
+    "translation": "Remove {emitter}"
+  },
   "tagSelector.remove": {
     "message": "Remove {value}",
     "placeholders": {},
@@ -5872,6 +6393,28 @@
     ],
     "translation": "Remove control group {number}"
   },
+  "deviceClassEditor.emittersEditor.removeEmitter": {
+    "message": "Remove emitter {id}",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/emittersEditor/EmittersEditor.tsx"
+      ]
+    ],
+    "translation": "Remove emitter {id}"
+  },
+  "deviceClassEditor.emittersEditor.removeGroup": {
+    "message": "Remove group {id}",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/emittersEditor/EmittersEditor.tsx"
+      ]
+    ],
+    "translation": "Remove group {id}"
+  },
   "tagInput.removeItem": {
     "message": "Remove item",
     "placeholders": {},
@@ -5893,6 +6436,72 @@
       ]
     ],
     "translation": "Remove Mapping Group"
+  },
+  "deviceClassEditor.structure3DViewport.repairMesh": {
+    "message": "Repair mesh",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/Viewport.tsx"
+      ]
+    ],
+    "translation": "Repair mesh"
+  },
+  "deviceClassEditor.structure3D.undo.repairMesh": {
+    "message": "Repair Mesh",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/state.ts"
+      ]
+    ],
+    "translation": "Repair Mesh"
+  },
+  "deviceClassEditor.structure3DViewport.repairNormals": {
+    "message": "Repair normals",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/Viewport.tsx"
+      ]
+    ],
+    "translation": "Repair normals"
+  },
+  "deviceClassEditor.structure3D.undo.repairNormals": {
+    "message": "Repair Normals",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/state.ts"
+      ]
+    ],
+    "translation": "Repair Normals"
+  },
+  "deviceClassEditor.structure3DViewport.repairing": {
+    "message": "Repairing the model…",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/Viewport.tsx"
+      ]
+    ],
+    "translation": "Repairing the model…"
+  },
+  "deviceClassEditor.structure3DNodeEditor.repeat": {
+    "message": "Repeat",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/NodeEditor.tsx"
+      ]
+    ],
+    "translation": "Repeat"
   },
   "deviceClassEditor.commandEditor.required": {
     "message": "Required",
@@ -6766,6 +7375,28 @@
     ],
     "translation": "Something has gone wrong!"
   },
+  "deviceClassEditor.emittersEditor.spdResource": {
+    "message": "Spectral data from {resource}",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/emittersEditor/EmittersEditor.tsx"
+      ]
+    ],
+    "translation": "Spectral data from {resource}"
+  },
+  "deviceClassEditor.emittersEditor.spdDirect": {
+    "message": "Spectral data given in place",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/emittersEditor/EmittersEditor.tsx"
+      ]
+    ],
+    "translation": "Spectral data given in place"
+  },
   "deviceClassEditor.dmxController.splitHorizontal": {
     "message": "Split Horizontal",
     "placeholders": {},
@@ -6820,6 +7451,17 @@
       ]
     ],
     "translation": "Start Address"
+  },
+  "deviceClassEditor.structure3DNodeEditor.invalidIndexName": {
+    "message": "Start with a letter, followed by letters, digits, - or _. Leave empty for none.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/NodeEditor.tsx"
+      ]
+    ],
+    "translation": "Start with a letter, followed by letters, digits, - or _. Leave empty for none."
   },
   "deviceClassEditor.dmxMappingRange.start": {
     "message": "Start:",
@@ -6891,6 +7533,50 @@
       ]
     ],
     "translation": "Step {stepNumber} of {stepTotal}"
+  },
+  "deviceClassEditor.structure3DNodeEditor.stepRotateAxis": {
+    "message": "Step rotate {axis}",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/NodeEditor.tsx"
+      ]
+    ],
+    "translation": "Step rotate {axis}"
+  },
+  "deviceClassEditor.structure3DNodeEditor.stepTranslateAxis": {
+    "message": "Step translate {axis}",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/NodeEditor.tsx"
+      ]
+    ],
+    "translation": "Step translate {axis}"
+  },
+  "deviceClassEditor.structure3DNodeEditor.repeatStepRotate": {
+    "message": "Step: Rotate (degrees)",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/NodeEditor.tsx"
+      ]
+    ],
+    "translation": "Step: Rotate (degrees)"
+  },
+  "deviceClassEditor.structure3DNodeEditor.repeatStepTranslate": {
+    "message": "Step: Translate",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/NodeEditor.tsx"
+      ]
+    ],
+    "translation": "Step: Translate"
   },
   "deviceClassEditor.structure3DEditor.tree.structure": {
     "message": "Structure",
@@ -7035,6 +7721,28 @@
     ],
     "translation": "Test the device class with a virtual controller"
   },
+  "deviceClassEditor.structure3D.issue.apertureNotPositive": {
+    "message": "The aperture's size should be more than 0.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/validation.ts"
+      ]
+    ],
+    "translation": "The aperture's size should be more than 0."
+  },
+  "deviceClassEditor.structure3DNodeEditor.noEmitterOptions": {
+    "message": "The device class has no emitters yet. Add them in the Emitters tab.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/NodeEditor.tsx"
+      ]
+    ],
+    "translation": "The device class has no emitters yet. Add them in the Emitters tab."
+  },
   "deviceClassEditor.structure3DViewport.drivenByDmx": {
     "message": "The DMX controller tab is posing the controls it has values for. Close it to pose them here.",
     "placeholders": {},
@@ -7078,6 +7786,28 @@
       ]
     ],
     "translation": "The model can't be shown: {reason}. Only GLB files, and .gltf files with everything embedded, can be shown."
+  },
+  "deviceClassEditor.structure3DViewport.repairFailed": {
+    "message": "The model couldn't be repaired: {reason}",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/Viewport.tsx"
+      ]
+    ],
+    "translation": "The model couldn't be repaired: {reason}"
+  },
+  "deviceClassEditor.structure3DViewport.nothingToRepair": {
+    "message": "The model had nothing to repair.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/Viewport.tsx"
+      ]
+    ],
+    "translation": "The model had nothing to repair."
   },
   "deviceClassEditor.structure3DNodeEditor.nameNotInModel": {
     "message": "The model has no node or scene named {name}.",
@@ -7496,6 +8226,17 @@
     ],
     "translation": "Translate and Rotate"
   },
+  "deviceClassEditor.structure3DViewport.normalsRepaired": {
+    "message": "Turned {flippedFaces, plural, one {# face} other {# faces}} outward and fixed {fixedNormals, plural, one {# normal} other {# normals}}.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/Viewport.tsx"
+      ]
+    ],
+    "translation": "Turned {flippedFaces, plural, one {# face} other {# faces}} outward and fixed {fixedNormals, plural, one {# normal} other {# normals}}."
+  },
   "deviceClassEditor.structure3DNodeEditor.controlType": {
     "message": "Type",
     "placeholders": {},
@@ -7818,13 +8559,24 @@
     ],
     "translation": "View Migration Report"
   },
-  "deviceClassEditor.structure3DEditor.write": {
+  "deviceClassEditor.structure3DNodeEditor.apertureWidth": {
+    "message": "Width (m)",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/NodeEditor.tsx"
+      ]
+    ],
+    "translation": "Width (m)"
+  },
+  "deviceClassEditor.structureFields.write": {
     "message": "Write",
     "placeholders": {},
     "comments": [],
     "origin": [
       [
-        "src/features/structure3DEditor/Structure3DEditor.tsx"
+        "src/features/deviceClassEditor/StructureFields.tsx"
       ]
     ],
     "translation": "Write"
@@ -7861,6 +8613,17 @@
       ]
     ],
     "translation": "Write a path into a control groups structure, like control-groups?/groups/0"
+  },
+  "deviceClassEditor.structure3DNodeEditor.invalidEmitterPath": {
+    "message": "Write a path into the emitters structure, such as {example}",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/NodeEditor.tsx"
+      ]
+    ],
+    "translation": "Write a path into the emitters structure, such as {example}"
   },
   "deviceClassEditor.commandEditor.required.yes": {
     "message": "Yes",

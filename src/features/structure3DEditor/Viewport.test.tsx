@@ -1,15 +1,29 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import userEvent from "@testing-library/user-event";
+import { BoxGeometry, Mesh, MeshStandardMaterial, Scene } from "three";
+import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter.js";
+import { Toaster } from "sonner";
 import { act, render, screen } from "test/render";
-import { createEmptyDeviceClassEditor, resetAllStores } from "test/utils";
+import {
+  createEmptyDeviceClassEditor,
+  resetAllStores,
+  testUndoLabel,
+} from "test/utils";
+import { assetStorage } from "app/assetStorage";
 import { EntityId } from "app/persistentState";
+import { initUndo, undo } from "app/undo";
 import { setDmxParamStates } from "features/deviceClassEditor/controller/state";
-import { Structure3DViewport } from "./Viewport";
+import { updateCurrentEditor } from "features/deviceClassEditor/state";
+import { ModelMenu, Structure3DViewport } from "./Viewport";
+import { gltfObjectNames } from "./sceneGraph";
+import { parseGltfAsset } from "./useGltf";
 import {
   addMotionParameters,
+  addMotionResource,
   addStructureWithRoot,
   currentEditor,
   PAN,
+  ROOT,
   TRACK,
 } from "./testFixtures";
 
@@ -189,5 +203,117 @@ describe("Structure3DViewport", () => {
     expect(
       screen.getByRole("slider", { name: "track on base" }),
     ).not.toHaveAttribute("aria-disabled", "true");
+  });
+});
+
+describe("ModelMenu", () => {
+  const MODEL = EntityId("model-resource");
+  const EDITOR = EntityId("test-editor-id");
+  let stopUndo: () => void;
+
+  // Stores a GLB of a box, inside out if asked, and shows it at the root node.
+  async function showBox({ insideOut }: { insideOut: boolean }) {
+    const geometry = new BoxGeometry();
+    if (insideOut) {
+      const index = geometry.index!;
+      for (let i = 0; i < index.count; i += 3) {
+        const b = index.getX(i + 1);
+        index.setX(i + 1, index.getX(i + 2));
+        index.setX(i + 2, b);
+      }
+      const normal = geometry.getAttribute("normal");
+      for (let i = 0; i < normal.count; i++) {
+        normal.setXYZ(i, -normal.getX(i), -normal.getY(i), -normal.getZ(i));
+      }
+    }
+    const mesh = new Mesh(geometry, new MeshStandardMaterial());
+    mesh.name = "Moving Head";
+    const scene = new Scene();
+    scene.add(mesh);
+    const glb = await new GLTFExporter().parseAsync(scene, { binary: true });
+    const assetId = await assetStorage.storeAsset(
+      glb as ArrayBuffer,
+      "model/gltf-binary",
+      "Box.glb",
+    );
+
+    addMotionResource(MODEL);
+    updateCurrentEditor(testUndoLabel("Show the box"), (editor) => {
+      editor.resources[MODEL].mediaType = "model/gltf-binary";
+      editor.resources[MODEL].default = "box.glb";
+      editor.resourceAssets["box.glb"] = assetId;
+      editor.structure3DNodes[ROOT].visual = {
+        quality: "high",
+        resource: MODEL,
+        nodeOrSceneName: "Moving Head",
+      };
+    });
+  }
+
+  const renderMenu = () =>
+    render(
+      <>
+        <ModelMenu
+          nodeId={ROOT}
+          x={0}
+          y={0}
+          nodeCodexId="base"
+          onClose={vi.fn()}
+        />
+        <Toaster />
+      </>,
+    );
+
+  const modelAssetId = () =>
+    currentEditor().resourceAssets[currentEditor().resources[MODEL].default!];
+
+  beforeEach(() => {
+    resetAllStores();
+    createEmptyDeviceClassEditor();
+    addStructureWithRoot();
+    stopUndo = initUndo();
+  });
+
+  afterEach(() => stopUndo());
+
+  it("repairs the normals of the model it was opened on, as one change", async () => {
+    const user = userEvent.setup();
+    await showBox({ insideOut: true });
+    const originalAssetId = modelAssetId();
+    renderMenu();
+
+    expect(screen.getByText("base")).toBeInTheDocument();
+    await user.click(screen.getByRole("menuitem", { name: "Repair normals" }));
+
+    expect(
+      await screen.findByText(/^Turned 12 faces outward/),
+    ).toBeInTheDocument();
+    const repairedAssetId = modelAssetId();
+    expect(repairedAssetId).not.toBe(originalAssetId);
+    expect(await assetStorage.getAsset(repairedAssetId)).toMatchObject({
+      mediaType: "model/gltf-binary",
+      originalFileName: "Box.glb",
+    });
+    // The repaired file keeps the names the node refers to.
+    expect(gltfObjectNames(await parseGltfAsset(repairedAssetId))).toContain(
+      "Moving Head",
+    );
+
+    act(() => undo(EDITOR));
+    expect(modelAssetId()).toBe(originalAssetId);
+  });
+
+  it("leaves a model with nothing to repair as it is", async () => {
+    const user = userEvent.setup();
+    await showBox({ insideOut: false });
+    const originalAssetId = modelAssetId();
+    renderMenu();
+
+    await user.click(screen.getByRole("menuitem", { name: "Repair mesh" }));
+
+    expect(
+      await screen.findByText("The model had nothing to repair."),
+    ).toBeInTheDocument();
+    expect(modelAssetId()).toBe(originalAssetId);
   });
 });

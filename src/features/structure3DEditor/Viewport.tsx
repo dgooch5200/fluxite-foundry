@@ -13,6 +13,7 @@ import { MessageDescriptor } from "@lingui/core";
 import { msg } from "@lingui/core/macro";
 import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
+import { toast } from "sonner";
 import {
   Canvas,
   createPortal,
@@ -30,14 +31,22 @@ import {
   ContrastIcon,
   FocusIcon,
   PaletteIcon,
+  WrenchIcon,
   ZoomInIcon,
   ZoomOutIcon,
 } from "lucide-react";
 import {
+  ArrowHelper,
   AxesHelper,
-  BoxHelper,
+  Box3,
+  Box3Helper,
+  BufferGeometry,
   Color,
+  ColorRepresentation,
   DoubleSide,
+  Group,
+  LineBasicMaterial,
+  LineLoop,
   Material,
   Mesh,
   MeshStandardMaterial,
@@ -46,6 +55,7 @@ import {
   HalfFloatType,
   PMREMGenerator,
   RaycasterParameters,
+  Vector3,
   WebGLRenderTarget,
 } from "three";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
@@ -58,6 +68,7 @@ import {
   EntityId,
   Parameter,
   ParameterReference,
+  Structure3DControl,
   Structure3DControlType,
   Structure3DFinish,
   structure3DFinishes,
@@ -67,6 +78,8 @@ import { Button } from "components/scn-ui/Button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
@@ -79,8 +92,22 @@ import {
   getNumericValue,
   serializeParamRef,
 } from "features/deviceClassEditor/controller/parameterValues";
-import { parameterCurrentCodexId } from "features/deviceClassEditor/referenceResolution";
 import {
+  entityIdAsCodexId,
+  parameterCurrentCodexId,
+} from "features/deviceClassEditor/referenceResolution";
+import { errorMessage } from "utils/utils";
+import {
+  emitterForCopy,
+  nodeCopies,
+  ONLY_COPY,
+  parameterForCopy,
+  placeholderNames,
+} from "./repeats";
+import {
+  apertureOutline,
+  beamColor,
+  beamColorForTheme,
   buildStructureObject,
   findGltfObject,
   GLTF_TO_STRUCTURE,
@@ -89,11 +116,18 @@ import {
 } from "./sceneGraph";
 import { frameObject, OrbitDirection, orbitCamera, zoomCamera } from "./camera";
 import {
+  repairModelMesh,
+  repairModelNormals,
   setStructure3DViewSettings,
   useStructure3D,
   useStructure3DNodes,
   useStructure3DViewSettings,
 } from "./state";
+import {
+  useEmitterGroups,
+  useEmitters,
+  useEmittersStructure,
+} from "features/emittersEditor/state";
 import { useGltfs } from "./useGltf";
 import type { Structure3DViewportProps } from "./Structure3DEditor";
 
@@ -158,6 +192,36 @@ const MESSAGES = {
     id: "deviceClassEditor.structure3DViewport.faceOrientation",
     message: "Face orientation",
   }),
+  repairMesh: msg({
+    id: "deviceClassEditor.structure3DViewport.repairMesh",
+    message: "Repair mesh",
+  }),
+  repairNormals: msg({
+    id: "deviceClassEditor.structure3DViewport.repairNormals",
+    message: "Repair normals",
+  }),
+  repairing: msg({
+    id: "deviceClassEditor.structure3DViewport.repairing",
+    message: "Repairing the model…",
+  }),
+  meshRepaired: msg({
+    id: "deviceClassEditor.structure3DViewport.meshRepaired",
+    message:
+      "Fixed {fixedFolds, plural, one {# fold} other {# folds}}, merged {mergedVertices, plural, one {# duplicate vertex} other {# duplicate vertices}} and removed {removedFaces, plural, one {# bad face} other {# bad faces}}.",
+  }),
+  normalsRepaired: msg({
+    id: "deviceClassEditor.structure3DViewport.normalsRepaired",
+    message:
+      "Turned {flippedFaces, plural, one {# face} other {# faces}} outward and fixed {fixedNormals, plural, one {# normal} other {# normals}}.",
+  }),
+  nothingToRepair: msg({
+    id: "deviceClassEditor.structure3DViewport.nothingToRepair",
+    message: "The model had nothing to repair.",
+  }),
+  repairFailed: msg({
+    id: "deviceClassEditor.structure3DViewport.repairFailed",
+    message: "The model couldn't be repaired: {reason}",
+  }),
 };
 
 const FINISH_NAMES: Record<Structure3DFinish, MessageDescriptor> = {
@@ -195,6 +259,15 @@ const MIN_HEIGHT = 160;
 const HEIGHT_STEP = 20;
 
 const SELECTION_COLOR = 0xf59e0b;
+// Beams show which way light leaves a node, with the aperture's outline if it
+// has one, in the color of their emitters. A beam whose emitters have no common
+// color is drawn in this yellow. The arrow's length is only for seeing the
+// direction.
+const BEAM_COLOR = 0xfacc15;
+// A beam whose emitters are all at zero is drawn in this gray, so where it
+// leaves from still shows.
+const BEAM_OFF_COLOR = 0x71717a;
+const BEAM_LENGTH = 0.3;
 // Opaque, since a see-through grid comes out brighter through the ambient
 // occlusion passes, which convert colors after blending.
 const GRID_COLORS = { dark: 0x2c2c30, light: 0xd4d4d8 };
@@ -273,12 +346,16 @@ export const Structure3DViewport = ({
   const { _ } = useLingui();
   const structure = useStructure3D();
   const nodes = useStructure3DNodes();
+  const emitterGroups = useEmitterGroups();
+  const emitters = useEmitters();
+  const emittersStructure = useEmittersStructure();
   const parameters =
     useCurrentEditorPart((editor) => editor.parameters) ?? NO_PARAMETERS;
   const dmxStates = useDmxParamStates();
   const controls = useRef<OrbitControls>(null);
   const settings = useStructure3DViewSettings();
-  const gridColor = useDarkMode() ? GRID_COLORS.dark : GRID_COLORS.light;
+  const darkMode = useDarkMode();
+  const gridColor = darkMode ? GRID_COLORS.dark : GRID_COLORS.light;
   const finish = settings.finish ?? structure3DFinishes.GRAY;
   const smoothShading = settings.smoothShading ?? false;
   // Follows a drag live, and is saved once the drag ends.
@@ -287,6 +364,8 @@ export const Structure3DViewport = ({
   const [pose, setPose] = useState<Record<string, number>>({});
   // Only for a quick look, so not remembered.
   const [faceOrientation, setFaceOrientation] = useState(false);
+  // The model last right-clicked, and where in the view.
+  const [modelMenu, setModelMenu] = useState<ModelMenuTarget>();
 
   // While the DMX controller runs, it poses the controls it has values for and
   // the sliders pose the rest.
@@ -309,29 +388,47 @@ export const Structure3DViewport = ({
       index: ref.index,
     });
 
-  const poseControls: PoseControl[] = Object.entries(nodes).flatMap(
-    ([nodeId, node]) =>
-      node.controls.flatMap((control, index) => {
-        if (control.target.type !== "parameter" || control.type === "beam") {
-          return [];
-        }
-        const { minimum, maximum } =
-          parameters[control.target.parameter.id] ?? {};
-        const extent = control.type === "rotate" ? 180 : 1;
-        const key = parameterKey(control.target.parameter);
-        return [
-          {
-            id: `${nodeId}-${index}`,
-            key,
-            nodeCodexId: node.codexId,
-            type: control.type,
-            min: typeof minimum === "number" ? minimum : -extent,
-            max: typeof maximum === "number" ? maximum : extent,
-            drivenByDmx: dmxStates?.[key] !== undefined,
-          },
-        ];
-      }),
-  );
+  // A control in a repeated node gets a slider per copy when its parameter
+  // differs between copies, as "tilt[${i}]" does, and one otherwise. Copies
+  // sharing a parameter share its slider.
+  const poseControls: PoseControl[] = [
+    ...new Map(
+      Object.entries(nodes).flatMap(([nodeId, node]) =>
+        node.controls.flatMap((control, index) => {
+          const { target } = control;
+          if (target.type !== "parameter" || control.type === "beam") {
+            return [];
+          }
+          const copies =
+            placeholderNames(entityIdAsCodexId(target.parameter.id)).length > 0
+              ? nodeCopies(nodes, EntityId(nodeId))
+              : [ONLY_COPY];
+          return copies.map((copy): [string, PoseControl] => {
+            const ref = parameterForCopy(
+              parameters,
+              target.parameter,
+              copy.indices,
+            );
+            const { minimum, maximum } = parameters[ref.id] ?? {};
+            const extent = control.type === "rotate" ? 180 : 1;
+            const key = parameterKey(ref);
+            return [
+              key,
+              {
+                id: `${nodeId}${copy.suffix}-${index}`,
+                key,
+                nodeCodexId: `${node.codexId}${copy.suffix}`,
+                type: control.type,
+                min: typeof minimum === "number" ? minimum : -extent,
+                max: typeof maximum === "number" ? maximum : extent,
+                drivenByDmx: dmxStates?.[key] !== undefined,
+              },
+            ];
+          });
+        }),
+      ),
+    ).values(),
+  ];
 
   const resourceIds = useMemo(
     () => [
@@ -344,6 +441,18 @@ export const Structure3DViewport = ({
     [nodes],
   );
   const gltfStates = useGltfs(resourceIds);
+  // The parts of each model that nodes draw by name, which a node drawing a
+  // part above them leaves out.
+  const drawnParts = useMemo(() => {
+    const parts = new Map<EntityId, Set<string>>();
+    for (const { visual } of Object.values(nodes)) {
+      if (visual?.nodeOrSceneName) {
+        const names = parts.get(visual.resource) ?? new Set<string>();
+        parts.set(visual.resource, names.add(visual.nodeOrSceneName));
+      }
+    }
+    return parts;
+  }, [nodes]);
   const gltfs = useMemo(() => {
     const loaded = new Map<EntityId, GLTF>();
     resourceIds.forEach((id, index) => {
@@ -369,14 +478,24 @@ export const Structure3DViewport = ({
     };
 
     const object = buildStructureObject(nodes, structure?.rootNodes ?? [], {
-      controlValue: (_nodeId, _index, control) =>
+      controlValue: (_nodeId, _index, control, indices) =>
         control.target.type === "parameter"
-          ? (values[parameterKey(control.target.parameter)] ?? 0)
+          ? (values[
+              parameterKey(
+                parameterForCopy(parameters, control.target.parameter, indices),
+              )
+            ] ?? 0)
           : 0,
-      model: (_nodeId, node) => {
-        const gltf = node.visual && gltfs.get(node.visual.resource);
+      model: (_nodeId, { visual }) => {
+        const gltf = visual && gltfs.get(visual.resource);
         const model =
-          gltf && findGltfObject(gltf, node.visual?.nodeOrSceneName);
+          visual &&
+          gltf &&
+          findGltfObject(
+            gltf,
+            visual.nodeOrSceneName,
+            drawnParts.get(visual.resource),
+          );
         if (!model) return nodeAxes();
         if (smoothShading) shadeSmooth(model);
         // The copy's meshes are its own, so this leaves the loaded file alone.
@@ -388,6 +507,27 @@ export const Structure3DViewport = ({
         }
         return model;
       },
+      beam: (control, indices) => {
+        const tables = { emitterGroups, emitters, emittersStructure };
+        // Each copy of a repeated node may name its own emitters.
+        const emittersOfCopy = control.emitters?.map((ref) =>
+          emitterForCopy(tables, ref, indices),
+        );
+        // Emitters and group controls take their values from their
+        // parameters, as the DMX controller or a slider sets them.
+        const color = beamColor(
+          { ...control, emitters: emittersOfCopy },
+          tables,
+          (ref) => values[parameterKey(ref)],
+        );
+        const off = color && Math.max(color.r, color.g, color.b) < 1 / 255;
+        return beamMarker(
+          control,
+          off
+            ? new Color(BEAM_OFF_COLOR)
+            : beamColorForTheme(color ?? new Color(BEAM_COLOR), darkMode),
+        );
+      },
     });
     object.quaternion.copy(STRUCTURE_TO_THREE);
     return object;
@@ -397,6 +537,11 @@ export const Structure3DViewport = ({
     parameters,
     values,
     gltfs,
+    drawnParts,
+    emitterGroups,
+    emitters,
+    emittersStructure,
+    darkMode,
     finish,
     smoothShading,
     faceOrientation,
@@ -405,37 +550,76 @@ export const Structure3DViewport = ({
   useEffect(
     () => () =>
       root.traverse((object) => {
-        if (object instanceof AxesHelper) object.dispose();
+        if (object instanceof AxesHelper || object instanceof ArrowHelper) {
+          object.dispose();
+        }
+        if (object instanceof LineLoop && object.userData.beam) {
+          object.geometry.dispose();
+          (object.material as Material).dispose();
+        }
       }),
     [root],
   );
 
-  const selectedObject = useMemo(() => {
-    if (!selectedNodeId) return undefined;
-    let selected: Object3D | undefined;
+  // Every copy of the selected node, or none.
+  const selectedObjects = useMemo(() => {
+    const selected: Object3D[] = [];
+    if (!selectedNodeId) return selected;
     root.traverse((object) => {
-      if (object.userData.nodeId === selectedNodeId) selected = object;
+      if (object.userData.nodeId === selectedNodeId) selected.push(object);
     });
     return selected;
   }, [root, selectedNodeId]);
 
+  // One box around all of the selected node's copies.
   const selectionBox = useMemo(() => {
-    if (!selectedObject) return undefined;
+    if (selectedObjects.length === 0) return undefined;
     // The box is measured in world space, before the canvas has drawn the tree.
     root.updateMatrixWorld(true);
-    return new BoxHelper(selectedObject, SELECTION_COLOR);
-  }, [root, selectedObject]);
+    const box = new Box3();
+    selectedObjects.forEach((object) => box.expandByObject(object));
+    return new Box3Helper(box, SELECTION_COLOR);
+  }, [root, selectedObjects]);
 
   useEffect(() => () => selectionBox?.dispose(), [selectionBox]);
+
+  // The node an object in the view belongs to: a model part belongs to the
+  // nearest node above it.
+  const clickedNodeId = (event: ThreeEvent<MouseEvent>) => {
+    let object: Object3D | null = event.object;
+    while (object && !object.userData.nodeId) object = object.parent;
+    return object?.userData.nodeId as EntityId | undefined;
+  };
 
   const selectClicked = (event: ThreeEvent<MouseEvent>) => {
     // Only the nearest object hit picks.
     event.stopPropagation();
     // A drag orbits the camera rather than picking.
     if (event.delta > 2) return;
-    let object: Object3D | null = event.object;
-    while (object && !object.userData.nodeId) object = object.parent;
-    if (object) onSelectNode(object.userData.nodeId);
+    const nodeId = clickedNodeId(event);
+    if (nodeId) onSelectNode(nodeId);
+  };
+
+  const openModelMenu = (event: ThreeEvent<MouseEvent>) => {
+    event.stopPropagation();
+    // A right drag pans the camera rather than opening the menu.
+    if (event.delta > 2) return;
+    const nodeId = clickedNodeId(event);
+    // Models are meshes; a node without one shows its axes, which are lines.
+    // A beam's arrowhead is a mesh too, but not a model.
+    if (
+      !nodeId ||
+      !(event.object instanceof Mesh) ||
+      event.object.userData.beam
+    ) {
+      return;
+    }
+    onSelectNode(nodeId);
+    setModelMenu({
+      nodeId,
+      x: event.nativeEvent.offsetX,
+      y: event.nativeEvent.offsetY,
+    });
   };
 
   return (
@@ -457,12 +641,20 @@ export const Structure3DViewport = ({
             key={gridColor}
             args={[4, 20, gridColor, gridColor]}
           />
-          <primitive object={root} onClick={selectClicked} />
+          <primitive
+            // Mounted afresh for each build. R3F 9.3 swaps a primitive's
+            // object without moving its click handlers to the new one, which
+            // left clicks hitting the tree from before.
+            key={root.uuid}
+            object={root}
+            onClick={selectClicked}
+            onContextMenu={openModelMenu}
+          />
           {selectionBox && <primitive object={selectionBox} />}
         </Canvas>
         <ViewButtons
           centerLabel={_(
-            selectedObject
+            selectedObjects.length > 0
               ? MESSAGES.centerOnSelected
               : MESSAGES.centerOnStructure,
           )}
@@ -474,7 +666,10 @@ export const Structure3DViewport = ({
           }
           onCenter={() =>
             controls.current &&
-            frameObject(controls.current, selectedObject ?? root)
+            frameObject(
+              controls.current,
+              selectedObjects.length > 0 ? selectedObjects : root,
+            )
           }
           finish={finish}
           onFinishChange={(finish) => setStructure3DViewSettings({ finish })}
@@ -489,6 +684,15 @@ export const Structure3DViewport = ({
           faceOrientation={faceOrientation}
           onFaceOrientationChange={setFaceOrientation}
         />
+        {modelMenu && (
+          <ModelMenu
+            // Opened afresh at each click, so it moves to where it was clicked
+            key={`${modelMenu.x},${modelMenu.y}`}
+            {...modelMenu}
+            nodeCodexId={nodes[modelMenu.nodeId]?.codexId ?? ""}
+            onClose={() => setModelMenu(undefined)}
+          />
+        )}
       </div>
       <ResizeHandle
         height={height}
@@ -510,6 +714,38 @@ export const Structure3DViewport = ({
     </div>
   );
 };
+
+// An arrow along the positive direction of the beam's axis, and the aperture's
+// outline across it.
+function beamMarker(
+  control: Structure3DControl,
+  color: ColorRepresentation,
+): Object3D {
+  const direction = new Vector3();
+  direction[control.axis] = 1;
+  const arrow = new ArrowHelper(
+    direction,
+    undefined,
+    BEAM_LENGTH,
+    color,
+    BEAM_LENGTH * 0.2,
+    BEAM_LENGTH * 0.12,
+  );
+  arrow.cone.userData.beam = true;
+
+  const marker = new Group();
+  marker.add(arrow);
+  const outline = apertureOutline(control);
+  if (outline.length > 0) {
+    const loop = new LineLoop(
+      new BufferGeometry().setFromPoints(outline),
+      new LineBasicMaterial({ color }),
+    );
+    loop.userData.beam = true;
+    marker.add(loop);
+  }
+  return marker;
+}
 
 // Shown at a node that has no model, in the node's own frame. The model hook
 // turns whatever it is given from glTF's Y-up to the structure's Z-up, so the
@@ -791,6 +1027,91 @@ const ViewButtons = ({
         )}
       </div>
     </div>
+  );
+};
+
+interface ModelMenuTarget {
+  nodeId: EntityId;
+  // Where the model was right-clicked, in pixels from the view's top left
+  x: number;
+  y: number;
+}
+
+interface ModelMenuProps extends ModelMenuTarget {
+  nodeCodexId: string;
+  onClose: () => void;
+}
+
+/** What can be done to the model shown at a node, opened by right-clicking it. */
+export const ModelMenu = ({
+  nodeId,
+  x,
+  y,
+  nodeCodexId,
+  onClose,
+}: ModelMenuProps) => {
+  const { _ } = useLingui();
+
+  const runRepair = async <Summary extends Record<string, number>>(
+    repair: (nodeId: EntityId) => Promise<Summary | undefined>,
+    repaired: MessageDescriptor,
+  ) => {
+    // Rewriting a large model takes a moment.
+    const progress = toast.loading(_(MESSAGES.repairing));
+    try {
+      const summary = await repair(nodeId);
+      toast.success(
+        summary
+          ? _({ ...repaired, values: summary })
+          : _(MESSAGES.nothingToRepair),
+        { id: progress },
+      );
+    } catch (error) {
+      toast.error(
+        _({
+          ...MESSAGES.repairFailed,
+          values: { reason: errorMessage(error) },
+        }),
+        { id: progress },
+      );
+    }
+  };
+
+  return (
+    // Not modal, so a right click on another model moves the menu there.
+    <DropdownMenu
+      open
+      modal={false}
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DropdownMenuTrigger asChild>
+        <span
+          className="pointer-events-none absolute"
+          style={{ left: x, top: y }}
+        />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start">
+        <DropdownMenuLabel>{nodeCodexId}</DropdownMenuLabel>
+        <DropdownMenuItem
+          onSelect={() =>
+            void runRepair(repairModelMesh, MESSAGES.meshRepaired)
+          }
+        >
+          <WrenchIcon />
+          {_(MESSAGES.repairMesh)}
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onSelect={() =>
+            void runRepair(repairModelNormals, MESSAGES.normalsRepaired)
+          }
+        >
+          <ArrowUpFromDotIcon />
+          {_(MESSAGES.repairNormals)}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 

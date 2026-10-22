@@ -99,6 +99,8 @@ interface ParameterRow {
   mappable: MappableParameter;
   index: number | undefined;
   label: string;
+  // The first row of a new index among array parameters shown side by side
+  startsInstance: boolean;
 }
 
 /** The live controls for each valid parameter in the test controller. */
@@ -265,31 +267,62 @@ export const ParametersPanel = ({
   );
 };
 
+/**
+ * The table's rows, one per instance of each parameter. Array parameters with
+ * the same count are taken to run side by side, one element per pixel, cell or
+ * blade, so their instances are interleaved: red [0], green [0], blue [0],
+ * red [1], and so on, in the order the parameters are defined. Each such set,
+ * and each other parameter, is placed by name.
+ */
 function parameterRows(
   mappableParams: MappableParameter[],
   instanceLabel: (name: string, index: number) => string,
 ): ParameterRow[] {
-  const rows: ParameterRow[] = [];
+  const nameOf = (mappable: MappableParameter) =>
+    mappable.friendlyName || mappable.param.codexId;
+  const row = (
+    mappable: MappableParameter,
+    index?: number,
+    startsInstance = false,
+  ): ParameterRow => ({
+    key: serializeParamRef({ id: mappable.param.codexId, index }),
+    mappable,
+    index,
+    label:
+      index === undefined
+        ? nameOf(mappable)
+        : instanceLabel(nameOf(mappable), index),
+    startsInstance,
+  });
 
+  const blocks: { name: string; rows: ParameterRow[] }[] = [];
+  const sideBySide = new Map<number, MappableParameter[]>();
   for (const mappable of mappableParams) {
-    const name = mappable.friendlyName || mappable.param.codexId;
     const count = getParameterCount(mappable.param.count);
-
-    for (let index = 0; index < count; index++) {
-      const paramIndex = count > 1 ? index : undefined;
-      rows.push({
-        key: serializeParamRef({
-          id: mappable.param.codexId,
-          index: paramIndex,
-        }),
-        mappable,
-        index: paramIndex,
-        label: count > 1 ? instanceLabel(name, index) : name,
-      });
+    if (count > 1) {
+      sideBySide.set(count, [...(sideBySide.get(count) ?? []), mappable]);
+    } else {
+      blocks.push({ name: nameOf(mappable), rows: [row(mappable)] });
     }
   }
+  for (const [count, members] of sideBySide) {
+    blocks.push({
+      name: members.map(nameOf).sort((a, b) => a.localeCompare(b))[0]!,
+      rows: [...Array(count).keys()].flatMap((index) =>
+        members.map((mappable, position) =>
+          row(
+            mappable,
+            index,
+            members.length > 1 && index > 0 && position === 0,
+          ),
+        ),
+      ),
+    });
+  }
 
-  return rows.sort((a, b) => a.label.localeCompare(b.label));
+  return blocks
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .flatMap((block) => block.rows);
 }
 
 interface ParameterRowViewProps {
@@ -317,7 +350,12 @@ const ParameterRowView = ({
     onParamChange(paramId, index, newValue);
 
   return (
-    <tr className="border-b last:border-b-0">
+    <tr
+      className={cn(
+        "border-b last:border-b-0",
+        row.startsInstance && "border-t-2",
+      )}
+    >
       <td className="py-2 pr-2">
         <div className="flex items-center gap-1.5">
           <span>

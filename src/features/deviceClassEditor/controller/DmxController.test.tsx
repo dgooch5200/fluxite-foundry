@@ -371,6 +371,39 @@ test("Shows one row for each instance of a parameter", () => {
   expect(screen.getByRole("slider", { name: "Frame [1]" })).toBeInTheDocument();
 });
 
+test("Puts array parameters of the same count side by side, by index", () => {
+  const array = (id: string, name: string, count: number): TestParam => ({
+    ...PAN,
+    id,
+    name,
+    param: { ...PAN.param, count: { type: "fixed", value: count } },
+  });
+  setUpController([
+    PAN,
+    array("red", "Red", 2),
+    array("green", "Green", 2),
+    array("blue", "Blue", 2),
+    array("frame", "Frame", 3),
+  ]);
+
+  expect(
+    screen
+      .getAllByRole("slider")
+      .map((slider) => slider.getAttribute("aria-label")),
+  ).toEqual([
+    "Red [0]",
+    "Green [0]",
+    "Blue [0]",
+    "Red [1]",
+    "Green [1]",
+    "Blue [1]",
+    "Frame [0]",
+    "Frame [1]",
+    "Frame [2]",
+    "Pan",
+  ]);
+});
+
 test("Switches the layout between horizontal and vertical", async () => {
   const { user } = setUpController([]);
 

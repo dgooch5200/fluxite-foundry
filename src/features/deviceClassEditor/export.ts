@@ -7,8 +7,12 @@ import {
   DataType,
   DefinitionLocalization,
   DeviceClass,
+  EmitterGroup,
+  Emitters,
   EstaDmx,
+  GroupControl,
   Lifetime,
+  ParamReference,
   Parameter,
   ParameterAccess,
   ParameterClass,
@@ -29,6 +33,7 @@ import {
   DmxMappingChunkValuesSchema,
   DmxSerializerState,
   DmxTrigger,
+  EmitterReference,
   EntityId,
   LocalizationKey,
   ParameterCountSchema,
@@ -55,6 +60,8 @@ type InternalParameterCount = z.infer<typeof ParameterCountSchema>;
 // and the 3d-model resource class.
 export const MOTION_LIBRARY = "org.esta.lib.motion";
 export const STRUCTURE_3D_CLASS = "structure-3d";
+export const INTENSITY_COLOR_LIBRARY = "org.esta.lib.intensity-color";
+export const EMITTERS_CLASS = "emitters";
 
 function convertParamReference(
   editor: DeviceClassDocument,
@@ -174,6 +181,7 @@ export function exportDeviceClass(editor: DeviceClassDocument): DeviceClass {
   exportParameters(editor, codexClass, keys);
   exportResources(editor, codexClass);
   exportCommands(editor, codexClass, keys);
+  exportEmitters(editor, codexClass);
   exportStructure3D(editor, codexClass, keys);
   exportDmxSerializer(editor, codexClass);
 
@@ -796,6 +804,14 @@ function exportStructure3DNodes(
             },
           }
         : undefined,
+      repeat: node.repeat && {
+        count: node.repeat.count,
+        step: {
+          translate: node.repeat.step.translate,
+          rotate: node.repeat.step.rotate,
+        },
+        index: node.repeat.index,
+      },
       nodes:
         node.children.length > 0
           ? exportStructure3DNodes(editor, node.children, keys)
@@ -810,19 +826,147 @@ function exportStructure3DControl(
   editor: DeviceClassDocument,
   control: Structure3DControl,
 ): object {
-  const { target } = control;
+  const { target, emitters, aperture } = control;
   return {
     type: control.type,
     axis: control.axis,
     commonAxis: control.commonAxis,
     ...(target.type === "parameter"
-      ? {
-          parameter: serializeParameterReference({
-            codexId: parameterCurrentCodexId(editor, target.parameter),
-            index: target.parameter.index,
-          }),
-        }
+      ? { parameter: parameterReferenceText(editor, target.parameter) }
       : { controlGroups: target.controlGroups }),
+    // The proposal requires at least one, so an empty list is left out.
+    emitters: emitters?.length
+      ? emitters.map((ref) => emitterReferencePath(editor, ref))
+      : undefined,
+    aperture:
+      aperture?.shape === "circle"
+        ? { diameter: aperture.diameter }
+        : aperture && { width: aperture.width, height: aperture.height },
+  };
+}
+
+function parameterReferenceText(
+  editor: DeviceClassDocument,
+  ref: ParameterReference,
+): string {
+  return serializeParameterReference({
+    codexId: parameterCurrentCodexId(editor, ref),
+    index: ref.index,
+  });
+}
+
+/**
+ * The path to an emitter group, or an emitter in it, as a beam names it. A
+ * group or emitter that no longer exists keeps the ID it had.
+ */
+export function emitterReferencePath(
+  editor: Pick<
+    DeviceClassDocument,
+    "emittersStructure" | "emitterGroups" | "emitters"
+  >,
+  ref: EmitterReference,
+): string {
+  const structure = editor.emittersStructure?.codexId ?? EMITTERS_CLASS;
+  const group =
+    editor.emitterGroups[ref.group]?.codexId ?? entityIdAsCodexId(ref.group);
+  const path = `${structure}?/emitterGroups/${group}`;
+  if (!ref.emitter) {
+    return path;
+  }
+  const emitter =
+    editor.emitters[ref.emitter]?.codexId ?? entityIdAsCodexId(ref.emitter);
+  return `${path}/emitters/${emitter}`;
+}
+
+function exportEmitters(editor: DeviceClassDocument, codexClass: DeviceClass) {
+  const structure = editor.emittersStructure;
+  if (!structure) {
+    return;
+  }
+
+  const groupCodexId = (id: EntityId) =>
+    editor.emitterGroups[id]?.codexId ?? entityIdAsCodexId(id);
+  const resourceCodexId = (id: EntityId) =>
+    editor.resources[id]?.codexId ?? entityIdAsCodexId(id);
+  const parameter = (ref: ParameterReference): ParamReference => ({
+    id: parameterCurrentCodexId(editor, ref),
+    ...(ref.index !== undefined ? { index: ref.index } : {}),
+  });
+
+  const emitterGroups: Emitters["emitterGroups"] = {};
+  for (const groupId of structure.emitterGroups) {
+    const group = editor.emitterGroups[groupId];
+    // A dangling group id has nothing to write.
+    if (!group) {
+      continue;
+    }
+    const emitters: EmitterGroup["emitters"] = {};
+    for (const emitterId of group.emitters) {
+      const emitter = editor.emitters[emitterId];
+      if (!emitter) {
+        continue;
+      }
+      const { directControl, spd } = emitter;
+      emitters[emitter.codexId] = {
+        directControl: directControl && parameter(directControl),
+        commonColor: emitter.commonColor,
+        spd:
+          spd?.type === "direct"
+            ? {
+                direct: {
+                  start: spd.start,
+                  step: spd.step,
+                  mappings: spd.mappings,
+                },
+              }
+            : spd && {
+                local: resourceCodexId(spd.resource),
+                remote: spd.remote,
+              },
+        relativeBrightness: emitter.relativeBrightness,
+      };
+    }
+    emitterGroups[group.codexId] = { emitters };
+  }
+
+  const controlGroups: Record<string, GroupControl> = {};
+  for (const control of structure.controlGroups) {
+    const schemes = Object.entries(control.colorSchemes).map(
+      ([scheme, components]) => [
+        scheme,
+        Object.fromEntries(
+          Object.entries(components ?? {}).map(([component, ref]) => [
+            component,
+            parameter(ref),
+          ]),
+        ),
+      ],
+    );
+    controlGroups[control.codexId] = {
+      emitterGroups: control.emitterGroups.map(groupCodexId),
+      masterIntensity:
+        control.masterIntensity && parameter(control.masterIntensity),
+      // Each scheme keeps the components it was imported or made with.
+      ...(Object.fromEntries(schemes) as Partial<GroupControl>),
+      crossfade: control.crossfade && {
+        parameter: parameter(control.crossfade.parameter),
+        points: control.crossfade.points,
+      },
+    };
+  }
+
+  codexClass.structures ??= {};
+  codexClass.structures[structure.codexId] = {
+    type: "Emitters",
+    value: {
+      access: structure.access as Access[],
+      lifetime: structure.lifetime as Lifetime,
+      default: {
+        emitterGroups,
+        // Left out rather than undefined, which delver's unparse throws on.
+        ...(structure.controlGroups.length > 0 ? { controlGroups } : {}),
+      },
+    },
   };
 }
 

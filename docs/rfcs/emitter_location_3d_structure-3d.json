@@ -1,0 +1,322 @@
+{
+  "$id": "https://gitlab.com/esta-cpwg/e173/-/raw/main/libraries/motion/draft-2027-1/schemas/structure-3d.json",
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "The physical or virtual layout and movement of a Component.",
+  "type": "object",
+  "properties": {
+    "nodes": {
+      "type": "object",
+      "description": "A hierarchy of location, orientation and zero values for controlled and/or reported movement axes and output beams.",
+      "additionalProperties": {
+        "$ref": "#/$defs/node"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": ["nodes"],
+  "$defs": {
+    "node": {
+      "type": "object",
+      "properties": {
+        "@friendlyName": {
+          "type": "string",
+          "description": "A localizable string describing the node for display in a user interface."
+        },
+        "accessoryLocation": {
+          "type": "string",
+          "description": "The accessory location which is associated with this node."
+        },
+        "translate": {
+          "type": "array",
+          "description": "The XYZ translation of this node.",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "type": "number"
+          }
+        },
+        "rotate": {
+          "type": "array",
+          "description": "The rotation angles of this node in XYZ order. Defines the Tait-Bryan ZYX rotation.",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 360
+          }
+        },
+        "matrix": {
+          "type": "array",
+          "description": "The 4x4 transformation matrix of this node.",
+          "minItems": 12,
+          "maxItems": 16,
+          "items": {
+            "type": "number"
+          }
+        },
+        "control": {
+          "type": "array",
+          "description": "Associates methods of control and/or reported movement with this node.",
+          "items": {
+            "$ref": "#/$defs/control"
+          }
+        },
+        "model": {
+          "$ref": "#/$defs/model",
+          "description": "Size and visual model information intended for visualization and/or collision detection."
+        },
+        "repeat": {
+          "type": "object",
+          "description": "Makes this node, with everything beneath it, stand for 'count' copies. Copy k is placed by applying 'step' k times to the node's own transform, and is identified as '<id>[k]'. In references beneath it, '${index}' stands for k.",
+          "properties": {
+            "count": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "step": {
+              "type": "object",
+              "description": "The transform from one copy to the next, in the parent's frame.",
+              "properties": {
+                "translate": {
+                  "type": "array",
+                  "minItems": 3,
+                  "maxItems": 3,
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "rotate": {
+                  "type": "array",
+                  "minItems": 3,
+                  "maxItems": 3,
+                  "items": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 360
+                  }
+                }
+              },
+              "additionalProperties": false,
+              "minProperties": 1
+            },
+            "index": {
+              "type": "string",
+              "description": "A name for the copy's number, written '${name}' in references beneath this node.",
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]*$"
+            }
+          },
+          "additionalProperties": false,
+          "required": ["count", "step"]
+        },
+        "nodes": {
+          "type": "object",
+          "description": "A hierarchy of location, orientation and zero values for controlled and/or reported movement axes and output beams.",
+          "additionalProperties": {
+            "$ref": "#/$defs/node"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "dependencies": {
+        "translate": {
+          "not": {
+            "required": ["matrix"]
+          }
+        },
+        "rotate": {
+          "not": {
+            "required": ["matrix"]
+          }
+        },
+        "matrix": {
+          "not": {
+            "required": ["translate", "rotate"]
+          }
+        }
+      }
+    },
+    "control": {
+      "type": "object",
+      "description": "Associates a method of control and/or reported movement with a node.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "The type of control.",
+          "enum": ["linear", "rotate", "beam"]
+        },
+        "axis": {
+          "type": "string",
+          "description": "The axis (x, y, z) which this control impacts. For a 'beam' control, light leaves the node along the positive direction of this axis.",
+          "enum": ["x", "y", "z"]
+        },
+        "commonAxis": {
+          "type": "string",
+          "description": "Associates this control with a commonly known axis.",
+          "enum": ["pan", "tilt", "barrel", "x", "y", "z"]
+        },
+        "parameter": {
+          "type": "string",
+          "description": "The Parameter Reference which provides control of the parent node."
+        },
+        "controlGroups": {
+          "type": "array",
+          "description": "The Control Groups which are associated with the parent node.",
+          "items": {
+            "type": "string",
+            "pattern": "^[^\\?]+\\?(\\/groups\\/(\\d+|\\$\\{[A-Za-z][A-Za-z0-9_-]*\\}))+$"
+          }
+        },
+        "emitters": {
+          "type": "array",
+          "description": "The emitter groups and/or emitters whose light leaves the parent node. Only valid on a 'beam' control, beside its 'controlGroups'.",
+          "items": {
+            "type": "string",
+            "pattern": "^[^\\?]+\\?\\/emitterGroups\\/[^\\/]+(\\/emitters\\/[^\\/]+)?$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "aperture": {
+          "type": "object",
+          "description": "The area light leaves from, centered on the node origin and perpendicular to 'axis'. When omitted, the beam is a point. Only valid on a 'beam' control.",
+          "properties": {
+            "diameter": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "The diameter of a circular aperture, in meters."
+            },
+            "width": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "The width of a rectangular aperture, in meters, along the first axis after 'axis' in x, y, z order."
+            },
+            "height": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "The height of a rectangular aperture, in meters, along the second axis after 'axis' in x, y, z order."
+            }
+          },
+          "additionalProperties": false,
+          "dependencies": {
+            "width": ["height"],
+            "height": ["width"]
+          },
+          "oneOf": [
+            {
+              "required": ["diameter"]
+            },
+            {
+              "required": ["width", "height"]
+            }
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "required": ["type", "axis"],
+      "oneOf": [
+        {
+          "description": "Linear and rotate controls are driven by a Parameter (E1.73-4 Table 8-8).",
+          "properties": {
+            "type": {
+              "enum": ["linear", "rotate"]
+            }
+          },
+          "required": ["parameter"],
+          "not": {
+            "anyOf": [
+              {
+                "required": ["controlGroups"]
+              },
+              {
+                "required": ["emitters"]
+              },
+              {
+                "required": ["aperture"]
+              }
+            ]
+          }
+        },
+        {
+          "description": "Beam controls are driven by Control Groups (E1.73-4 Table 8-8), and may name their emitters and aperture.",
+          "properties": {
+            "type": {
+              "const": "beam"
+            }
+          },
+          "required": ["controlGroups"],
+          "not": {
+            "required": ["parameter"]
+          }
+        }
+      ]
+    },
+    "model": {
+      "type": "object",
+      "description": "Size and visual model information intended for visualization and/or collision detection.",
+      "properties": {
+        "bounds": {
+          "type": "object",
+          "description": "The physical/virtual size of a node",
+          "properties": {
+            "center": {
+              "type": "array",
+              "description": "The bounding box XYZ center of a node.",
+              "minItems": 3,
+              "maxItems": 3,
+              "items": {
+                "type": "number"
+              },
+              "extents": {
+                "type": "array",
+                "description": "The bounding box XYZ extents of a node.",
+                "minItems": 3,
+                "maxItems": 3,
+                "items": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "additionalProperties": false,
+          "required": ["center", "extents"]
+        },
+        "visual": {
+          "type": "object",
+          "description": "Visual model information for visualization. If 'nodeOrSceneName' is omitted or empty, the gLTF default Scene shall be imported.",
+          "properties": {
+            "low": {
+              "type": "string",
+              "description": "An instance of the 3D Model Resource Class which provides a low quality 3D model for a node."
+            },
+            "medium": {
+              "type": "string",
+              "description": "An instance of the 3D Model Resource Class which provides a medium quality 3D model for a node."
+            },
+            "high": {
+              "type": "string",
+              "description": "An instance of the 3D Model Resource Class which provides a high quality 3D model for a node."
+            },
+            "nodeOrSceneName": {
+              "type": "string",
+              "description": "The name of a gLTF Node or Scene (unique within each model provided by low, medium and high) which should be imported."
+            }
+          },
+          "additionalProperties": false,
+          "oneOf": [
+            {
+              "required": ["low"]
+            },
+            {
+              "required": ["medium"]
+            },
+            {
+              "required": ["high"]
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

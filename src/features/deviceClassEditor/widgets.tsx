@@ -9,6 +9,7 @@ import { ResourcesEditor } from "./resourcesEditor/ResourcesEditor";
 import { CommandsEditor } from "./commandsEditor/CommandsEditor";
 import { Structure3DEditor } from "features/structure3DEditor/Structure3DEditor";
 import { Structure3DViewport } from "features/structure3DEditor/Viewport";
+import { EmittersEditor } from "features/emittersEditor/EmittersEditor";
 import { ClassesEditor } from "features/classEditors/ClassesEditor";
 import { DeviceClassClassEditing } from "./classEditing";
 
@@ -100,6 +101,18 @@ export const WIDGETS: Record<string, EditorWidget> = {
         renderViewport={(props) => <Structure3DViewport {...props} />}
       />
     ),
+  },
+  emittersEditor: {
+    name: msg({
+      id: "deviceClassEditor.widget.emittersEditor.name",
+      message: "Emitters",
+    }),
+    description: msg({
+      id: "deviceClassEditor.widget.emittersEditor.description",
+      message:
+        "Edit the device's light sources: their groups, colors and intensity parameters",
+    }),
+    factory: () => <EmittersEditor />,
   },
   classesEditor: {
     name: msg({

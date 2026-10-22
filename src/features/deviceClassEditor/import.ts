@@ -5,6 +5,7 @@ import {
   E173Archive,
   EstaDmx,
   MappingRange,
+  ParamReference,
   Trigger,
   UnmappedParam,
 } from "@cpwg-community/delver";
@@ -47,21 +48,27 @@ import {
   DmxTrigger,
   DmxUnmappedParam,
   Command,
+  emitterColorSchemes,
+  EmitterControlGroup,
+  EmitterReference,
   EntityId,
   LocalizationKey,
   Resource,
   ParameterCount,
+  Structure3DAperture,
   structure3DAxes,
   structure3DCommonAxes,
   Structure3DControl,
   Structure3DControlTarget,
   structure3DControlTypes,
+  Structure3DRepeat,
   structure3DModelQualities,
   Structure3DTransform,
   Structure3DVisual,
   Vec3,
 } from "app/persistentState";
 import { getDefaultDeviceClass } from "codex/codex";
+import { emitterReferenceFromPath } from "features/emittersEditor/state";
 import { emptyLibraryIndex, importClasses, LibraryIndex } from "codex/library";
 import { assetStorage } from "app/assetStorage";
 import { STRUCTURE_3D_CLASS, MOTION_LIBRARY } from "./export";
@@ -183,6 +190,8 @@ export function getImportedDeviceClassEditor(
     commandClassReturnValues: {},
     enumChoices: {},
     structure3DNodes: {},
+    emitterGroups: {},
+    emitters: {},
     localizations,
     sourceLocale,
   };
@@ -201,6 +210,8 @@ export function getImportedDeviceClassEditor(
   importParameters(codexClass, editor, deviceLibraryIndex, locKeys);
   importResources(codexClass, editor, deviceLibraryIndex);
   importCommands(codexClass, editor, deviceLibraryIndex, locKeys);
+  // Before the 3D structure, whose beams refer to emitters.
+  importEmitters(codexClass, editor);
   importStructure3D(codexClass, editor, locKeys);
 
   if (dmx) {
@@ -484,6 +495,114 @@ function isOneOf<T extends string>(
   return (Object.values(values) as unknown[]).includes(value);
 }
 
+function resourceIdsByCodexId(
+  editor: DeviceClassDocument,
+): Map<string, EntityId> {
+  return new Map(
+    Object.entries(editor.resources).map(([id, resource]) => [
+      resource.codexId as string,
+      EntityId(id),
+    ]),
+  );
+}
+
+// delver's emitters structure doesn't keep the order its groups and emitters
+// had in the file, and gives a different one each time, so they are put in
+// order by ID, with numbers in IDs compared as numbers: cell-2 before cell-10.
+function byCodexId<T>(entries: Record<string, T>): [string, T][] {
+  return Object.entries(entries).sort(([a], [b]) =>
+    a.localeCompare(b, "en", { numeric: true }),
+  );
+}
+
+function importEmitters(imported: DeviceClass, editor: DeviceClassDocument) {
+  // emitters is not multipleAllowed, so only the first is kept. delver reads
+  // it into its own structure type.
+  const entry = Object.entries(imported.structures ?? {}).find(
+    ([, structure]) => structure.type === "Emitters",
+  );
+  if (!entry || entry[1].type !== "Emitters") {
+    return;
+  }
+  const [codexId, { value: structure }] = entry;
+  const resourceIds = resourceIdsByCodexId(editor);
+  const parameterRef = (ref: ParamReference) =>
+    toEditorParameterReference(editor, CodexId(ref.id), ref.index);
+
+  const groupIds = new Map<string, EntityId>();
+  const emitterGroups = byCodexId(structure.default?.emitterGroups ?? {}).map(
+    ([groupCodexId, group]) => {
+      const groupId = newEntityId();
+      groupIds.set(groupCodexId, groupId);
+      editor.emitterGroups[groupId] = {
+        codexId: CodexId(groupCodexId),
+        emitters: byCodexId(group.emitters).map(([emitterCodexId, emitter]) => {
+          const id = newEntityId();
+          const { directControl, spd } = emitter;
+          editor.emitters[id] = {
+            codexId: CodexId(emitterCodexId),
+            group: groupId,
+            directControl: directControl && parameterRef(directControl),
+            commonColor: emitter.commonColor,
+            spd: !spd
+              ? undefined
+              : "direct" in spd
+                ? { type: "direct", ...spd.direct }
+                : {
+                    type: "resource",
+                    resource:
+                      resourceIds.get(spd.local) ??
+                      codexIdAsEntityId(spd.local),
+                    remote: spd.remote,
+                  },
+            relativeBrightness: emitter.relativeBrightness,
+          };
+          return id;
+        }),
+      };
+      return groupId;
+    },
+  );
+
+  editor.emittersStructure = {
+    codexId: CodexId(codexId),
+    access: structure.access,
+    lifetime: structure.lifetime,
+    emitterGroups,
+    controlGroups: Object.entries(structure.default?.controlGroups ?? {}).map(
+      ([controlCodexId, control]): EmitterControlGroup => {
+        const colorSchemes: EmitterControlGroup["colorSchemes"] = {};
+        for (const scheme of Object.values(emitterColorSchemes)) {
+          const components = control[scheme];
+          if (components) {
+            // Each scheme's type names its components, all parameters.
+            const entries = Object.entries(components) as [
+              string,
+              ParamReference,
+            ][];
+            colorSchemes[scheme] = Object.fromEntries(
+              entries.map(([component, ref]) => [component, parameterRef(ref)]),
+            );
+          }
+        }
+        return {
+          codexId: CodexId(controlCodexId),
+          emitterGroups: control.emitterGroups.map(
+            (group) => groupIds.get(group) ?? codexIdAsEntityId(group),
+          ),
+          masterIntensity:
+            control.masterIntensity && parameterRef(control.masterIntensity),
+          colorSchemes,
+          crossfade: control.crossfade && {
+            parameter: parameterRef(control.crossfade.parameter),
+            points: control.crossfade.points,
+          },
+        };
+      },
+    ),
+  };
+}
+
 function importStructure3D(
   imported: DeviceClass,
   editor: DeviceClassDocument,
@@ -500,13 +619,7 @@ function importStructure3D(
     return;
   }
   const [codexId, { value: structure }] = entry;
-
-  const resourceIds = new Map(
-    Object.entries(editor.resources).map(([id, resource]) => [
-      resource.codexId as string,
-      EntityId(id),
-    ]),
-  );
+  const resourceIds = resourceIdsByCodexId(editor);
 
   // Flattens a `nodes` map into the node table, parents before children.
   function importNodes(
@@ -531,6 +644,7 @@ function importStructure3D(
         accessoryLocation: asString(node.accessoryLocation),
         controls: importControls(editor, node.control),
         visual: importVisual(node.model, resourceIds),
+        repeat: importRepeat(node.repeat),
         localized: {
           friendlyName: locKeys.of(asString(node["@friendlyName"])),
         },
@@ -591,6 +705,8 @@ function importControls(
               ? c.commonAxis
               : undefined,
             target: importControlTarget(editor, c),
+            emitters: importEmitterReferences(editor, c.emitters),
+            aperture: importAperture(c.aperture),
           },
         ]
       : [],
@@ -611,14 +727,66 @@ function importControlTarget(
     return { type: "controlGroups", controlGroups };
   }
 
-  // A control naming neither a parameter nor control groups is kept as a
-  // broken parameter reference rather than dropped, so that its type and axes
-  // survive and the editor shows it as needing a parameter.
+  // A control naming neither a parameter nor control groups is kept rather
+  // than dropped, so that its type and axes survive and the editor shows it as
+  // needing what drives its type: control groups for a beam, otherwise a
+  // parameter, kept as a broken reference.
+  if (parameter === undefined && control.type === "beam") {
+    return { type: "controlGroups", controlGroups: [] };
+  }
   const ref = parseParameterReference(parameter ?? "");
   return {
     type: "parameter",
     parameter: toEditorParameterReference(editor, ref.codexId, ref.index),
   };
+}
+
+function importEmitterReferences(
+  editor: DeviceClassDocument,
+  paths: unknown,
+): EmitterReference[] | undefined {
+  return Array.isArray(paths)
+    ? paths.flatMap(
+        (path) =>
+          (typeof path === "string" &&
+            emitterReferenceFromPath(editor, path)) ||
+          [],
+      )
+    : undefined;
+}
+
+// A repeat is kept whatever its count and step, so that the editor can point
+// out what to fix rather than the copies vanishing.
+function importRepeat(repeat: unknown): Structure3DRepeat | undefined {
+  if (!isJsonObject(repeat) || typeof repeat.count !== "number") {
+    return undefined;
+  }
+  const step = isJsonObject(repeat.step) ? repeat.step : {};
+  const rotate = asVec3(step.rotate);
+  return {
+    count: repeat.count,
+    step: {
+      translate: asVec3(step.translate),
+      rotate: rotate?.map(wrapDegrees) as Vec3 | undefined,
+    },
+    index: asString(repeat.index),
+  };
+}
+
+// A diameter wins over width and height, which the schema doesn't allow
+// together.
+function importAperture(aperture: unknown): Structure3DAperture | undefined {
+  if (!isJsonObject(aperture)) {
+    return undefined;
+  }
+  const { diameter, width, height } = aperture;
+  if (typeof diameter === "number") {
+    return { shape: "circle", diameter };
+  }
+  if (typeof width === "number" && typeof height === "number") {
+    return { shape: "rectangle", width, height };
+  }
+  return undefined;
 }
 
 // The schema allows one quality per node, so a node giving several keeps the

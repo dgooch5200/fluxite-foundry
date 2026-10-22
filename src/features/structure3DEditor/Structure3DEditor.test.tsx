@@ -54,7 +54,8 @@ describe("Structure3DEditor", () => {
     const root = editor.structure3DNodes[rootId];
     expect(root.codexId).toBe("node");
     expect(editor.structure3DNodes[root.children[0]]).toMatchObject({
-      codexId: "node",
+      // Node IDs are unique throughout the structure, not just among siblings.
+      codexId: "node-1",
       parent: rootId,
       transform: { type: "trs", translate: [1.5, 0, 0] },
       controls: [

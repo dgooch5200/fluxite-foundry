@@ -690,8 +690,18 @@ export const Structure3DTransformSchema = z.discriminatedUnion("type", [
   }),
 ]);
 
+// An emitter group, or one emitter in it. Written to Fluxite Codex as a path
+// into the emitters structure, e.g. "emitters?/emitterGroups/cell-1" or
+// "emitters?/emitterGroups/cell-1/emitters/red".
+export const EmitterReferenceSchema = z.object({
+  group: EntityIdSchema,
+  // Absent for the whole group
+  emitter: EntityIdSchema.optional(),
+});
+
 // What drives a control: a parameter, or paths into control-groups structures,
-// never both.
+// never both. E1.73-4 Table 8-8 has linear and rotate controls driven by a
+// parameter, and beams by control groups.
 export const Structure3DControlTargetSchema = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("parameter"),
@@ -704,11 +714,28 @@ export const Structure3DControlTargetSchema = z.discriminatedUnion("type", [
   }),
 ]);
 
+// The area a beam's light leaves from, in meters, centered on the node and
+// perpendicular to the control's axis. Proposed in
+// `docs/rfcs/emitter_location_3d.md`, as are a beam's emitters.
+export const Structure3DApertureSchema = z.discriminatedUnion("shape", [
+  z.object({ shape: z.literal("circle"), diameter: z.number() }),
+  z.object({
+    shape: z.literal("rectangle"),
+    width: z.number(),
+    height: z.number(),
+  }),
+]);
+
 export const Structure3DControlSchema = z.object({
   type: z.enum(structure3DControlTypes),
   axis: z.enum(structure3DAxes),
   commonAxis: z.enum(structure3DCommonAxes).optional(),
   target: Structure3DControlTargetSchema,
+  // Beams only: the emitter groups and emitters whose light the beam is. Absent
+  // when it names none.
+  emitters: z.array(EmitterReferenceSchema).optional(),
+  // Beams only. Absent means the light leaves from a point.
+  aperture: Structure3DApertureSchema.optional(),
 });
 
 // The schema allows exactly one of low, medium or high per node.
@@ -718,6 +745,22 @@ export const Structure3DVisualSchema = z.object({
   resource: EntityIdSchema,
   // A glTF node or scene in the model. Absent means the default scene.
   nodeOrSceneName: z.string().optional(),
+});
+
+// Makes a node stand for `count` copies of itself and everything beneath it.
+// Copy k is placed by applying `step` k times to the node's own transform, in
+// the parent's frame. Proposed in `docs/rfcs/emitter_location_3d.md`.
+// A reference beneath a repeated node may hold `${index}`, standing for the
+// copy number; it is kept by its codexId, like an unresolved reference, and
+// resolved for each copy.
+export const Structure3DRepeatSchema = z.object({
+  count: z.number(),
+  step: z.object({
+    translate: Vec3Schema.optional(),
+    // Degrees, applied as Tait-Bryan ZYX.
+    rotate: Vec3Schema.optional(),
+  }),
+  index: z.string().optional(),
 });
 
 export const Structure3DNodeSchema = z.object({
@@ -731,6 +774,7 @@ export const Structure3DNodeSchema = z.object({
   accessoryLocation: z.string().optional(),
   controls: z.array(Structure3DControlSchema),
   visual: Structure3DVisualSchema.optional(),
+  repeat: Structure3DRepeatSchema.optional(),
   localized: z.object({
     friendlyName: LocalizationKeySchema.optional(),
   }),
@@ -742,6 +786,128 @@ export const Structure3DSchema = z.object({
   access: z.array(AccessSchema),
   lifetime: LifetimeSchema,
   rootNodes: z.array(EntityIdSchema),
+});
+
+// ---------------------------------------------------------------------------
+// Emitters
+// ---------------------------------------------------------------------------
+
+// The emitters structure from the E1.73 intensity-color library. Its schema is
+// `e173/libraries/intensity-color/<draft>/schemas/emitters.json`, but this
+// follows delver, which files are read and written through, where the two
+// differ: delver keys control groups by ID where the draft-2027-1 schema lists
+// them, and knows two more common colors, amber and deep-blue.
+
+export const emitterCommonColors = {
+  AMBER: "amber",
+  BLUE: "blue",
+  COOL_WHITE: "cool-white",
+  CYAN: "cyan",
+  DEEP_BLUE: "deep-blue",
+  DEEP_RED: "deep-red",
+  GREEN: "green",
+  INDIGO: "indigo",
+  LIME: "lime",
+  MINT: "mint",
+  ORANGE: "orange",
+  RED: "red",
+  UV: "uv",
+  WARM_WHITE: "warm-white",
+  WHITE: "white",
+} as const;
+
+export type EmitterCommonColor =
+  (typeof emitterCommonColors)[keyof typeof emitterCommonColors];
+
+// The color schemes a control group can be controlled by. Each names its
+// components' parameters, e.g. rgb has red, green and blue.
+export const emitterColorSchemes = {
+  RGB: "rgb",
+  HSV: "hsv",
+  CCT: "cct",
+  CMY: "cmy",
+  XY: "xy",
+  XYZ: "xyz",
+  UV: "uv",
+} as const;
+
+export type EmitterColorScheme =
+  (typeof emitterColorSchemes)[keyof typeof emitterColorSchemes];
+
+// An emitter's spectral power distribution: given in place, or in a resource
+// with an optional URL for the same file.
+export const EmitterSpdSchema = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal("direct"),
+    start: z.number(),
+    step: z.number(),
+    mappings: z.array(
+      z.object({
+        value: z.number(),
+        powerDistribution: z.array(z.number()),
+        deviationPlus: z.array(z.number()).optional(),
+        deviationMinus: z.array(z.number()).optional(),
+      }),
+    ),
+  }),
+  z.object({
+    type: z.literal("resource"),
+    resource: EntityIdSchema,
+    remote: z.string().optional(),
+  }),
+]);
+
+export const EmitterSchema = z.object({
+  // The emitter's key in its group's `emitters`, unique within the group
+  codexId: CodexIdSchema,
+  group: EntityIdSchema,
+  directControl: ParameterReferenceSchema.optional(),
+  commonColor: z.enum(emitterCommonColors).optional(),
+  spd: EmitterSpdSchema.optional(),
+  // 0 to 1
+  relativeBrightness: z.number().optional(),
+});
+
+export const EmitterGroupSchema = z.object({
+  // The group's key in the structure's `emitterGroups`
+  codexId: CodexIdSchema,
+  emitters: z.array(EntityIdSchema),
+});
+
+// Controls the emitters of one or more groups together.
+export const EmitterControlGroupSchema = z.object({
+  // The control group's key in the structure's `controlGroups`
+  codexId: CodexIdSchema,
+  emitterGroups: z.array(EntityIdSchema),
+  masterIntensity: ParameterReferenceSchema.optional(),
+  // Each scheme's parameters by component name
+  colorSchemes: z.partialRecord(
+    z.enum(emitterColorSchemes),
+    z.record(z.string(), ParameterReferenceSchema),
+  ),
+  crossfade: z
+    .object({
+      parameter: ParameterReferenceSchema,
+      points: z.array(
+        z.object({
+          value: z.number(),
+          controlScheme: z.union([
+            z.enum(emitterColorSchemes),
+            z.literal("direct"),
+          ]),
+        }),
+      ),
+    })
+    .optional(),
+});
+
+// emitters is not multipleAllowed, so a device class has at most one.
+export const EmittersStructureSchema = z.object({
+  codexId: CodexIdSchema,
+  access: z.array(AccessSchema),
+  lifetime: LifetimeSchema,
+  emitterGroups: z.array(EntityIdSchema),
+  controlGroups: z.array(EmitterControlGroupSchema),
 });
 
 export const LocalizationDbSchema = z
@@ -792,6 +958,11 @@ export const DeviceClassDocumentSchema = z.object({
   // Structure 3D
   structure3D: Structure3DSchema.optional(),
   structure3DNodes: z.record(EntityIdSchema, Structure3DNodeSchema),
+
+  // Emitters
+  emittersStructure: EmittersStructureSchema.optional(),
+  emitterGroups: z.record(EntityIdSchema, EmitterGroupSchema),
+  emitters: z.record(EntityIdSchema, EmitterSchema),
 
   localizations: z.record(LocalizationKeySchema, LocalizationSchema),
 
@@ -864,8 +1035,16 @@ export type Structure3DTransform = z.infer<typeof Structure3DTransformSchema>;
 export type Structure3DControlTarget = z.infer<
   typeof Structure3DControlTargetSchema
 >;
+export type Structure3DAperture = z.infer<typeof Structure3DApertureSchema>;
+export type EmitterReference = z.infer<typeof EmitterReferenceSchema>;
+export type EmitterSpd = z.infer<typeof EmitterSpdSchema>;
+export type Emitter = z.infer<typeof EmitterSchema>;
+export type EmitterGroup = z.infer<typeof EmitterGroupSchema>;
+export type EmitterControlGroup = z.infer<typeof EmitterControlGroupSchema>;
+export type EmittersStructure = z.infer<typeof EmittersStructureSchema>;
 export type Structure3DControl = z.infer<typeof Structure3DControlSchema>;
 export type Structure3DVisual = z.infer<typeof Structure3DVisualSchema>;
+export type Structure3DRepeat = z.infer<typeof Structure3DRepeatSchema>;
 export type Structure3DNode = z.infer<typeof Structure3DNodeSchema>;
 export type Structure3D = z.infer<typeof Structure3DSchema>;
 

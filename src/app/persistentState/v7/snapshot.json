@@ -1,6 +1,6 @@
 {
   "formatVersion": 1,
-  "exportedAt": "2026-10-18T17:15:24.907Z",
+  "exportedAt": "2026-10-22T16:29:10.946Z",
   "stateVersion": 7,
   "state": {
     "appSettings": {
@@ -14,17 +14,17 @@
     },
     "session": {
       "openDocuments": [
-        "5WG_KdH2KoIpuEqaGLVEn",
-        "FpInd5ieqfUpIeLtj2xqp"
+        "HNvmQTcFEgBKQuJre_CAr",
+        "DlGhQlxO6JJPWLi9Pc1Li"
       ],
-      "selectedDocumentId": "5WG_KdH2KoIpuEqaGLVEn",
+      "selectedDocumentId": "HNvmQTcFEgBKQuJre_CAr",
       "layouts": {
-        "5WG_KdH2KoIpuEqaGLVEn": "{\"type\":\"row\",\"weight\":100,\"id\":\"8WKve5Mfqh9Ot_F1kiGmc\",\"children\":[{\"type\":\"tabset\",\"weight\":50,\"id\":\"hQzneSeBmLoWmPHaRV5d8\",\"children\":[{\"type\":\"tab\",\"name\":\"Parameters Editor\",\"component\":\"parametersEditor\",\"id\":\"kLZmXYdiJY6Z3h16nuKf7\"}]},{\"type\":\"tabset\",\"weight\":50,\"id\":\"_ToLTHT8SpNrndzhlCdnM\",\"children\":[{\"type\":\"tab\",\"name\":\"Device Info Editor\",\"component\":\"deviceInfoEditor\",\"id\":\"z49s730_V5A_IkGsGq-JN\"}]}]}",
-        "FpInd5ieqfUpIeLtj2xqp": "{\"type\":\"row\",\"weight\":100,\"id\":\"EStWuWR_Ueu_XiqKoJvFc\",\"children\":[{\"type\":\"tabset\",\"weight\":50,\"id\":\"1AxBPyXjoSr6MbfIdy_-9\",\"children\":[{\"type\":\"tab\",\"name\":\"Parameters Editor\",\"component\":\"parametersEditor\",\"id\":\"K6TJ6nV72mVtBCTtV5aau\"}]},{\"type\":\"tabset\",\"weight\":50,\"id\":\"nGQj-Hs8BSidxbf4jQ1mZ\",\"children\":[{\"type\":\"tab\",\"name\":\"Device Info Editor\",\"component\":\"deviceInfoEditor\",\"id\":\"DX1mSkLx8URUJyCU-9GZP\"}]}]}"
+        "HNvmQTcFEgBKQuJre_CAr": "{\"type\":\"row\",\"weight\":100,\"id\":\"VgFcyuiJqMevOaybYEoeL\",\"children\":[{\"type\":\"tabset\",\"weight\":50,\"id\":\"szVJD_OGPTqF8hIBU9Vvz\",\"children\":[{\"type\":\"tab\",\"name\":\"Parameters Editor\",\"component\":\"parametersEditor\",\"id\":\"XZGkhcmCrd_w9Ym_9MMhQ\"}]},{\"type\":\"tabset\",\"weight\":50,\"id\":\"KHo3XSBR4ktXEoM-CHaLk\",\"children\":[{\"type\":\"tab\",\"name\":\"Device Info Editor\",\"component\":\"deviceInfoEditor\",\"id\":\"6K2fJZR-KNDDMCBlwGsLc\"}]}]}",
+        "DlGhQlxO6JJPWLi9Pc1Li": "{\"type\":\"row\",\"weight\":100,\"id\":\"Em6F2dyZ63J4o8TztR0fa\",\"children\":[{\"type\":\"tabset\",\"weight\":50,\"id\":\"aINBy6cCIT0l5iLEzLNIh\",\"children\":[{\"type\":\"tab\",\"name\":\"Parameters Editor\",\"component\":\"parametersEditor\",\"id\":\"HuZbK9eXKbZ8gcs8wPxhl\"}]},{\"type\":\"tabset\",\"weight\":50,\"id\":\"zIyffPgOKu3Tl41vkxU_D\",\"children\":[{\"type\":\"tab\",\"name\":\"Device Info Editor\",\"component\":\"deviceInfoEditor\",\"id\":\"UjfsXZ6IiZv79GfncXKLR\"}]}]}"
       }
     },
     "documents": {
-      "5WG_KdH2KoIpuEqaGLVEn": {
+      "HNvmQTcFEgBKQuJre_CAr": {
         "type": "deviceClass",
         "orgId": {
           "type": "org",
@@ -48,7 +48,7 @@
             "1.0.0"
           ],
           "localized": {
-            "description": "FtrF7n3emJYwQRPq4FOWW"
+            "description": "5E65vHmmvuwxlRLOQ-fqd"
           }
         },
         "libraries": {
@@ -57,345 +57,345 @@
           "org.esta.lib.intensity-color": "1.0.0"
         },
         "parameterClasses": {
-          "mNGOwFNLbaPRE-Gsmw5w3": {
+          "HL5E6nOXEjYDQWiLVEQiw": {
             "codexId": "color/ctc",
             "dataType": "number",
             "unit": {
               "name": "ratio"
             },
             "localized": {
-              "name": "vKT7S6bftWhaJCsmLkM2G",
-              "description": "XjumbXo6InBnCgRcaDNVT"
+              "name": "SLErtx9SFv-izy9iRv0aZ",
+              "description": "q9Jcr7F1ILXXpMEmCgcyy"
             }
           },
-          "bqW_vltRD5pFahgsBLqvU": {
+          "VtkwjWP2H9ZW3OJYiG7xo": {
             "codexId": "lamp/emulation",
             "dataType": "number",
             "unit": {
               "name": "none"
             },
             "localized": {
-              "name": "v_iRQQC3ndxgIPKDUUUM9",
-              "description": "PPpHptPOrJGMkGzxyIQPe"
+              "name": "IJh2gIc475JWyHBQko-yM",
+              "description": "6g_ROJKcIZCC-PVZOrvYD"
             }
           },
-          "rmVcG8WBs0RyrMDCOfQgl": {
+          "KPHfJvan3kdYGPMF2q6yq": {
             "codexId": "effects/animation/rotate/offset",
             "dataType": "number",
             "unit": {
               "name": "degree"
             },
             "localized": {
-              "name": "gaFDQUNrrH3LovyhOh5-x",
-              "description": "DpALR2dmEzckQM4rUnake"
+              "name": "2SGctaMUGkvlJ8dgWx1gg",
+              "description": "9TadMVjOIHi-MDivhWg-f"
             }
           },
-          "r6xL_JJPn2Y7UvCbIIwEn": {
+          "4tseFtcq8J4AZwrSxGOGx": {
             "codexId": "shape/zoom/focal-distance",
             "dataType": "number",
             "unit": {
               "name": "ratio"
             },
             "localized": {
-              "name": "O2lp7wXOUN1nSmVkkLQXI",
-              "description": "xMfv6MwzJavYHgZegMsV5"
+              "name": "MJcHOlH8SU7iVcC0en4ow",
+              "description": "I_P3t950nZkxCFYj-SL1e"
             }
           },
-          "jYNlEP4i0NH3t254rOrss": {
+          "3kkecmQ2fDpXLiDjU6vvK": {
             "codexId": "shape/frame/rotate/offset",
             "dataType": "number",
             "unit": {
               "name": "degree"
             },
             "localized": {
-              "name": "gaFDQUNrrH3LovyhOh5-x",
-              "description": "ZrOw3sUfp9nD-BvYBYtzz"
+              "name": "2SGctaMUGkvlJ8dgWx1gg",
+              "description": "Z0EZXRULNplA9ZmyLktzY"
             }
           },
-          "uh0SR8fIClJ_HGqAw0hFJ": {
+          "7DsxOHRmlNvDjyySQIiFn": {
             "codexId": "macro/rate",
             "dataType": "number",
             "unit": {
               "name": "hertz"
             },
             "localized": {
-              "name": "eou9YqyItsZdbl6c4HbYL",
-              "description": "9kCvnNzm-DY4tHxsXm-sk"
+              "name": "JBPkAckUJFVj7ywyGs2Lb",
+              "description": "EBuuZdgxNvVmjMqhFF1PV"
             }
           },
-          "W6FRwyoN4dZHT6KVvDK11": {
+          "fCdJworpii8VcukBNx37Y": {
             "codexId": "shape/frame/angle",
             "dataType": "number",
             "unit": {
               "name": "degree"
             },
             "localized": {
-              "name": "WYMkjgb1v4p9EK0v5sOhl",
-              "description": "LpntzPPC7W5uxky7_uGh4"
+              "name": "jqBR1ss-mGLJiZsC-B1rV",
+              "description": "Sm4YB-EHdgEDSu6DbT7qo"
             }
           },
-          "hf_KoaITzotCbaS5wlHfu": {
+          "iPaDH0RFri7i_Fam7YrSZ": {
             "codexId": "physical/reset",
             "dataType": "number",
             "unit": {
               "name": "none"
             },
             "localized": {
-              "name": "xxg_qiB__xLWrub-Nl29K",
-              "description": "zvoNkcyjU5yg-DRbqgS4I"
+              "name": "wOuU-BYU1nrhpT8G-sPkJ",
+              "description": "r0jAzoTFMjbJtztcNdFyK"
             }
           },
-          "-lWQKQaiOOgJu7HfjSQlB": {
+          "mymw8sUAPUXUalZy54cbN": {
             "codexId": "effects/frost/insert",
             "dataType": "number",
             "unit": {
               "name": "ratio"
             },
             "localized": {
-              "name": "BAEx2s3PWi1-yRL6cSdUs",
-              "description": "mnfk_ZNYreEE7iENYOpp0"
+              "name": "GfFC_UPRAqtZPKEMCj3mq",
+              "description": "P74zcVXTUtnBtXOYWUsCg"
             }
           },
-          "ohq_4MOZgXE5J6pLx4MER": {
+          "OvBgk-e8JKDR81IJPAkyp": {
             "codexId": "gobo/select/index",
             "dataType": "number",
             "unit": {
               "name": "none"
             },
             "localized": {
-              "name": "85UNzTCOzohSoi6dKZ5e6",
-              "description": "596TniD5Q9gSM08YnKs_t"
+              "name": "y3jY1clu1h45-GwaAxN6X",
+              "description": "XpGsyvL3JM-lzBRz7t1NR"
             }
           },
-          "5kco4AcklUkjEXb2Ih-GL": {
+          "phC1RJJs7iUu89MWS9snR": {
             "codexId": "effects/animation/incline/angle",
             "dataType": "number",
             "unit": {
               "name": "degree"
             },
             "localized": {
-              "name": "WYMkjgb1v4p9EK0v5sOhl",
-              "description": "vfX_cTb25AeyZTPR2FQan"
+              "name": "jqBR1ss-mGLJiZsC-B1rV",
+              "description": "C1b3HnuYB8HG_ayxaByOz"
             }
           },
-          "AEmPw9a-alDA2SYD-ownx": {
+          "uXER1BGH5nDZacPVxfDFq": {
             "codexId": "lamp/dim-curve",
             "dataType": "number",
             "unit": {
               "name": "none"
             },
             "localized": {
-              "name": "SsL8nUA39KV_lCt2RYpSt",
-              "description": "Ek3sIhd5Vz59tLJbW2ZVn"
+              "name": "hequdSl84TCduKRiwn5hC",
+              "description": "W_9lCNTTpCzZ0o_FN-HcR"
             }
           },
-          "KDMM2cIe16pHHZAkA0r7d": {
+          "8v_JEdczNHKOwXUnvu9h5": {
             "codexId": "macro/program",
             "dataType": "number",
             "unit": {
               "name": "none"
             },
             "localized": {
-              "name": "KXLIB7kJp3VrgVIdEDoUR",
-              "description": "osyC5VcumfnD_DCusJlKG"
+              "name": "oLcGx_4hR9TflXidTjeaV",
+              "description": "82A2AMjjdSpyY4RNfOzaY"
             }
           },
-          "8IKj82kJi6tJWOlw9HbpB": {
+          "-JrV2UqGq7I6NhlyPhEo7": {
             "codexId": "macro/offset",
             "dataType": "number",
             "unit": {
               "name": "degree"
             },
             "localized": {
-              "name": "gaFDQUNrrH3LovyhOh5-x",
-              "description": "lbQH-nqXYudT7mixnf-vh"
+              "name": "2SGctaMUGkvlJ8dgWx1gg",
+              "description": "8Um4PjwWb1PDHycN4B33D"
             }
           },
-          "9W-QoyZK13eEb_h0Pxgxq": {
+          "CKPbLUdUkh6opGODGeEkL": {
             "codexId": "shape/frame/insert",
             "dataType": "number",
             "unit": {
               "name": "ratio"
             },
             "localized": {
-              "name": "BAEx2s3PWi1-yRL6cSdUs",
-              "description": "_8d_pk4rRCsY5kAcjkltG"
+              "name": "GfFC_UPRAqtZPKEMCj3mq",
+              "description": "_mBL9Ol8HP2l4h5JUkyyH"
             }
           },
-          "3Wtv7Vnf-v93Z2GRd-2ea": {
+          "Ezm8BncChBoEPn36QuUeE": {
             "codexId": "gobo/rotate/spin",
             "dataType": "number",
             "unit": {
               "name": "rpm"
             },
             "localized": {
-              "name": "wquG_n1s6PI1S9sI7HOQt",
-              "description": "SIUhgcs8inJoa0stQvdWu"
+              "name": "8GHcNLeslKjELsRWvwKhM",
+              "description": "4O4jyNJyQmWTRYiETaMy_"
             }
           },
-          "q3Cjw184da--nHIU27fVE": {
+          "gSR7TWqwh447uPPwOOexG": {
             "codexId": "physical/fan-mode",
             "dataType": "number",
             "unit": {
               "name": "none"
             },
             "localized": {
-              "name": "G-7tPJ09FhWHUrS-0WEp-",
-              "description": "Zj1oQvNW90MXqHeqlH2AN"
+              "name": "GlhwZZKZTSANYMil5nSqG",
+              "description": "NZQMrtjdS1pUtF6EfRH6D"
             }
           },
-          "aJ0Rz48rF1ZVd8flbu72u": {
+          "nbPTy4HE6EES9IjUrtqiH": {
             "codexId": "gobo/select/cycle-fixed",
             "dataType": "number",
             "unit": {
               "name": "hertz"
             },
             "localized": {
-              "name": "DUyHXNGRI9erfJHt9yKxg",
-              "description": "Q7QC-gv_Pc7zK_bBees6P"
+              "name": "wvUti4Nm4LIwuiMTbJKFL",
+              "description": "3UHnNGtaAyLFMY5CF2qc-"
             }
           },
-          "VDy9VtJTdxT5CsTOS_eEN": {
+          "g-Ry-VRBYM5jSEH0sIs77": {
             "codexId": "gobo/rotate/offset",
             "dataType": "number",
             "unit": {
               "name": "degree"
             },
             "localized": {
-              "name": "gaFDQUNrrH3LovyhOh5-x",
-              "description": "wgz0qBGcfUtu7jGD_ysIn"
+              "name": "2SGctaMUGkvlJ8dgWx1gg",
+              "description": "qLKSJCfLPjPmaQohKl85F"
             }
           },
-          "UofGcM1omnS_jd1-DV41w": {
+          "MuOGU1ZDMsrcCFKBeB9XR": {
             "codexId": "gobo/rotate/shake-rate",
             "dataType": "number",
             "unit": {
               "name": "hertz"
             },
             "localized": {
-              "name": "EmuewIz798fS0-pKj1F4F",
-              "description": "E_c4elQL5XC8p1LUR4OcW"
+              "name": "TqMFmHta4Tr5Qme7_rSAs",
+              "description": "SSMJJLWVfqn7V4h9PUKzM"
             }
           },
-          "gpgvpPHlwhDdSrMMUWiVs": {
+          "ITDgjxP29I0Q5gSuDg8vH": {
             "codexId": "shape/iris/insert",
             "dataType": "number",
             "unit": {
               "name": "ratio"
             },
             "localized": {
-              "name": "BAEx2s3PWi1-yRL6cSdUs",
-              "description": "yFFGaDvO4wjyb_lhx8yZU"
+              "name": "GfFC_UPRAqtZPKEMCj3mq",
+              "description": "hFMh3iVm2MxaiomxSARWZ"
             }
           },
-          "kELqJv4EM-YJaLwGu4Mu8": {
+          "Tg8l5Pm0y5vUfbVHlaf7-": {
             "codexId": "shape/zoom/field-angle",
             "dataType": "number",
             "unit": {
               "name": "degree"
             },
             "localized": {
-              "name": "lVeZFwOU4S7x5mOH-cuvy",
-              "description": "-nRBCFDMOrQQXaA8YEGB_"
+              "name": "u380sHXY1oEoNcD_XDNnA",
+              "description": "OXevg87oXkuqF1W5MvAOt"
             }
           },
-          "Ei44ibwrsat4PqyDCj1gP": {
+          "EPdQxjNRylGigfiwWCE_M": {
             "codexId": "effects/animation/rotate/spin",
             "dataType": "number",
             "unit": {
               "name": "rpm"
             },
             "localized": {
-              "name": "wquG_n1s6PI1S9sI7HOQt",
-              "description": "3V7kt1ZiR8d7e3rIEjitt"
+              "name": "8GHcNLeslKjELsRWvwKhM",
+              "description": "ZdI-nLTtg8OhMlisW2FyY"
             }
           },
-          "KQI13KviFMNwbCAQECE2J": {
+          "BshFx7iYoFm19l3FZI8xP": {
             "codexId": "display/brightness",
             "dataType": "number",
             "unit": {
               "name": "none"
             },
             "localized": {
-              "name": "RrJdIqlfiCf7SbXoQ6N__",
-              "description": "ocvUEkbLDKeHdo0BJhpGB"
+              "name": "-OFl0zTQScJlXVE_nL0nb",
+              "description": "Ggf3rq_Su5u7u6vSWDvz_"
             }
           }
         },
         "structureClasses": {},
         "serializerClasses": {},
         "resourceClasses": {
-          "Wlz55OJXjqyic2JWXZhxM": {
+          "OGCr-usrRaGSg6h9ZKRPT": {
             "codexId": "animation-image",
             "mediaType": [
               "image/jpeg",
               "image/png"
             ],
             "localized": {
-              "name": "6tVxpvsPlkMg26mkZLLJ-",
-              "description": "TH47u5drUj43Il3ztZFkp"
+              "name": "6GH0p8_kqhV1zgT54xIeg",
+              "description": "oLd6Z9vpXJFvNyhkMCu6L"
             }
           },
-          "OIdi7XU-CUIrNs_ytn9m1": {
+          "d1d6U52ORPsdhXEm2vR0B": {
             "codexId": "gobo-image",
             "mediaType": [
               "image/jpeg",
               "image/png"
             ],
             "localized": {
-              "name": "wY03KgVPVc-egkLqb5TD7",
-              "description": "SdsJ67lICNLqeAi3pWDYH"
+              "name": "hNthmYH3B1wqU0okYLIp8",
+              "description": "BtkobNmd_BIYvKDubmtaY"
             }
           }
         },
         "commandClasses": {},
         "parameterEditors": [
-          "VkjQwTvVBzAA_RehAA5zR",
-          "EQNFAScGv9oDY7lN8LVZY",
-          "moSquBk9b3OyNsZH7JQS5",
-          "gNaL6i6F5mYAOfi7rozlM",
-          "wO9L_RXL6MzdvorPPDqcZ",
-          "CRF21oubI-fOlBgKglX4I",
-          "LTWn5J5XFXSLr7_UI3fLn",
-          "H2379JadiF4pCYp432Mlv",
-          "PSlSyN4PkoNAM0NE2gGpM",
-          "Xr-taQkPvdRbETn3I89zx",
-          "qwqsMluJMRfILIp7bKRHz",
-          "Myb4uP23GA-Z_So1YJhzF",
-          "0-Uxo13YPhqkRka7iiGAN",
-          "MU5ms2cp6q3G4Qy_zFrc6",
-          "AnZqn7w5TtE_hO3148NjT",
-          "jhTTr0c2U-cyCfY9HBMR-",
-          "Hhvp7h3mR5LhtUNBUYfU9",
-          "U56R6ng3X1oetun61BYhd",
-          "GkuAxpn4KeBkUzOehll5h",
-          "b7yFrld5khB0jx9sxUxvm",
-          "TYhbUVo3QX0MeD1kj431b",
-          "QPSh4viZ3fsl3I1dAhAOD",
-          "q7WyHw0R6Ph2Ae66psQi3",
-          "77kB1TzglLP437DYBPcED",
-          "fwg4hqQQhvs9edheBHS_W",
-          "SQD2ajTtRR5HRp3FDQt0C",
-          "A9pm7vojFOLv5umbis8Z_",
-          "3lVum61RPLR74dfQv_yV0",
-          "anxYLW605lcfbK4jx4g4V",
-          "SMnpRHi9n25QYhnpwLTLu",
-          "EnyGxMduBZVVl25e7GdTc",
-          "eh5z9bRV2HgEFs9nWutq_",
-          "xtkc1d0550iUCoBgWB0Sa",
-          "lUEkzAFHKZfj6Pc44hLvU",
-          "IONEiJhvg8-B2M8y9Ekn1",
-          "jXb3jpz5BMFYt-PQt0kuz",
-          "TSHn9XvEMbxMjmT0g2dJP",
-          "EYG1tg3WdqHFVWjT3-Z9H",
-          "6r_yMRY7_T5X_D5NiGSFh"
+          "cVA4W81VACuyMfkLh7u75",
+          "4rWQsJoYNY2_SvSur0uOE",
+          "GhMJCZ0Fxxys37fH22Kz5",
+          "6i3MzJfsjy2Yu02YMiN4h",
+          "VJxRQqJiSbl83TcUuxsUS",
+          "3muml-ScdZFUR4zwaatse",
+          "ue-soawpUOiPOUEWTeekx",
+          "KYpc7xHNIpeOi0BoUsXc6",
+          "l9EDjX6RjDPJe8HnWUtoS",
+          "03ZImlylCW4ZDsN05sI0M",
+          "Kqi2guJKFuCaQm2f1TMeS",
+          "P7hudkBSWvGAeeuxwz4cO",
+          "xbjUdSuc-SUz4G2l4yLIM",
+          "yvptep6xniee_Mm49Lf5I",
+          "EdCqbgseSUeQDKr2uFc4U",
+          "V66YPmXM04sU_7BJSLwW2",
+          "NY3tu1zW5PVy7M4lzHyAn",
+          "DBjyrdSRxvKjPGKouoUmP",
+          "DpwvugFXlLlzAWeW9r4xs",
+          "2QcbfLzv2mQ_rxa4LhGCY",
+          "e1MjrI4u9D9mG5IsYYaMX",
+          "jvzB8XdvEeZYA5EGaC9RB",
+          "qECTe1IkJdf7gfC5oAN2o",
+          "0j2apFtCeb8FwtkeSxJbJ",
+          "reYU4KffmyKuIStpXaogD",
+          "EzyVRdojL_8QYgINWy1dq",
+          "lOdJkYpwdyqVb09g3S6NI",
+          "UYh7wCK43b05_Jp0vtJng",
+          "OsE1p6zQkDBCQ5lODum2f",
+          "uBWzep9XyNJRMRV8DEVxw",
+          "iVioJ2AxnFVrF9tKxtKBI",
+          "_Z9fKTJ1JsSHivWNqQwTG",
+          "K-Efq8ZEuoqcz-dzk2vBW",
+          "WIRkcmywHiO1IFpvLKK5o",
+          "Qrx6kq_Uosgpa_K8sRp1N",
+          "aES76atOrA3QzGoktlQOO",
+          "xrUWoLcl7Kktnd5w9BdUX",
+          "aRNUlk0H3OsYrsEVCupE6",
+          "7phhf-jkYiOkQHDndwscg"
         ],
         "parameters": {
-          "VkjQwTvVBzAA_RehAA5zR": {
+          "cVA4W81VACuyMfkLh7u75": {
             "codexId": "zoom",
             "class": {
               "type": "local",
-              "id": "kELqJv4EM-YJaLwGu4Mu8"
+              "id": "Tg8l5Pm0y5vUfbVHlaf7-"
             },
             "access": [
               "readTarget",
@@ -407,11 +407,11 @@
             "default": 36,
             "localized": {}
           },
-          "EQNFAScGv9oDY7lN8LVZY": {
+          "4rWQsJoYNY2_SvSur0uOE": {
             "codexId": "display-brightness",
             "class": {
               "type": "local",
-              "id": "KQI13KviFMNwbCAQECE2J"
+              "id": "BshFx7iYoFm19l3FZI8xP"
             },
             "access": [
               "readTarget",
@@ -423,11 +423,11 @@
             "default": 0,
             "localized": {}
           },
-          "moSquBk9b3OyNsZH7JQS5": {
+          "GhMJCZ0Fxxys37fH22Kz5": {
             "codexId": "macro-offset",
             "class": {
               "type": "local",
-              "id": "8IKj82kJi6tJWOlw9HbpB"
+              "id": "-JrV2UqGq7I6NhlyPhEo7"
             },
             "access": [
               "readTarget",
@@ -439,7 +439,7 @@
             "default": 10,
             "localized": {}
           },
-          "gNaL6i6F5mYAOfi7rozlM": {
+          "6i3MzJfsjy2Yu02YMiN4h": {
             "codexId": "color-select-index",
             "class": {
               "type": "imported",
@@ -457,11 +457,11 @@
             "wrapping": true,
             "localized": {}
           },
-          "wO9L_RXL6MzdvorPPDqcZ": {
+          "VJxRQqJiSbl83TcUuxsUS": {
             "codexId": "gobo-rotator-spin",
             "class": {
               "type": "local",
-              "id": "3Wtv7Vnf-v93Z2GRd-2ea"
+              "id": "Ezm8BncChBoEPn36QuUeE"
             },
             "access": [
               "write",
@@ -473,11 +473,11 @@
             "default": 0,
             "localized": {}
           },
-          "CRF21oubI-fOlBgKglX4I": {
+          "3muml-ScdZFUR4zwaatse": {
             "codexId": "frame-insert",
             "class": {
               "type": "local",
-              "id": "9W-QoyZK13eEb_h0Pxgxq"
+              "id": "CKPbLUdUkh6opGODGeEkL"
             },
             "count": {
               "type": "fixed",
@@ -493,11 +493,11 @@
             "default": 0,
             "localized": {}
           },
-          "LTWn5J5XFXSLr7_UI3fLn": {
+          "ue-soawpUOiPOUEWTeekx": {
             "codexId": "dimmer-curve",
             "class": {
               "type": "local",
-              "id": "AEmPw9a-alDA2SYD-ownx"
+              "id": "uXER1BGH5nDZacPVxfDFq"
             },
             "access": [
               "write",
@@ -509,11 +509,11 @@
             "default": 0,
             "localized": {}
           },
-          "H2379JadiF4pCYp432Mlv": {
+          "KYpc7xHNIpeOi0BoUsXc6": {
             "codexId": "macro-program",
             "class": {
               "type": "local",
-              "id": "KDMM2cIe16pHHZAkA0r7d"
+              "id": "8v_JEdczNHKOwXUnvu9h5"
             },
             "count": {
               "type": "fixed",
@@ -529,7 +529,7 @@
             "default": 0,
             "localized": {}
           },
-          "PSlSyN4PkoNAM0NE2gGpM": {
+          "l9EDjX6RjDPJe8HnWUtoS": {
             "codexId": "color-select-continuous",
             "class": {
               "type": "imported",
@@ -546,11 +546,11 @@
             "default": 0,
             "localized": {}
           },
-          "Xr-taQkPvdRbETn3I89zx": {
+          "03ZImlylCW4ZDsN05sI0M": {
             "codexId": "frost",
             "class": {
               "type": "local",
-              "id": "-lWQKQaiOOgJu7HfjSQlB"
+              "id": "mymw8sUAPUXUalZy54cbN"
             },
             "access": [
               "readTarget",
@@ -562,11 +562,11 @@
             "default": 0,
             "localized": {}
           },
-          "qwqsMluJMRfILIp7bKRHz": {
+          "Kqi2guJKFuCaQm2f1TMeS": {
             "codexId": "animation-spin",
             "class": {
               "type": "local",
-              "id": "Ei44ibwrsat4PqyDCj1gP"
+              "id": "EPdQxjNRylGigfiwWCE_M"
             },
             "access": [
               "readTarget",
@@ -578,11 +578,11 @@
             "default": 0,
             "localized": {}
           },
-          "Myb4uP23GA-Z_So1YJhzF": {
+          "P7hudkBSWvGAeeuxwz4cO": {
             "codexId": "macro-sync",
             "class": {
               "type": "local",
-              "id": "KDMM2cIe16pHHZAkA0r7d"
+              "id": "8v_JEdczNHKOwXUnvu9h5"
             },
             "access": [
               "write",
@@ -594,11 +594,11 @@
             "default": 0,
             "localized": {}
           },
-          "0-Uxo13YPhqkRka7iiGAN": {
+          "xbjUdSuc-SUz4G2l4yLIM": {
             "codexId": "gate-angle",
             "class": {
               "type": "local",
-              "id": "jYNlEP4i0NH3t254rOrss"
+              "id": "3kkecmQ2fDpXLiDjU6vvK"
             },
             "access": [
               "write",
@@ -610,11 +610,11 @@
             "default": 0,
             "localized": {}
           },
-          "MU5ms2cp6q3G4Qy_zFrc6": {
+          "yvptep6xniee_Mm49Lf5I": {
             "codexId": "edge",
             "class": {
               "type": "local",
-              "id": "r6xL_JJPn2Y7UvCbIIwEn"
+              "id": "4tseFtcq8J4AZwrSxGOGx"
             },
             "access": [
               "write",
@@ -626,7 +626,7 @@
             "default": 0.5,
             "localized": {}
           },
-          "AnZqn7w5TtE_hO3148NjT": {
+          "EdCqbgseSUeQDKr2uFc4U": {
             "codexId": "strobe-waveform",
             "class": {
               "type": "imported",
@@ -640,11 +640,11 @@
             "lifetime": "runtime",
             "localized": {}
           },
-          "jhTTr0c2U-cyCfY9HBMR-": {
+          "V66YPmXM04sU_7BJSLwW2": {
             "codexId": "tungsten-emulation",
             "class": {
               "type": "local",
-              "id": "bqW_vltRD5pFahgsBLqvU"
+              "id": "VtkwjWP2H9ZW3OJYiG7xo"
             },
             "access": [
               "write",
@@ -656,11 +656,11 @@
             "default": 0,
             "localized": {}
           },
-          "Hhvp7h3mR5LhtUNBUYfU9": {
+          "NY3tu1zW5PVy7M4lzHyAn": {
             "codexId": "frame-angle",
             "class": {
               "type": "local",
-              "id": "W6FRwyoN4dZHT6KVvDK11"
+              "id": "fCdJworpii8VcukBNx37Y"
             },
             "count": {
               "type": "fixed",
@@ -676,7 +676,7 @@
             "default": 0,
             "localized": {}
           },
-          "U56R6ng3X1oetun61BYhd": {
+          "DBjyrdSRxvKjPGKouoUmP": {
             "codexId": "magenta",
             "class": {
               "type": "imported",
@@ -693,7 +693,7 @@
             "default": 0,
             "localized": {}
           },
-          "GkuAxpn4KeBkUzOehll5h": {
+          "DpwvugFXlLlzAWeW9r4xs": {
             "codexId": "color-select-spin",
             "class": {
               "type": "imported",
@@ -710,7 +710,7 @@
             "default": 0,
             "localized": {}
           },
-          "b7yFrld5khB0jx9sxUxvm": {
+          "2QcbfLzv2mQ_rxa4LhGCY": {
             "codexId": "shutter",
             "class": {
               "type": "imported",
@@ -725,11 +725,11 @@
             "default": true,
             "localized": {}
           },
-          "TYhbUVo3QX0MeD1kj431b": {
+          "e1MjrI4u9D9mG5IsYYaMX": {
             "codexId": "fan-mode",
             "class": {
               "type": "local",
-              "id": "q3Cjw184da--nHIU27fVE"
+              "id": "gSR7TWqwh447uPPwOOexG"
             },
             "access": [
               "readTarget",
@@ -741,11 +741,11 @@
             "default": 0,
             "localized": {}
           },
-          "QPSh4viZ3fsl3I1dAhAOD": {
+          "jvzB8XdvEeZYA5EGaC9RB": {
             "codexId": "gobo-select-index",
             "class": {
               "type": "local",
-              "id": "ohq_4MOZgXE5J6pLx4MER"
+              "id": "OvBgk-e8JKDR81IJPAkyp"
             },
             "access": [
               "write",
@@ -758,7 +758,7 @@
             "wrapping": true,
             "localized": {}
           },
-          "q7WyHw0R6Ph2Ae66psQi3": {
+          "qECTe1IkJdf7gfC5oAN2o": {
             "codexId": "yellow",
             "class": {
               "type": "imported",
@@ -775,11 +775,11 @@
             "default": 0,
             "localized": {}
           },
-          "77kB1TzglLP437DYBPcED": {
+          "0j2apFtCeb8FwtkeSxJbJ": {
             "codexId": "run-mode",
             "class": {
               "type": "local",
-              "id": "hf_KoaITzotCbaS5wlHfu"
+              "id": "iPaDH0RFri7i_Fam7YrSZ"
             },
             "access": [
               "write",
@@ -791,11 +791,11 @@
             "default": 0,
             "localized": {}
           },
-          "fwg4hqQQhvs9edheBHS_W": {
+          "reYU4KffmyKuIStpXaogD": {
             "codexId": "animation-offset",
             "class": {
               "type": "local",
-              "id": "rmVcG8WBs0RyrMDCOfQgl"
+              "id": "KPHfJvan3kdYGPMF2q6yq"
             },
             "access": [
               "write",
@@ -807,7 +807,7 @@
             "default": 0,
             "localized": {}
           },
-          "SQD2ajTtRR5HRp3FDQt0C": {
+          "EzyVRdojL_8QYgINWy1dq": {
             "codexId": "strobe-rate",
             "class": {
               "type": "imported",
@@ -824,11 +824,11 @@
             "default": 0.1,
             "localized": {}
           },
-          "A9pm7vojFOLv5umbis8Z_": {
+          "lOdJkYpwdyqVb09g3S6NI": {
             "codexId": "iris",
             "class": {
               "type": "local",
-              "id": "gpgvpPHlwhDdSrMMUWiVs"
+              "id": "ITDgjxP29I0Q5gSuDg8vH"
             },
             "access": [
               "write",
@@ -840,11 +840,11 @@
             "default": 0,
             "localized": {}
           },
-          "3lVum61RPLR74dfQv_yV0": {
+          "UYh7wCK43b05_Jp0vtJng": {
             "codexId": "gobo-rotator-shake",
             "class": {
               "type": "local",
-              "id": "UofGcM1omnS_jd1-DV41w"
+              "id": "MuOGU1ZDMsrcCFKBeB9XR"
             },
             "access": [
               "readTarget",
@@ -856,11 +856,11 @@
             "default": 0,
             "localized": {}
           },
-          "anxYLW605lcfbK4jx4g4V": {
+          "OsE1p6zQkDBCQ5lODum2f": {
             "codexId": "gobo-select-spin",
             "class": {
               "type": "local",
-              "id": "aJ0Rz48rF1ZVd8flbu72u"
+              "id": "nbPTy4HE6EES9IjUrtqiH"
             },
             "access": [
               "readTarget",
@@ -872,7 +872,7 @@
             "default": 0,
             "localized": {}
           },
-          "SMnpRHi9n25QYhnpwLTLu": {
+          "uBWzep9XyNJRMRV8DEVxw": {
             "codexId": "pan",
             "class": {
               "type": "imported",
@@ -889,7 +889,7 @@
             "default": 0,
             "localized": {}
           },
-          "EnyGxMduBZVVl25e7GdTc": {
+          "iVioJ2AxnFVrF9tKxtKBI": {
             "codexId": "tilt",
             "class": {
               "type": "imported",
@@ -906,11 +906,11 @@
             "default": 0,
             "localized": {}
           },
-          "eh5z9bRV2HgEFs9nWutq_": {
+          "_Z9fKTJ1JsSHivWNqQwTG": {
             "codexId": "animation-incline",
             "class": {
               "type": "local",
-              "id": "5kco4AcklUkjEXb2Ih-GL"
+              "id": "phC1RJJs7iUu89MWS9snR"
             },
             "access": [
               "readTarget",
@@ -922,11 +922,11 @@
             "default": 0,
             "localized": {}
           },
-          "xtkc1d0550iUCoBgWB0Sa": {
+          "K-Efq8ZEuoqcz-dzk2vBW": {
             "codexId": "gobo-rotator-rotation",
             "class": {
               "type": "local",
-              "id": "VDy9VtJTdxT5CsTOS_eEN"
+              "id": "g-Ry-VRBYM5jSEH0sIs77"
             },
             "access": [
               "readTarget",
@@ -938,11 +938,11 @@
             "default": 0,
             "localized": {}
           },
-          "lUEkzAFHKZfj6Pc44hLvU": {
+          "WIRkcmywHiO1IFpvLKK5o": {
             "codexId": "ctc",
             "class": {
               "type": "local",
-              "id": "mNGOwFNLbaPRE-Gsmw5w3"
+              "id": "HL5E6nOXEjYDQWiLVEQiw"
             },
             "access": [
               "readTarget",
@@ -954,11 +954,11 @@
             "default": 0,
             "localized": {}
           },
-          "IONEiJhvg8-B2M8y9Ekn1": {
+          "Qrx6kq_Uosgpa_K8sRp1N": {
             "codexId": "macro-rate",
             "class": {
               "type": "local",
-              "id": "uh0SR8fIClJ_HGqAw0hFJ"
+              "id": "7DsxOHRmlNvDjyySQIiFn"
             },
             "count": {
               "type": "fixed",
@@ -974,7 +974,7 @@
             "default": 0,
             "localized": {}
           },
-          "jXb3jpz5BMFYt-PQt0kuz": {
+          "aES76atOrA3QzGoktlQOO": {
             "codexId": "cyan",
             "class": {
               "type": "imported",
@@ -991,7 +991,7 @@
             "default": 0,
             "localized": {}
           },
-          "TSHn9XvEMbxMjmT0g2dJP": {
+          "xrUWoLcl7Kktnd5w9BdUX": {
             "codexId": "color-effect-rate",
             "class": {
               "type": "imported",
@@ -1008,7 +1008,7 @@
             "default": 5,
             "localized": {}
           },
-          "EYG1tg3WdqHFVWjT3-Z9H": {
+          "aRNUlk0H3OsYrsEVCupE6": {
             "codexId": "intensity",
             "class": {
               "type": "imported",
@@ -1025,7 +1025,7 @@
             "default": 0,
             "localized": {}
           },
-          "6r_yMRY7_T5X_D5NiGSFh": {
+          "7phhf-jkYiOkQHDndwscg": {
             "codexId": "color-effect-program",
             "class": {
               "type": "imported",
@@ -1041,18 +1041,18 @@
           }
         },
         "resourceEditors": [
-          "PCAWtKjbIszLbOs9zP2sr",
-          "OQBwyGpIRIvBGBbuEHE3P",
-          "DCkkY5n2GXJrwOkth0xM8",
-          "bO93MjESKB_pVIlzm_-fq",
-          "ubegfs3xn98zTziOxzh_v",
-          "BnUInjSaCwM8K8xKECCOK",
-          "C-CYn7nL8A41NxqxaaD67",
-          "hiqAbcgfScG_d8kAfDUBw",
-          "K4hOZKUwe42P0-K77ZFN3"
+          "AheOZGnaqo6yLBSrfOK02",
+          "vlVLnV9r2yPKaVFFfn8Wq",
+          "iUxy3YqPkqWB80yCJ1KoG",
+          "6m4mVPy1FHyC1KvHGUWwT",
+          "bjG3FbDkbk3grJjwBbrKN",
+          "jhAwjvRNHKy2-rHrpmccV",
+          "8XKjeSdXpXUO3rVpeHD72",
+          "ZRoB3lhLn08DeRPVUsfKV",
+          "UhE21iMbNzBDvIgxe5tLj"
         ],
         "resources": {
-          "PCAWtKjbIszLbOs9zP2sr": {
+          "AheOZGnaqo6yLBSrfOK02": {
             "codexId": "model-low",
             "class": {
               "type": "imported",
@@ -1065,11 +1065,11 @@
             "lifetime": "static",
             "assetId": "776d97af-e08d-4550-b6a9-f65cd8fea313"
           },
-          "OQBwyGpIRIvBGBbuEHE3P": {
+          "vlVLnV9r2yPKaVFFfn8Wq": {
             "codexId": "gobo-5",
             "class": {
               "type": "local",
-              "id": "OIdi7XU-CUIrNs_ytn9m1"
+              "id": "d1d6U52ORPsdhXEm2vR0B"
             },
             "access": [
               "read"
@@ -1077,11 +1077,11 @@
             "lifetime": "static",
             "assetId": "8fd3855e-0c0d-4993-b7dc-89c00d9177fb"
           },
-          "DCkkY5n2GXJrwOkth0xM8": {
+          "iUxy3YqPkqWB80yCJ1KoG": {
             "codexId": "gobo-2",
             "class": {
               "type": "local",
-              "id": "OIdi7XU-CUIrNs_ytn9m1"
+              "id": "d1d6U52ORPsdhXEm2vR0B"
             },
             "access": [
               "read"
@@ -1089,11 +1089,11 @@
             "lifetime": "static",
             "assetId": "3f65ab0f-a03a-48eb-9164-f969cb578ed0"
           },
-          "bO93MjESKB_pVIlzm_-fq": {
+          "6m4mVPy1FHyC1KvHGUWwT": {
             "codexId": "gobo-1",
             "class": {
               "type": "local",
-              "id": "OIdi7XU-CUIrNs_ytn9m1"
+              "id": "d1d6U52ORPsdhXEm2vR0B"
             },
             "access": [
               "read"
@@ -1101,11 +1101,11 @@
             "lifetime": "static",
             "assetId": "55f34864-8093-47b9-a7d6-5adf5d36937c"
           },
-          "ubegfs3xn98zTziOxzh_v": {
+          "bjG3FbDkbk3grJjwBbrKN": {
             "codexId": "gobo-3",
             "class": {
               "type": "local",
-              "id": "OIdi7XU-CUIrNs_ytn9m1"
+              "id": "d1d6U52ORPsdhXEm2vR0B"
             },
             "access": [
               "read"
@@ -1113,11 +1113,11 @@
             "lifetime": "static",
             "assetId": "cf97101b-5f2d-46b3-bbc9-9bf78cc97440"
           },
-          "BnUInjSaCwM8K8xKECCOK": {
+          "jhAwjvRNHKy2-rHrpmccV": {
             "codexId": "animation",
             "class": {
               "type": "local",
-              "id": "Wlz55OJXjqyic2JWXZhxM"
+              "id": "OGCr-usrRaGSg6h9ZKRPT"
             },
             "access": [
               "read"
@@ -1125,11 +1125,11 @@
             "lifetime": "static",
             "assetId": "8fb11032-e3bd-42c5-b575-c1d1c13a8b18"
           },
-          "C-CYn7nL8A41NxqxaaD67": {
+          "8XKjeSdXpXUO3rVpeHD72": {
             "codexId": "gobo-4",
             "class": {
               "type": "local",
-              "id": "OIdi7XU-CUIrNs_ytn9m1"
+              "id": "d1d6U52ORPsdhXEm2vR0B"
             },
             "access": [
               "read"
@@ -1137,7 +1137,7 @@
             "lifetime": "static",
             "assetId": "67afd75e-d571-46b4-8c58-147076389ca0"
           },
-          "hiqAbcgfScG_d8kAfDUBw": {
+          "ZRoB3lhLn08DeRPVUsfKV": {
             "codexId": "model-high",
             "class": {
               "type": "imported",
@@ -1150,7 +1150,7 @@
             "lifetime": "static",
             "assetId": "4fcfc0d1-4d9b-4e98-b27a-1b360165c02b"
           },
-          "K4hOZKUwe42P0-K77ZFN3": {
+          "UhE21iMbNzBDvIgxe5tLj": {
             "codexId": "model-med",
             "class": {
               "type": "imported",
@@ -1171,10 +1171,10 @@
         "commandClassReturnValues": {},
         "enumChoices": {},
         "structure3DNodes": {
-          "g2AQxfdCrKLqC7bGeIPHp": {
+          "4FFPAtbwOQjE6yQJOYoN2": {
             "codexId": "base",
             "children": [
-              "cGPFOF75jRJzpfFiqwl5m"
+              "yksTIWHCsHvTV4-0SoEqP"
             ],
             "transform": {
               "type": "trs",
@@ -1187,16 +1187,16 @@
             "controls": [],
             "visual": {
               "quality": "high",
-              "resource": "hiqAbcgfScG_d8kAfDUBw",
+              "resource": "ZRoB3lhLn08DeRPVUsfKV",
               "nodeOrSceneName": "base"
             },
             "localized": {}
           },
-          "cGPFOF75jRJzpfFiqwl5m": {
+          "yksTIWHCsHvTV4-0SoEqP": {
             "codexId": "pan",
-            "parent": "g2AQxfdCrKLqC7bGeIPHp",
+            "parent": "4FFPAtbwOQjE6yQJOYoN2",
             "children": [
-              "g-6En3-2SP4CgT6Cv1UBm"
+              "YwrDIrhAhy2_X5Y65MwWo"
             ],
             "transform": {
               "type": "trs",
@@ -1214,21 +1214,21 @@
                 "target": {
                   "type": "parameter",
                   "parameter": {
-                    "id": "SMnpRHi9n25QYhnpwLTLu"
+                    "id": "uBWzep9XyNJRMRV8DEVxw"
                   }
                 }
               }
             ],
             "visual": {
               "quality": "high",
-              "resource": "hiqAbcgfScG_d8kAfDUBw",
+              "resource": "ZRoB3lhLn08DeRPVUsfKV",
               "nodeOrSceneName": "yoke"
             },
             "localized": {}
           },
-          "g-6En3-2SP4CgT6Cv1UBm": {
+          "YwrDIrhAhy2_X5Y65MwWo": {
             "codexId": "tilt",
-            "parent": "cGPFOF75jRJzpfFiqwl5m",
+            "parent": "yksTIWHCsHvTV4-0SoEqP",
             "children": [],
             "transform": {
               "type": "trs",
@@ -1246,1181 +1246,1183 @@
                 "target": {
                   "type": "parameter",
                   "parameter": {
-                    "id": "EnyGxMduBZVVl25e7GdTc"
+                    "id": "iVioJ2AxnFVrF9tKxtKBI"
                   }
                 }
               }
             ],
             "visual": {
               "quality": "high",
-              "resource": "hiqAbcgfScG_d8kAfDUBw",
+              "resource": "ZRoB3lhLn08DeRPVUsfKV",
               "nodeOrSceneName": "head"
             },
             "localized": {}
           }
         },
+        "emitterGroups": {},
+        "emitters": {},
         "localizations": {
-          "1tR9tsKYoOpeCFp0EtFPL": {
+          "seQAEIdww7wrdV_7bx-cy": {
             "strings": {
               "en-US": "Low Fan/Reg Intens"
             },
             "exportKey": "low_fan_regulated_intensity"
           },
-          "aGI0y6lafS-kngk_DzTMi": {
+          "PDGbl-6hwvdSLJlx0WOpo": {
             "strings": {
               "en-US": "Expand Twist"
             },
             "exportKey": "expand_twist"
           },
-          "mnfk_ZNYreEE7iENYOpp0": {
+          "P74zcVXTUtnBtXOYWUsCg": {
             "strings": {
               "en-US": "The proportion of the diameter of the beam which is covered by the frost."
             },
             "exportKey": "effects_frost_insert_description"
           },
-          "S6nFLntGrobJRf_D_PHZr": {
+          "yCRkUQBcsTnQC9RpuBuxg": {
             "strings": {
               "en-US": "RGB Step"
             },
             "exportKey": "rgb_step"
           },
-          "cV0kOVg2OeXVc1IT8hQay": {
+          "rw9pxp88_P7xGlzCX0RmN": {
             "strings": {
               "en-US": "Iris Ramp"
             },
             "exportKey": "iris_ramp"
           },
-          "J4UegGa98-taf0E6SM8pw": {
+          "hAjZsKjacLAZghTCGfeyu": {
             "strings": {
               "en-US": "Full fan speed, regulated light output intensity"
             },
             "exportKey": "full_fan_regulated_intensity_long"
           },
-          "2-bk-WnMDYEwzBKEM0oyM": {
+          "3nzBdAEb4Bw6aojrDlu6T": {
             "strings": {
               "en-US": "Full Fan/Reg Intens"
             },
             "exportKey": "full_fan_regulated_intensity"
           },
-          "_F_qbAtSzjY2NdE4e7d_0": {
+          "VIorB8tojNE9fJZ2TlTlj": {
             "strings": {
               "en-US": "Tungst Emul Off"
             },
             "exportKey": "tungsten_emulation_off"
           },
-          "fW4aEkkuLS6zI0wwx1jKL": {
+          "tjgCAotQQaCryXqNC0FvF": {
             "strings": {
               "en-US": "Broken Marble 5090918"
             },
             "exportKey": "broken_marble_extended"
           },
-          "fhW1Jq6gDhoBGCJqIkVO9": {
+          "wym0x2foiE6WHyA6N0mQb": {
             "strings": {
               "en-US": "Intensity Sine Wave"
             },
             "exportKey": "intensity_sine_wave"
           },
-          "kU6RuwCPQeIuTY8UrQU5j": {
+          "oK7iK_iXqfWa8-yqVG1M1": {
             "strings": {
               "en-US": "RGB Pulse"
             },
             "exportKey": "rgb_pulse"
           },
-          "2ttqQGd0KZ--HiV-yHmS7": {
+          "ZoYBJRPQGAyQVOb19SBks": {
             "strings": {
               "en-US": "Mix To White Pulse"
             },
             "exportKey": "mix_to_white_pulse"
           },
-          "I7VDEoJOkMwwTqpik3oL1": {
+          "wHb7zH_XDWl6yN4TdGDd6": {
             "strings": {
               "en-US": "No function (disables calibration)"
             },
             "exportKey": "no_function_long"
           },
-          "BU59DH1WOlszYcxR2SrjZ": {
+          "4mln0-SAeWDGJlkdGl3Ds": {
             "strings": {
               "en-US": "Hot And Cold"
             },
             "exportKey": "hot_and_cold"
           },
-          "0g3Ujjk4ySJLufyAm7LUG": {
+          "sqPu9BhGvKNKYnjMJJRvT": {
             "strings": {
               "en-US": "Random Size Step"
             },
             "exportKey": "random_size_step"
           },
-          "KwpT9xfuKfRWLhNy0twdI": {
+          "E9I8a4-48H9NFVPk5Xiu9": {
             "strings": {
               "en-US": "Select Fixed Gobo 1"
             },
             "exportKey": "select_fixed_gobo_1"
           },
-          "TY_SBUvVxGWo9_SxTlHyB": {
+          "tBkC1h3pnVaQ9Ksul51xx": {
             "strings": {
               "en-US": "Select Fixed Gobo 2"
             },
             "exportKey": "select_fixed_gobo_2"
           },
-          "NstwBjQAc12qXCqkGxwXy": {
+          "vUkUtXaGfppODKlcL5wwX": {
             "strings": {
               "en-US": "Select Fixed Gobo 7"
             },
             "exportKey": "select_fixed_gobo_7"
           },
-          "ABtbvBtGszIS6t8NDY3NW": {
+          "wxDknrBOoKMcfRl2veSso": {
             "strings": {
               "en-US": "Magenta"
             },
             "exportKey": "magenta"
           },
-          "rV4XjWEahn7nJKZbM_dVz": {
+          "z2zPNG5iOIS5i1E5GR_lO": {
             "strings": {
               "en-US": "Blue/Green"
             },
             "exportKey": "blue_green"
           },
-          "Y5iMQI46VIYgnYTiTEzVa": {
+          "74GlxP1uKhmTtg2cQ0Yzu": {
             "strings": {
               "en-US": "Linear dimming curve"
             },
             "exportKey": "linear_curve_long"
           },
-          "NIvfBTnQQG_7FdJB7N81E": {
+          "OZ1EZWwaPfFvhLuytcUrg": {
             "strings": {
               "en-US": "Random Mix Pulse"
             },
             "exportKey": "random_mix_pulse"
           },
-          "4E6ZAmpfqUClsVehuNAym": {
+          "cG1Z2eFwZpJF3YJnaRpKL": {
             "strings": {
               "en-US": "Irish Pulse"
             },
             "exportKey": "irish_pulse"
           },
-          "Yosd2gtnlvMf7d6RtNNSD": {
+          "bGgC2KF5T1nLmBcitxx9N": {
             "strings": {
               "en-US": "Water Gobo"
             },
             "exportKey": "water_gobo"
           },
-          "_IN3sM1risWWXoNMS1sWC": {
+          "1X043CbMc4axpwKj56Jey": {
             "strings": {
               "en-US": "Random start (FX 1 adjust controls overall speed)"
             },
             "exportKey": "macro_random_start_long"
           },
-          "CljyDJ0YmJCJoCF8ywrGf": {
+          "Mu2q4nr3m8dgOUlOng212": {
             "strings": {
               "en-US": "CMY Step"
             },
             "exportKey": "cmy_step"
           },
-          "EmuewIz798fS0-pKj1F4F": {
+          "TqMFmHta4Tr5Qme7_rSAs": {
             "strings": {
               "en-US": "Shake Rate"
             },
             "exportKey": "gobo_rotate_shake_rate_name"
           },
-          "dhaZKbO7icAFU2C1ts2ZO": {
+          "W_G28zMwo1YYDPOm-eUXu": {
             "strings": {
               "en-US": "Gobo Twist"
             },
             "exportKey": "gobo_twist"
           },
-          "O2lp7wXOUN1nSmVkkLQXI": {
+          "MJcHOlH8SU7iVcC0en4ow": {
             "strings": {
               "en-US": "Focal Distance"
             },
             "exportKey": "shape_zoom_focal_distance_name"
           },
-          "b5kCX9Bz2dCh3-CQUKvXh": {
+          "Pr6GCwL9P2ndB74-n5FE5": {
             "strings": {
               "en-US": "Synchronized: all fixtures start FX cycles at same time",
               "en-GB": "Synchronised: all fixtures start FX cycles at same time"
             },
             "exportKey": "macro_sync_long"
           },
-          "v_iRQQC3ndxgIPKDUUUM9": {
+          "IJh2gIc475JWyHBQko-yM": {
             "strings": {
               "en-US": "Emulation"
             },
             "exportKey": "lamp_emulation_name"
           },
-          "eou9YqyItsZdbl6c4HbYL": {
+          "JBPkAckUJFVj7ywyGs2Lb": {
             "strings": {
               "en-US": "Rate"
             },
             "exportKey": "macro_rate_name"
           },
-          "SIUhgcs8inJoa0stQvdWu": {
+          "4O4jyNJyQmWTRYiETaMy_": {
             "strings": {
               "en-US": "The continuous rotation of a gobo around a single axis."
             },
             "exportKey": "gobo_rotate_spin_description"
           },
-          "rL0csJc0CxcTahVDACeRK": {
+          "y-s6E4wCEh-4BIfEIQbkC": {
             "strings": {
               "en-US": "Sq Law"
             },
             "exportKey": "sq_law_curve"
           },
-          "PQfSwW_Ac5AQJRoI35frl": {
+          "bTWK0BU8nhUjVpPUlHx-D": {
             "strings": {
               "en-US": "Green/Orange"
             },
             "exportKey": "green_orange"
           },
-          "IWmPvp9OY2mInvp2n0DTR": {
+          "0qtlHzyru3wEqpSf2rKeq": {
             "strings": {
               "en-US": "Reset color only",
               "en-GB": "Reset colour only"
             },
             "exportKey": "reset_color_long"
           },
-          "ocvUEkbLDKeHdo0BJhpGB": {
+          "Ggf3rq_Su5u7u6vSWDvz_": {
             "strings": {
               "en-US": "The brightness of an integrated configuration display of a device."
             },
             "exportKey": "display_brightness_description"
           },
-          "imWhIKTNWd-KCUE3VvOvj": {
+          "FOCVwM2jVDa5YSUFMteeF": {
             "strings": {
               "en-US": "Mix To White Wave"
             },
             "exportKey": "mix_to_white_wave"
           },
-          "SwQZzpdGOaadppxi3K7Us": {
+          "0puZbz6WTydG2aeMBTwnA": {
             "strings": {
               "en-US": "Zoom Step"
             },
             "exportKey": "zoom_step"
           },
-          "yTQXVim_5VvB-vHlGhCCS": {
+          "CZduhK8PDT-tIaxGX6cju": {
             "strings": {
               "en-US": "Rings In Out"
             },
             "exportKey": "rings_in_out"
           },
-          "qAmPZm0U0emOe8_vn1LP0": {
+          "p909zuYrMO1SzuZRbZGVS": {
             "strings": {
               "en-US": "Random Size Wave"
             },
             "exportKey": "random_size_wave"
           },
-          "NaAvS8sW4MCh74wk3u1HS": {
+          "LJaK7s47EpGhdgH9RMBbe": {
             "strings": {
               "en-US": "Splash"
             },
             "exportKey": "splash"
           },
-          "yFFGaDvO4wjyb_lhx8yZU": {
+          "hFMh3iVm2MxaiomxSARWZ": {
             "strings": {
               "en-US": "The proportion of the radius of the beam which is covered by the iris."
             },
             "exportKey": "shape_iris_insert_description"
           },
-          "dIw_f5fMQSjwpOXBGFYEt": {
+          "g13Wf0zzNJLkhCzRe-JGe": {
             "strings": {
               "en-US": "Open/Blue"
             },
             "exportKey": "open_blue"
           },
-          "lbQH-nqXYudT7mixnf-vh": {
+          "8Um4PjwWb1PDHycN4B33D": {
             "strings": {
               "en-US": "The phase offset between devices executing the macro."
             },
             "exportKey": "macro_offset_description"
           },
-          "cjevMjb06037356mjxWdE": {
+          "fyrg5NLKLypMc7u01TlNE": {
             "strings": {
               "en-US": "Med Fan/Reg Intens"
             },
             "exportKey": "med_fan_regulated_intensity"
           },
-          "rAZ1O4mb16MjPRK5d5UDn": {
+          "NrBNQ4x1mQSiFqmjXg67W": {
             "strings": {
               "en-US": "Up Flash"
             },
             "exportKey": "up_flash"
           },
-          "_8d_pk4rRCsY5kAcjkltG": {
+          "_mBL9Ol8HP2l4h5JUkyyH": {
             "strings": {
               "en-US": "The proportion of the diameter of the beam which is covered by the frame."
             },
             "exportKey": "shape_frame_insert_description"
           },
-          "ZYb9dvEp8QdTvg8FdumoA": {
+          "Ljn2D6iGgcWWlffqqsCHJ": {
             "strings": {
               "en-US": "No Fx"
             },
             "exportKey": "no_fx"
           },
-          "6jnoY_MhM4O6CLltWpCRk": {
+          "pLbp7IQ6WpGOk92QieTVi": {
             "strings": {
               "en-US": "Random Colors",
               "en-GB": "Random Colours"
             },
             "exportKey": "random_colors"
           },
-          "JGYfHGTROpYGc9rfG0G0v": {
+          "rEXv8JArbUCzTCTHA_kCF": {
             "strings": {
               "en-US": "Tungsten Emulation On"
             },
             "exportKey": "tungsten_emulation_on_long"
           },
-          "cUKX9ksjX0oCHg-A2Svhy": {
+          "9czP1IbrfOtssnMRpu_UX": {
             "strings": {
               "en-US": "Shakey Dimmers"
             },
             "exportKey": "shakey_dimmers"
           },
-          "QigE_4kBUDpRwfP-7EstD": {
+          "fxe_g54VI9CyV66PmKji0": {
             "strings": {
               "en-US": "RGB Wave"
             },
             "exportKey": "rgb_wave"
           },
-          "68MXdNhCKSYgvWw1J2cwz": {
+          "4CwVe-WKKJ_4hxPAbWSdD": {
             "strings": {
               "en-US": "Color Wheel Shaker",
               "en-GB": "Colour Wheel Shaker"
             },
             "exportKey": "color_wheel_shaker"
           },
-          "M0nwww70wF8TwUtCNnka7": {
+          "FokW_v4TPSIsfi5sgQQag": {
             "strings": {
               "en-US": "Reset pan and tilt only"
             },
             "exportKey": "reset_pan_tilt_long"
           },
-          "BOJJeCRnIdCrnJb-CU5OC": {
+          "VdHJOKbMiQTe3Run5ajLw": {
             "strings": {
               "en-US": "Zoom Wave"
             },
             "exportKey": "zoom_wave"
           },
-          "jasKU2_D-NGtva0RMi6s-": {
+          "CmIuffVqMlpxfxzd_DFPI": {
             "strings": {
               "en-US": "XLow Fan/Reg Intens"
             },
             "exportKey": "ultra_low_fan_regulated_intensity"
           },
-          "-E8HuhrmHXGlznEtrDpNV": {
+          "iA9wJmJptmL2OzRaOod0z": {
             "strings": {
               "en-US": "Random Dimmers"
             },
             "exportKey": "random_dimmers"
           },
-          "tA_dkI8R3mXmXz9kgWddO": {
+          "oq5qpWF-9xYWVCp9DfZkD": {
             "strings": {
               "en-US": "Negative Pulse"
             },
             "exportKey": "negative_pulse"
           },
-          "FBZNd_nyblhF-KGQfU4eH": {
+          "F8AJH3y4KAaEAcIOUre7s": {
             "strings": {
               "en-US": "Random Mix Step"
             },
             "exportKey": "random_mix_step"
           },
-          "aROoimAiwaOSVr1jR3TVq": {
+          "cfXF9iBaReTpCyt5YtmhG": {
             "strings": {
               "en-US": "Higgs"
             },
             "exportKey": "higgs"
           },
-          "596TniD5Q9gSM08YnKs_t": {
+          "XpGsyvL3JM-lzBRz7t1NR": {
             "strings": {
               "en-US": "The position within a series of gobos."
             },
             "exportKey": "gobo_select_index_description"
           },
-          "JTqGWY8PTxLTHHYTIslq8": {
+          "280zzvMRqYuRPvazkNa4J": {
             "strings": {
               "en-US": "Water"
             },
             "exportKey": "water"
           },
-          "qmQx1o16fyssLvZSXhfFs": {
+          "clfBonuDerjE3v5qYSlrv": {
             "strings": {
               "en-US": "Broken Marble"
             },
             "exportKey": "broken_marble"
           },
-          "RrJdIqlfiCf7SbXoQ6N__": {
+          "-OFl0zTQScJlXVE_nL0nb": {
             "strings": {
               "en-US": "Brightness"
             },
             "exportKey": "display_brightness_name"
           },
-          "ZdPcJQj6jcK6UMh2ma8Yg": {
+          "evaPyGXyofW--Qa5MgcLy": {
             "strings": {
               "en-US": "CMY Pulse"
             },
             "exportKey": "cmy_pulse"
           },
-          "lpQULmPC25sBiHgTghGip": {
+          "UQDxmwteH9noegQ9prYd9": {
             "strings": {
               "en-US": "Thunderstorm"
             },
             "exportKey": "thunderstorm"
           },
-          "6R5QQPNKD8dMs54izZCv1": {
+          "Fiy2SCEjl72PMcBHe6p82": {
             "strings": {
               "en-US": "Pounce"
             },
             "exportKey": "pounce"
           },
-          "Nc_OePVCBQ3daY6EzMsuz": {
+          "0v4vwOB63zIk-OKj0ofk1": {
             "strings": {
               "en-US": "Double Strobe"
             },
             "exportKey": "double_strobe"
           },
-          "Zj1oQvNW90MXqHeqlH2AN": {
+          "NZQMrtjdS1pUtF6EfRH6D": {
             "strings": {
               "en-US": "The operating mode of a device fan."
             },
             "exportKey": "physical_fan_mode_description"
           },
-          "MVhBgmTyomfGpc4f8OUvf": {
+          "pnDCBy1BXH11xK9cAZfTc": {
             "strings": {
               "en-US": "Reset P/T"
             },
             "exportKey": "reset_pan_tilt"
           },
-          "uPtkNUUw3FkrBUVgM3Ol1": {
+          "TANxVINjDFUCkKIkNuB7y": {
             "strings": {
               "en-US": "Fire"
             },
             "exportKey": "fire"
           },
-          "xxg_qiB__xLWrub-Nl29K": {
+          "wOuU-BYU1nrhpT8G-sPkJ": {
             "strings": {
               "en-US": "Reset"
             },
             "exportKey": "reset"
           },
-          "cmc7coKVdYuTiDUDzjp96": {
+          "SKXcesOHBwJiN2VNh78if": {
             "strings": {
               "en-US": "Reset Beam"
             },
             "exportKey": "reset_beam"
           },
-          "y7em_gDtjRrV6VD843Zeq": {
+          "YYGHZxJhGjoQ5-07Ta61o": {
             "strings": {
               "en-US": "Triple Strobe"
             },
             "exportKey": "triple_strobe"
           },
-          "0mCNmiliZxll9cxVW8bBZ": {
+          "vUCnDT1wQwn6MrACjcwRd": {
             "strings": {
               "en-US": "Expand Twist Fade"
             },
             "exportKey": "expand_twist_fade"
           },
-          "oMNTmKI21qtuJ-Q31aUmK": {
+          "QbRmWmCcYDeDxWIspAOjj": {
             "strings": {
               "en-US": "Display Off"
             },
             "exportKey": "display_off"
           },
-          "lVeZFwOU4S7x5mOH-cuvy": {
+          "u380sHXY1oEoNcD_XDNnA": {
             "strings": {
               "en-US": "Field Angle"
             },
             "exportKey": "shape_zoom_field_angle_name"
           },
-          "V6VvOwC5UJjCc7QhE1FZE": {
+          "fKgiUr5-mJOoiVh9G9Ahf": {
             "strings": {
               "en-US": "Grass Lines 5090919"
             },
             "exportKey": "grass_lines_extended"
           },
-          "SsL8nUA39KV_lCt2RYpSt": {
+          "hequdSl84TCduKRiwn5hC": {
             "strings": {
               "en-US": "Dim Curve"
             },
             "exportKey": "lamp_dim_curve_name"
           },
-          "gQ8GvjfFjzJ12frjw0Y9m": {
+          "UM1VG3UjRATYg4NqUmwMV": {
             "strings": {
               "en-US": "S"
             },
             "exportKey": "s_curve"
           },
-          "2BiX4iYNitW5axFj5EO1q": {
+          "TFDnqGThEHvIe0WxwCO_o": {
             "strings": {
               "en-US": "Random Level"
             },
             "exportKey": "random_level"
           },
-          "317nTxGp8SADsgy6Uyy3o": {
+          "nKUqsHPFsqIKoYfXXr-g_": {
             "strings": {
               "en-US": "Low fan speed, regulated light output intensity"
             },
             "exportKey": "low_fan_regulated_intensity_long"
           },
-          "7NrIIxucsZNzVg-_VG78x": {
+          "Y1MCRbUiNsBMHf3qNQ37u": {
             "strings": {
               "en-US": "Color Wheel All Step",
               "en-GB": "Colour Wheel All Step"
             },
             "exportKey": "color_wheel_all_step"
           },
-          "IspFSnTyX6-Iv7CbqLXUs": {
+          "Ui2tAUkLgjrhhXLEE6DBy": {
             "strings": {
               "en-US": "Grass Lines"
             },
             "exportKey": "grass_lines"
           },
-          "ckJXOGAhiW9DEJsC3c38K": {
+          "o6YyPOFSy_Z5MHE_Xftcs": {
             "strings": {
               "en-US": "Milling Around"
             },
             "exportKey": "milling_around"
           },
-          "UqX3fTAzy60_CcJDcUo5G": {
+          "Hpf_fqNDUaPfSpJtxN5NU": {
             "strings": {
               "en-US": "Select Fixed Gobo 3"
             },
             "exportKey": "select_fixed_gobo_3"
           },
-          "3V7kt1ZiR8d7e3rIEjitt": {
+          "ZdI-nLTtg8OhMlisW2FyY": {
             "strings": {
               "en-US": "The continous rotation of an animation wheel around a single axis."
             },
             "exportKey": "effects_animation_rotate_spin_description"
           },
-          "WYMkjgb1v4p9EK0v5sOhl": {
+          "jqBR1ss-mGLJiZsC-B1rV": {
             "strings": {
               "en-US": "Angle"
             },
             "exportKey": "angle"
           },
-          "G-7tPJ09FhWHUrS-0WEp-": {
+          "GlhwZZKZTSANYMil5nSqG": {
             "strings": {
               "en-US": "Fan Mode"
             },
             "exportKey": "physical_fan_mode_name"
           },
-          "XjumbXo6InBnCgRcaDNVT": {
+          "q9Jcr7F1ILXXpMEmCgcyy": {
             "strings": {
               "en-US": "The percentage insertion of the color temperature control flags",
               "en-GB": "The percentage insertion of the colour temperature control flags"
             },
             "exportKey": "color_ctc_description"
           },
-          "X-neP3_A6Ss7jVmlUf0dT": {
+          "05O9cwDuyFUObjv5rWnJu": {
             "strings": {
               "en-US": "Zoom Fades"
             },
             "exportKey": "zoom_fades"
           },
-          "m9JoEBUsTxDyQS7I-JaCq": {
+          "kdubrhpCic2LUDjE3HYOr": {
             "strings": {
               "en-US": "Movie Flicker"
             },
             "exportKey": "movie_flicker"
           },
-          "tWtHD2-9ijYpBlSx1Miyi": {
+          "XeGPUmf-6O1tmjOWZ4FD0": {
             "strings": {
               "en-US": "Green"
             },
             "exportKey": "green"
           },
-          "TH47u5drUj43Il3ztZFkp": {
+          "oLd6Z9vpXJFvNyhkMCu6L": {
             "strings": {
               "en-US": "An image representing an animation wheel."
             },
             "exportKey": "animation_image_description"
           },
-          "LCFudsegPp8Si-TASlopA": {
+          "LN3w-hLLqCaoYbG7CZBNd": {
             "strings": {
               "en-US": "Animotion"
             },
             "exportKey": "animotion"
           },
-          "-nRBCFDMOrQQXaA8YEGB_": {
+          "OXevg87oXkuqF1W5MvAOt": {
             "strings": {
               "en-US": "The field angle of a source of light."
             },
             "exportKey": "shape_zoom_field_angle_description"
           },
-          "1v6aj0OSWH9scnxv8FZoR": {
+          "Crx0UB_p1ezHD6HQ68pPk": {
             "strings": {
               "en-US": "Inverse square law dimming curve"
             },
             "exportKey": "inv_sq_law_curve_long"
           },
-          "hQ7e58-2Yu9043EMHVL3U": {
+          "jB8LlfXXG_xNkdm3nUWzW": {
             "strings": {
               "en-US": "Tick Tock"
             },
             "exportKey": "tick_tock"
           },
-          "yobro3BsjwfmJ_FRmaC09": {
+          "KAlUDlBskCRQrcfCt2hij": {
             "strings": {
               "en-US": "Thunderstorm Atomic"
             },
             "exportKey": "thunderstorm_atomic"
           },
-          "BHJ4ZuZoF1-bx4Wjacjc2": {
+          "vrYwuLu6l79kO7CzFEeIS": {
             "strings": {
               "en-US": "Red White Blue Wave"
             },
             "exportKey": "red_white_blue_wave"
           },
-          "kmHmh9nXYbJsgs2pOzJq4": {
+          "OgnCOPt2-YRZ9hHR_b_Iq": {
             "strings": {
               "en-US": "Display On"
             },
             "exportKey": "display_on"
           },
-          "4TJR6sOhWPLW1qg6GAf6_": {
+          "oaKY9I6NrkmRasHsm6hzQ": {
             "strings": {
               "en-US": "Zoom Ramp"
             },
             "exportKey": "zoom_ramp"
           },
-          "RcBd_RWd5TL5ErvGVJ1Zi": {
+          "2fy5HkNkOYlspZvLKDryY": {
             "strings": {
               "en-US": "Random Bold"
             },
             "exportKey": "random_bold"
           },
-          "4RNAN5Dza2CDDfRGzSCPT": {
+          "4CgF0Of4loWL2yEbIXx3C": {
             "strings": {
               "en-US": "Fire Gobo"
             },
             "exportKey": "fire_gobo"
           },
-          "DpALR2dmEzckQM4rUnake": {
+          "9TadMVjOIHi-MDivhWg-f": {
             "strings": {
               "en-US": "The rotational offset of an animation wheel around a single axis."
             },
             "exportKey": "effects_animation_rotate_offset_description"
           },
-          "vKT7S6bftWhaJCsmLkM2G": {
+          "SLErtx9SFv-izy9iRv0aZ": {
             "strings": {
               "en-US": "Color Temperature Control",
               "en-GB": "Colour Temperature Control"
             },
             "exportKey": "color_ctc_name"
           },
-          "XDBYr0V0PCNJslFY1aTcI": {
+          "nbsXBVvg0V_gO8y870eBj": {
             "strings": {
               "en-US": "Orange"
             },
             "exportKey": "orange"
           },
-          "1c0N-mOgIlLOxTU7N3ttG": {
+          "CFbcrN2x00Bwz4l8H4ci7": {
             "strings": {
               "en-US": "Patch It 509091"
             },
             "exportKey": "patch_it_extended"
           },
-          "i8HlOUhzYZHyCene-EDJD": {
+          "RbzWaR_cSohZvIQsLWl4L": {
             "strings": {
               "en-US": "Ice"
             },
             "exportKey": "ice"
           },
-          "gaFDQUNrrH3LovyhOh5-x": {
+          "2SGctaMUGkvlJ8dgWx1gg": {
             "strings": {
               "en-US": "Offset"
             },
             "exportKey": "offset"
           },
-          "-TrJ2ZbE2c20Hr2cF9G42": {
+          "Qkj607XZUoBKmZBnydcj5": {
             "strings": {
               "en-US": "Electric Arc"
             },
             "exportKey": "electric_arc"
           },
-          "BAEx2s3PWi1-yRL6cSdUs": {
+          "GfFC_UPRAqtZPKEMCj3mq": {
             "strings": {
               "en-US": "Insert"
             },
             "exportKey": "insert"
           },
-          "6tVxpvsPlkMg26mkZLLJ-": {
+          "6GH0p8_kqhV1zgT54xIeg": {
             "strings": {
               "en-US": "Animation Image"
             },
             "exportKey": "animation_image"
           },
-          "rujn9zwAH2IQwnjp1Hcia": {
+          "mBZONCAOXPG3s7XqGuuON": {
             "strings": {
               "en-US": "Color Wheel Random Split Step",
               "en-GB": "Colour Wheel Random Split Step"
             },
             "exportKey": "color_wheel_random_split_step"
           },
-          "g77KmO86-mpPNdSuhdueU": {
+          "wG4Ad6dHATOAFeLQrVy3a": {
             "strings": {
               "en-US": "Square law dimming curve"
             },
             "exportKey": "sq_law_curve_long"
           },
-          "syi-8DIj797uTcw6SDFbD": {
+          "ipggRuvYnm_muR5oxoJ1J": {
             "strings": {
               "en-US": "Fade Spin Gobo Zoom"
             },
             "exportKey": "fade_spin_gobo_zoom"
           },
-          "S3bUc6_ebOC__bsORcr0k": {
+          "k9ynq2c1hogTsmlV8tXES": {
             "strings": {
               "en-US": "Inv Sq Law"
             },
             "exportKey": "inv_sq_law_curve"
           },
-          "UU_gml9WxIw1FXXjuMZ_f": {
+          "SjPKyAIDCs_48aiYvpAie": {
             "strings": {
               "en-US": "Turn on control panel display"
             },
             "exportKey": "display_on_long"
           },
-          "kIEGWZ3hJNE3O3m9zh5zO": {
+          "rEUtnQzNUv3WwisGeNIhR": {
             "strings": {
               "en-US": "Mix To White Step"
             },
             "exportKey": "mix_to_white_step"
           },
-          "4C7iO0wS3Haojjq6rJY5u": {
+          "XFL9WHlaqBsVxyX9AXTPi": {
             "strings": {
               "en-US": "Intensity Pulse"
             },
             "exportKey": "intensity_pulse"
           },
-          "27CfoPpXL66VYOq7op4bg": {
+          "ElHbNxnkvLTHXfonptX0K": {
             "strings": {
               "en-US": "Congo/Red"
             },
             "exportKey": "congo_red"
           },
-          "QJDmh0BYEyFPWXsNgcJC3": {
+          "FQgh9W85IAHIJxXibN5Zw": {
             "strings": {
               "en-US": "No Sync"
             },
             "exportKey": "no_sync"
           },
-          "Nek5kbKykObyF8g9zohW6": {
+          "SoN7FWxMXWBzTdejsNZNl": {
             "strings": {
               "en-US": "Random Color Wave",
               "en-GB": "Random Colour Wave"
             },
             "exportKey": "random_color_wave"
           },
-          "wY03KgVPVc-egkLqb5TD7": {
+          "hNthmYH3B1wqU0okYLIp8": {
             "strings": {
               "en-US": "Gobo Image"
             },
             "exportKey": "gobo_image"
           },
-          "vmydvuAk0OYK_C-PfzxOz": {
+          "CjxWDDQ8QNTFWoaIDB5yy": {
             "strings": {
               "en-US": "Intensity Step"
             },
             "exportKey": "intensity_step"
           },
-          "E_c4elQL5XC8p1LUR4OcW": {
+          "SSMJJLWVfqn7V4h9PUKzM": {
             "strings": {
               "en-US": "The rate of oscillation of a selected gobo around a single axis."
             },
             "exportKey": "gobo_rotate_shake_rate_description"
           },
-          "c6dFMHJMo6qcOH4IC7nft": {
+          "0O99ncQqfas86HVP0wjkP": {
             "strings": {
               "en-US": "Rainbow Pulse"
             },
             "exportKey": "rainbow_pulse"
           },
-          "KXLIB7kJp3VrgVIdEDoUR": {
+          "oLcGx_4hR9TflXidTjeaV": {
             "strings": {
               "en-US": "Program"
             },
             "exportKey": "macro_program_name"
           },
-          "2qDptfyfqQgwPpEh3-4uV": {
+          "1RF3hfe7UZ49TBSLaKxXR": {
             "strings": {
               "en-US": "Iris Step"
             },
             "exportKey": "iris_step"
           },
-          "wquG_n1s6PI1S9sI7HOQt": {
+          "8GHcNLeslKjELsRWvwKhM": {
             "strings": {
               "en-US": "Spin"
             },
             "exportKey": "spin"
           },
-          "DUyHXNGRI9erfJHt9yKxg": {
+          "wvUti4Nm4LIwuiMTbJKFL": {
             "strings": {
               "en-US": "Cycle Fixed"
             },
             "exportKey": "gobo_select_cycle_fixed_name"
           },
-          "nxci-dcz3u9g4JJ6qJhE7": {
+          "KLTiy1Z1h4AmE5XGq0weA": {
             "strings": {
               "en-US": "Random Color Step",
               "en-GB": "Random Colour Step"
             },
             "exportKey": "random_color_step"
           },
-          "iNVckCKJoyhlYiRFQSpUZ": {
+          "E8r1aDR4q5FEkrHGzvpxL": {
             "strings": {
               "en-US": "Linear"
             },
             "exportKey": "linear_curve"
           },
-          "kUd-OO3Xdi2fdVPl_8JkS": {
+          "fhcN4XBXhqluMjdQ_LdUz": {
             "strings": {
               "en-US": "S-curve dimming curve"
             },
             "exportKey": "s_curve_long"
           },
-          "j_40eb6V1pVGseNjZjStG": {
+          "q1ynYJj0ii248f8u8OAol": {
             "strings": {
               "en-US": "Red/Open"
             },
             "exportKey": "red_open"
           },
-          "rQRwSOz7-9LsEvocW_lgt": {
+          "duiDRcziOMzKacCtUT3n-": {
             "strings": {
               "en-US": "Tungst Emul On"
             },
             "exportKey": "tungsten_emulation_on"
           },
-          "9tocEKyiqTm5kDwTCvxNL": {
+          "Dh3yySzux9qbdmjskg6LX": {
             "strings": {
               "en-US": "Center Out Chase"
             },
             "exportKey": "center_out_chase"
           },
-          "vfX_cTb25AeyZTPR2FQan": {
+          "C1b3HnuYB8HG_ayxaByOz": {
             "strings": {
               "en-US": "The angle at which the animation crosses a source of light."
             },
             "exportKey": "effects_animation_incline_angle_description"
           },
-          "-lke7m7dn5rlyaWfnCy9d": {
+          "nv9DRnPPpKc3pDNW4QNul": {
             "strings": {
               "en-US": "Reset entire fixture"
             },
             "exportKey": "reset_fixture_long"
           },
-          "zvoNkcyjU5yg-DRbqgS4I": {
+          "r0jAzoTFMjbJtztcNdFyK": {
             "strings": {
               "en-US": "The operating mode of a device."
             },
             "exportKey": "physical_reset_description"
           },
-          "dZLTWDQkwvA096QRQWQqD": {
+          "aYLqvDz08FZorwL763XjZ": {
             "strings": {
               "en-US": "Rainbow Step"
             },
             "exportKey": "rainbow_step"
           },
-          "CWXfuHwXMruOFBcvgVJpz": {
+          "4S4gtkkE6K5yg7pBXgRa1": {
             "strings": {
               "en-US": "Gobo X-fade"
             },
             "exportKey": "gobo_x-fade"
           },
-          "spUgoJNTwipA21YMLL8ed": {
+          "YhxO--RBaE6Sv0d2fMX3K": {
             "strings": {
               "en-US": "Patch It"
             },
             "exportKey": "patch_it"
           },
-          "9cfY9wpZtoqOsDo4D8v7_": {
+          "uT96Pt_m_nCFJQ97M8n13": {
             "strings": {
               "en-US": "Congo"
             },
             "exportKey": "congo"
           },
-          "osyC5VcumfnD_DCusJlKG": {
+          "82A2AMjjdSpyY4RNfOzaY": {
             "strings": {
               "en-US": "The selection of a pre-programed sequence."
             },
             "exportKey": "macro_program_description"
           },
-          "9kCvnNzm-DY4tHxsXm-sk": {
+          "EBuuZdgxNvVmjMqhFF1PV": {
             "strings": {
               "en-US": "The frequency of execution of the macro."
             },
             "exportKey": "macro_rate_description"
           },
-          "YVnSTCCKR0uUEPikqRgj4": {
+          "63pTpyLO0VtfLjAAwcYdr": {
             "strings": {
               "en-US": "Open"
             },
             "exportKey": "open"
           },
-          "yjjr3Ym4sSnnZS5j4FUo0": {
+          "xfH9xpgs7dy6CMaalLTna": {
             "strings": {
               "en-US": "Select Fixed Gobo 6"
             },
             "exportKey": "select_fixed_gobo_6"
           },
-          "822tGEkc5edo4Vkzz6UkN": {
+          "gSYfsYF9ILn_U51pApNg9": {
             "strings": {
               "en-US": "Medium fan speed, regulated light output intensity"
             },
             "exportKey": "med_fan_regulated_intensity_long"
           },
-          "FtrF7n3emJYwQRPq4FOWW": {
+          "5E65vHmmvuwxlRLOQ-fqd": {
             "strings": {
               "en-US": "MAC Encore Performance CLD"
             },
             "exportKey": "device_description"
           },
-          "uubyToxDjN4P0Z87P3Iu8": {
+          "gPHz1WGIroZ8dQtelNP4M": {
             "strings": {
               "en-US": "Limbo/Crystal in holder 62325152"
             },
             "exportKey": "limbo_crystal_extended"
           },
-          "YNqqhsJT3-batbKbIgaox": {
+          "EJwjzuzXRhQOy7lWJURy-": {
             "strings": {
               "en-US": "Positive Pulse"
             },
             "exportKey": "positive_pulse"
           },
-          "xxjYVIf5T-n12DpFCSIk0": {
+          "nGLFWy5Ywc_svrkOeRe6S": {
             "strings": {
               "en-US": "Color Wheel Full Step",
               "en-GB": "Colour Wheel Full Step"
             },
             "exportKey": "color_wheel_full_step"
           },
-          "PonLTCkhVMCwtPhaRgX0X": {
+          "TrprqyswRaOXv_7jSozPy": {
             "strings": {
               "en-US": "Random Start"
             },
             "exportKey": "macro_random_start"
           },
-          "wTJ37IlgaiL_aegBn5I1F": {
+          "qskB-UXrrxkhyfQghckOM": {
             "strings": {
               "en-US": "Limbo/Crystal in holder"
             },
             "exportKey": "limbo_crystal"
           },
-          "nPJC3Z3x_1kISOaDvtyv5": {
+          "TLkC9Hvuf1N8ivIe73R8o": {
             "strings": {
               "en-US": "Synchronized",
               "en-GB": "Synchronised"
             },
             "exportKey": "macro_sync"
           },
-          "qzcWvY-XYVW-S8W5-KIjA": {
+          "ivbBVz2xZDZzdTihmBAOL": {
             "strings": {
               "en-US": "Red"
             },
             "exportKey": "red"
           },
-          "AftSi8B9FAeL91DRTb9pZ": {
+          "BwTUdm-QGuSBcRnpNgjHj": {
             "strings": {
               "en-US": "Orange/Magenta"
             },
             "exportKey": "orange_magenta"
           },
-          "R44PcXMCiNJdgMCMjElPO": {
+          "alZuAAgefg2ln88D8c0kX": {
             "strings": {
               "en-US": "Pin To Flood"
             },
             "exportKey": "pin_to_flood"
           },
-          "UVsc6zIBm7f4w7SW3AQgy": {
+          "wW494nw-tP_e-tu8VpnL8": {
             "strings": {
               "en-US": "Magenta/Congo"
             },
             "exportKey": "magenta_congo"
           },
-          "Q7QC-gv_Pc7zK_bBees6P": {
+          "3UHnNGtaAyLFMY5CF2qc-": {
             "strings": {
               "en-US": "The rate of change from one full gobo to the next over a sequential series of gobos."
             },
             "exportKey": "gobo_select_cycle_fixed_description"
           },
-          "LpntzPPC7W5uxky7_uGh4": {
+          "Sm4YB-EHdgEDSu6DbT7qo": {
             "strings": {
               "en-US": "The angle of the frame relative to its default plane of insertion."
             },
             "exportKey": "shape_frame_angle_description"
           },
-          "bpB1jmcHI6v-IyFgdRkyS": {
+          "ezFm2JGt-jMiJvEuXeoSx": {
             "strings": {
               "en-US": "Ultra-low fan speed, regulated light output intensity"
             },
             "exportKey": "ultra_low_fan_regulated_intensity_long"
           },
-          "bNAA1lMf4LnNzevBrI3xJ": {
+          "wgrQr-gZBY5j92I2AuhuE": {
             "strings": {
               "en-US": "Tungsten Emulation Off"
             },
             "exportKey": "tungsten_emulation_off_long"
           },
-          "Q1iDr7iMfwTUvEA6XtEis": {
+          "0nBnvQnM6nBebNt2Hlanl": {
             "strings": {
               "en-US": "Reset Color",
               "en-GB": "Reset Colour"
             },
             "exportKey": "reset_color"
           },
-          "cIMsO1e0lVl-lZwnE6f3R": {
+          "SM81d5Ea6WVZbQC9MIGqF": {
             "strings": {
               "en-US": "Welding"
             },
             "exportKey": "welding"
           },
-          "yqSW8v9MMK1X_cAwmNltc": {
+          "BWdPCFkbb-56xr1avMIsT": {
             "strings": {
               "en-US": "Red White Blue Step"
             },
             "exportKey": "red_white_blue_step"
           },
-          "xMfv6MwzJavYHgZegMsV5": {
+          "I_P3t950nZkxCFYj-SL1e": {
             "strings": {
               "en-US": "The focal distance of a source of light."
             },
             "exportKey": "shape_zoom_focal_distance_description"
           },
-          "xEwJEPXS-P7R8aZfGDsfH": {
+          "x0TmBzrWHI8g9QC0Osw1m": {
             "strings": {
               "en-US": "Blue"
             },
             "exportKey": "blue"
           },
-          "SdsJ67lICNLqeAi3pWDYH": {
+          "BtkobNmd_BIYvKDubmtaY": {
             "strings": {
               "en-US": "An image representing a gobo/template."
             },
             "exportKey": "gobo_image_description"
           },
-          "olVtjtxfNnLkTsLAVq8kR": {
+          "xlT_HHGSsVsnHlyfbhRMh": {
             "strings": {
               "en-US": "Higgs 5090916"
             },
             "exportKey": "higgs_extended"
           },
-          "wgz0qBGcfUtu7jGD_ysIn": {
+          "qLKSJCfLPjPmaQohKl85F": {
             "strings": {
               "en-US": "The rotational offset of a gobo around a single axis."
             },
             "exportKey": "gobo_rotate_offset_description"
           },
-          "ZrOw3sUfp9nD-BvYBYtzz": {
+          "Z0EZXRULNplA9ZmyLktzY": {
             "strings": {
               "en-US": "The rotational offset of a framing module around a single axis."
             },
             "exportKey": "shape_frame_rotate_offset_description"
           },
-          "PPpHptPOrJGMkGzxyIQPe": {
+          "6g_ROJKcIZCC-PVZOrvYD": {
             "strings": {
               "en-US": "The mimicking of another type of light source."
             },
             "exportKey": "lamp_emulation_description"
           },
-          "FBnWfn9b1MX3S95w_DO2i": {
+          "kR2m8vY8U1mz4ZVDGktLD": {
             "strings": {
               "en-US": "Random Subtle"
             },
             "exportKey": "random_subtle"
           },
-          "2Hc7Mcdj1C-TvqQBOB6Ox": {
+          "1mR2PE9psTsO_MwZz8BKE": {
             "strings": {
               "en-US": "Rainbow Wave"
             },
             "exportKey": "rainbow_wave"
           },
-          "3yYfPEjToKRk2SikfCgVv": {
+          "3zKtUQYRMLKni-1Gil5HL": {
             "strings": {
               "en-US": "Reset beam only"
             },
             "exportKey": "reset_beam_long"
           },
-          "IWjQjmQRtnnYcl_NJakIc": {
+          "ZBif0NM86AoVPc2arLXut": {
             "strings": {
               "en-US": "Color Wheel Split Step",
               "en-GB": "Colour Wheel Split Step"
             },
             "exportKey": "color_wheel_split_step"
           },
-          "5aiS-__yXRA7--3lEBMVv": {
+          "0Ll8sUL0w7arvD17JBAqC": {
             "strings": {
               "en-US": "Warm And Fuzzy"
             },
             "exportKey": "warm_and_fuzzy"
           },
-          "etE26EBHVyQPijZvqu37S": {
+          "WtiCtcLEx41Xxso3rJkNQ": {
             "strings": {
               "en-US": "Select Fixed Gobo 5"
             },
             "exportKey": "select_fixed_gobo_5"
           },
-          "B1A88Ro2CAqsJPLh6qLAg": {
+          "wQFatC2jrTepVrcWJtwy1": {
             "strings": {
               "en-US": "No Func"
             },
             "exportKey": "no_function"
           },
-          "2DfsFIXxR6FgXAyaKnh_M": {
+          "3HWeGhXE9mVF4kBV1u_RC": {
             "strings": {
               "en-US": "Reg Fan/Fixed Intens"
             },
             "exportKey": "regulated_fan_fixed_intensity"
           },
-          "CqdVo-htwP5SqlS6sSqy0": {
+          "Uvoxb-e5-2GFwYryrly9E": {
             "strings": {
               "en-US": "Cross Chase"
             },
             "exportKey": "cross_chase"
           },
-          "3nWKcEaRW9zw446Kn2DeO": {
+          "CTF7fbWTLOis0zikvexKp": {
             "strings": {
               "en-US": "Select Fixed Gobo 4"
             },
             "exportKey": "select_fixed_gobo_4"
           },
-          "XL1YRvRT9_G0vtZfMv0n5": {
+          "DGKRADFUfARtr633B7jPV": {
             "strings": {
               "en-US": "Turn off control panel display"
             },
             "exportKey": "display_off_long"
           },
-          "85UNzTCOzohSoi6dKZ5e6": {
+          "y3jY1clu1h45-GwaAxN6X": {
             "strings": {
               "en-US": "Index"
             },
             "exportKey": "gobo_select_index_name"
           },
-          "ia2cr18XOEAZ8njrB-Ulo": {
+          "t1sBC6oM9jn7C8-EPDXk9": {
             "strings": {
               "en-US": "Regulated fan speed, fixed light output intensity"
             },
             "exportKey": "regulated_fan_fixed_intensity_long"
           },
-          "GeCiQ9g9P4P4w24AtV3_J": {
+          "clDnBSeDNPRi0V1FuF6MZ": {
             "strings": {
               "en-US": "CMY Wave"
             },
             "exportKey": "cmy_wave"
           },
-          "Ek3sIhd5Vz59tLJbW2ZVn": {
+          "W_9lCNTTpCzZ0o_FN-HcR": {
             "strings": {
               "en-US": "The mapping of input to power output."
             },
             "exportKey": "lamp_dim_curve_description"
           },
-          "3Bn2x7_HJqisjyWSaruUK": {
+          "aqSJE0kq_wPRojr2AjD3i": {
             "strings": {
               "en-US": "Random Duration"
             },
             "exportKey": "random_duration"
           },
-          "zREqZbDkfACCuLyEOhZ6X": {
+          "cImw5f9klBS9cI5ywwmHM": {
             "strings": {
               "en-US": "Up Flash Down Flash"
             },
@@ -2435,186 +2437,186 @@
           ],
           "lifetime": "static",
           "rootNodes": [
-            "g2AQxfdCrKLqC7bGeIPHp"
+            "4FFPAtbwOQjE6yQJOYoN2"
           ]
         },
         "dmxSerializer": {
           "chunks": {
-            "jtk3yCQj3F7jv2d_ygwPg": {
+            "2LEmcBDID4xZQ75pqB_pm": {
               "offsets": [
                 20
               ]
             },
-            "isaZHy3T8vqh-10sFyeJV": {
+            "pCpTw8H90I8uZLw636sw0": {
               "offsets": [
                 3
               ]
             },
-            "lTk2_gT1DLsvTp_kU0GPd": {
+            "LWhNrkiEadRrvltcRLN7v": {
               "offsets": [
                 22
               ]
             },
-            "48XV2UAKR1OohJEJd8rBh": {
+            "csEk8loxVsaZGnXbuOtEm": {
               "offsets": [
                 23
               ]
             },
-            "TlBiuYsbuJQ1ppn4MOv16": {
+            "ue6Be0pKkgshDORgqmpSr": {
               "offsets": [
                 35
               ]
             },
-            "qldm9X7SF5POmDDYky31s": {
+            "lkOlHp1ScEDfnDAszNWIQ": {
               "offsets": [
                 1,
                 2
               ]
             },
-            "jIZl5cFyGb06MLI9vT-VO": {
+            "BbgIxyJUGg4-J6K2CIEjO": {
               "offsets": [
                 33
               ]
             },
-            "gY414N9cnzZkyBZehCBFh": {
+            "9eozRG3_sckVhWPU21N16": {
               "offsets": [
                 24
               ]
             },
-            "4wDcsYK3JY_mUCCacHuxB": {
+            "BitSyXosTxTzwWHqXdINx": {
               "offsets": [
                 13
               ]
             },
-            "etIqZOMpJzs_XIApmW0D6": {
+            "kYgcp17sJoEb1mM16vKkp": {
               "offsets": [
                 17,
                 18
               ]
             },
-            "6KhJ37HN0BGQVmIYIuCJO": {
+            "W76hotYUcOWe31Fdq46nd": {
               "offsets": [
                 32
               ]
             },
-            "oJR4JKx8YYZ4eCf6vwrKY": {
+            "92ikr7T2KmdfKgWpX5768": {
               "offsets": [
                 21
               ]
             },
-            "4uX5qhnxZFK6yOXa3Rqbm": {
+            "AaIxEWFS5u-gYH_hasgHM": {
               "offsets": [
                 7
               ]
             },
-            "PmquqZhDELasjhlV9bKXu": {
+            "BXM3QHNQF-QvijqWebczG": {
               "offsets": [
                 28,
                 29
               ]
             },
-            "McB_et9HRoct-mDCT2v-j": {
+            "OWOjGSk1IoYu-FJTUDzOx": {
               "offsets": [
                 25
               ]
             },
-            "Q42ZHHxdQp7dFUmcLwg0z": {
+            "7PdKwpYn6I-jj7e7sbYV4": {
               "offsets": [
                 27
               ]
             },
-            "frhCwNeEz8N8ZrYm2rdb7": {
+            "3jbFi9yh6SqtP8kr8iZ6E": {
               "offsets": [
                 0
               ]
             },
-            "QesxdfSXn_slm2AiATL2F": {
+            "Rb9CF8vdJgOXr4cTRCkIq": {
               "offsets": [
                 26
               ]
             },
-            "SoqGJsQO-h2I1NPt73HWW": {
+            "ncAnHBKCxC1srq9PpJAmg": {
               "offsets": [
                 14
               ]
             },
-            "BGub37dY5wwWDxKGAliz5": {
+            "FhsO7oLU01AusrIHvxiQc": {
               "offsets": [
                 15,
                 16
               ]
             },
-            "nURCxiloBZPanw8xoFKIh": {
+            "4u7bLoHFEkbcXyQ2X6mr8": {
               "offsets": [
                 6
               ]
             },
-            "mQQfQQwQzYmDzdJmdNMTq": {
+            "K8O9eZzMFNUI0jMRQohle": {
               "offsets": [
                 4
               ]
             },
-            "lB_lIrFVtps-GOriEjJA7": {
+            "8_YH7cZpi5H1vkfh_DJ8c": {
               "offsets": [
                 19
               ]
             },
-            "d3ISpOzl-UUSrVM5OtXPd": {
+            "zodhJYchbP4rVaSSrbcjf": {
               "offsets": [
                 30,
                 31
               ]
             },
-            "FJj5jMauVqsQ7jbvSFDMx": {
+            "gWakz46X72t4_PDIUJpSs": {
               "offsets": [
                 11
               ]
             },
-            "O8r2YmqoQ0l2TgWMIqssu": {
+            "QpEJ2-uz2cgYDEBwp3GV1": {
               "offsets": [
                 8
               ]
             },
-            "X7cco3D7rV-R7vd3_Jb3Q": {
+            "Mhzxlc3z1yconZKKOkCXb": {
               "offsets": [
                 34
               ]
             },
-            "Gf_5-aXa3b0BY3Zd639xg": {
+            "hxFZgrUUvZYd_XuYACP3_": {
               "offsets": [
                 36
               ]
             },
-            "om3aZ4Y_LMFALuSrMpimY": {
+            "Q_WqwCk9uesEwIILaPY45": {
               "offsets": [
                 9,
                 10
               ]
             },
-            "KsgwneGgusAnPDB0V7exl": {
+            "yxTfKiCBt-m2jIsRTK2yy": {
               "offsets": [
                 12
               ]
             },
-            "ofkE4tLtUunKZQJcpk7XK": {
+            "bCz8yO1-guvQ8cde5s9Gm": {
               "offsets": [
                 37
               ]
             },
-            "_0jx_IwXAEc6rBkAnJ-11": {
+            "0F1BodY_uzj7l2GneL3M9": {
               "offsets": [
                 5
               ]
             }
           },
           "mappingGroups": {
-            "mhQDNEVPnfFJVFcOehZsW": {
-              "chunkId": "jtk3yCQj3F7jv2d_ygwPg",
+            "QqHpEgStbLdUqs1LqBsEd": {
+              "chunkId": "2LEmcBDID4xZQ75pqB_pm",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "Hhvp7h3mR5LhtUNBUYfU9",
+                    "id": "NY3tu1zW5PVy7M4lzHyAn",
                     "index": 0
                   },
                   "ranges": [
@@ -2632,13 +2634,13 @@
               ],
               "triggers": []
             },
-            "yQswIHz8jJBr4dt2fUK8J": {
-              "chunkId": "isaZHy3T8vqh-10sFyeJV",
+            "H9xsE6X3loec-e0pUmdpy": {
+              "chunkId": "pCpTw8H90I8uZLw636sw0",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "jXb3jpz5BMFYt-PQt0kuz"
+                    "id": "aES76atOrA3QzGoktlQOO"
                   },
                   "ranges": [
                     {
@@ -2655,13 +2657,13 @@
               ],
               "triggers": []
             },
-            "cxfiv67HZc0Q1lN4-9Bt_": {
-              "chunkId": "lTk2_gT1DLsvTp_kU0GPd",
+            "rvCyqsHf41MUfs0DV85v4": {
+              "chunkId": "LWhNrkiEadRrvltcRLN7v",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "Hhvp7h3mR5LhtUNBUYfU9",
+                    "id": "NY3tu1zW5PVy7M4lzHyAn",
                     "index": 1
                   },
                   "ranges": [
@@ -2679,13 +2681,13 @@
               ],
               "triggers": []
             },
-            "brLsJ4bZD60mtKDJJsVrS": {
-              "chunkId": "48XV2UAKR1OohJEJd8rBh",
+            "JIxfboJT5OmZFKXE2ftbK": {
+              "chunkId": "csEk8loxVsaZGnXbuOtEm",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "CRF21oubI-fOlBgKglX4I",
+                    "id": "3muml-ScdZFUR4zwaatse",
                     "index": 2
                   },
                   "ranges": [
@@ -2703,13 +2705,13 @@
               ],
               "triggers": []
             },
-            "yjMGkJ33IfJnv8pvyNb21": {
-              "chunkId": "TlBiuYsbuJQ1ppn4MOv16",
+            "yhSJZAkrQK3YjrzQXhjf-": {
+              "chunkId": "ue6Be0pKkgshDORgqmpSr",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "H2379JadiF4pCYp432Mlv",
+                    "id": "KYpc7xHNIpeOi0BoUsXc6",
                     "index": 1
                   },
                   "ranges": [
@@ -2727,13 +2729,13 @@
               ],
               "triggers": []
             },
-            "4q67mzLdwxMdNW4-uXjaq": {
-              "chunkId": "qldm9X7SF5POmDDYky31s",
+            "h0Y76HMOeW_6sZWe5yOQB": {
+              "chunkId": "lkOlHp1ScEDfnDAszNWIQ",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "EYG1tg3WdqHFVWjT3-Z9H"
+                    "id": "aRNUlk0H3OsYrsEVCupE6"
                   },
                   "ranges": [
                     {
@@ -2750,13 +2752,13 @@
               ],
               "triggers": []
             },
-            "ImbTlpmufyiy83TMbwq58": {
-              "chunkId": "jIZl5cFyGb06MLI9vT-VO",
+            "49XbQNsyQobwG1jK2RJgG": {
+              "chunkId": "BbgIxyJUGg4-J6K2CIEjO",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "H2379JadiF4pCYp432Mlv",
+                    "id": "KYpc7xHNIpeOi0BoUsXc6",
                     "index": 0
                   },
                   "ranges": [
@@ -2774,13 +2776,13 @@
               ],
               "triggers": []
             },
-            "ZPdZQiG-l8-nC8hXFwBpR": {
-              "chunkId": "gY414N9cnzZkyBZehCBFh",
+            "mf2BdtTXhm6w9vGbMNkmC": {
+              "chunkId": "9eozRG3_sckVhWPU21N16",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "Hhvp7h3mR5LhtUNBUYfU9",
+                    "id": "NY3tu1zW5PVy7M4lzHyAn",
                     "index": 2
                   },
                   "ranges": [
@@ -2798,13 +2800,13 @@
               ],
               "triggers": []
             },
-            "yfutMXWneBIym-46kPaGI": {
-              "chunkId": "4wDcsYK3JY_mUCCacHuxB",
+            "ZC-Q5HriLPXxx9SqL4Vt4": {
+              "chunkId": "BitSyXosTxTzwWHqXdINx",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "Xr-taQkPvdRbETn3I89zx"
+                    "id": "03ZImlylCW4ZDsN05sI0M"
                   },
                   "ranges": [
                     {
@@ -2821,13 +2823,13 @@
               ],
               "triggers": []
             },
-            "4Rz6uzq9WkgTe5-6a96no": {
-              "chunkId": "etIqZOMpJzs_XIApmW0D6",
+            "XEHLmDdu4mGvnrzd34Z1u": {
+              "chunkId": "kYgcp17sJoEb1mM16vKkp",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "MU5ms2cp6q3G4Qy_zFrc6"
+                    "id": "yvptep6xniee_Mm49Lf5I"
                   },
                   "ranges": [
                     {
@@ -2844,13 +2846,13 @@
               ],
               "triggers": []
             },
-            "WNRMams2ivEeEr9CWQE9U": {
-              "chunkId": "6KhJ37HN0BGQVmIYIuCJO",
+            "StVlLPDUJ-IMu71N0n3Bo": {
+              "chunkId": "W76hotYUcOWe31Fdq46nd",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "77kB1TzglLP437DYBPcED"
+                    "id": "0j2apFtCeb8FwtkeSxJbJ"
                   },
                   "ranges": [
                     {
@@ -2882,7 +2884,7 @@
                 },
                 {
                   "mappedParam": {
-                    "id": "LTWn5J5XFXSLr7_UI3fLn"
+                    "id": "ue-soawpUOiPOUEWTeekx"
                   },
                   "ranges": [
                     {
@@ -2898,7 +2900,7 @@
                 },
                 {
                   "mappedParam": {
-                    "id": "EQNFAScGv9oDY7lN8LVZY"
+                    "id": "4rWQsJoYNY2_SvSur0uOE"
                   },
                   "ranges": [
                     {
@@ -2914,7 +2916,7 @@
                 },
                 {
                   "mappedParam": {
-                    "id": "TYhbUVo3QX0MeD1kj431b"
+                    "id": "e1MjrI4u9D9mG5IsYYaMX"
                   },
                   "ranges": [
                     {
@@ -2930,7 +2932,7 @@
                 },
                 {
                   "mappedParam": {
-                    "id": "jhTTr0c2U-cyCfY9HBMR-"
+                    "id": "V66YPmXM04sU_7BJSLwW2"
                   },
                   "ranges": [
                     {
@@ -2947,13 +2949,13 @@
               ],
               "triggers": []
             },
-            "s1YAgqMavoBtwJUl0fDvu": {
-              "chunkId": "oJR4JKx8YYZ4eCf6vwrKY",
+            "YqHaUrHrzfBgjCbtQ3LqR": {
+              "chunkId": "92ikr7T2KmdfKgWpX5768",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "CRF21oubI-fOlBgKglX4I",
+                    "id": "3muml-ScdZFUR4zwaatse",
                     "index": 1
                   },
                   "ranges": [
@@ -2971,13 +2973,13 @@
               ],
               "triggers": []
             },
-            "8-FCyaQLZs0auukxFyhCf": {
-              "chunkId": "4uX5qhnxZFK6yOXa3Rqbm",
+            "ofTP8z3PvbEXYuZ6djIuC": {
+              "chunkId": "AaIxEWFS5u-gYH_hasgHM",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "PSlSyN4PkoNAM0NE2gGpM"
+                    "id": "l9EDjX6RjDPJe8HnWUtoS"
                   },
                   "ranges": [
                     {
@@ -3112,7 +3114,7 @@
                 },
                 {
                   "mappedParam": {
-                    "id": "gNaL6i6F5mYAOfi7rozlM"
+                    "id": "6i3MzJfsjy2Yu02YMiN4h"
                   },
                   "ranges": [
                     {
@@ -3175,7 +3177,7 @@
                 },
                 {
                   "mappedParam": {
-                    "id": "GkuAxpn4KeBkUzOehll5h"
+                    "id": "DpwvugFXlLlzAWeW9r4xs"
                   },
                   "ranges": [
                     {
@@ -3191,7 +3193,7 @@
                 },
                 {
                   "mappedParam": {
-                    "id": "TSHn9XvEMbxMjmT0g2dJP"
+                    "id": "xrUWoLcl7Kktnd5w9BdUX"
                   },
                   "ranges": [
                     {
@@ -3222,7 +3224,7 @@
                   "unmappedParams": [
                     {
                       "parameter": {
-                        "id": "6r_yMRY7_T5X_D5NiGSFh"
+                        "id": "7phhf-jkYiOkQHDndwscg"
                       },
                       "start": 0
                     }
@@ -3231,13 +3233,13 @@
               ],
               "triggers": []
             },
-            "Ty3KCupr2KdHShCeipdxy": {
-              "chunkId": "PmquqZhDELasjhlV9bKXu",
+            "O4fJ_w9NZHZr-7P5AFKZx": {
+              "chunkId": "BXM3QHNQF-QvijqWebczG",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "SMnpRHi9n25QYhnpwLTLu"
+                    "id": "uBWzep9XyNJRMRV8DEVxw"
                   },
                   "ranges": [
                     {
@@ -3254,13 +3256,13 @@
               ],
               "triggers": []
             },
-            "ed8Bi2QQj5spgQJ_CoM-z": {
-              "chunkId": "McB_et9HRoct-mDCT2v-j",
+            "cGVKqi940Bdp8GR9HO-1b": {
+              "chunkId": "OWOjGSk1IoYu-FJTUDzOx",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "CRF21oubI-fOlBgKglX4I",
+                    "id": "3muml-ScdZFUR4zwaatse",
                     "index": 3
                   },
                   "ranges": [
@@ -3278,13 +3280,13 @@
               ],
               "triggers": []
             },
-            "OaOI9prbatGN1kM-bdlJh": {
-              "chunkId": "Q42ZHHxdQp7dFUmcLwg0z",
+            "6P-QObLE_vTk3tSu5qoSS": {
+              "chunkId": "7PdKwpYn6I-jj7e7sbYV4",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "0-Uxo13YPhqkRka7iiGAN"
+                    "id": "xbjUdSuc-SUz4G2l4yLIM"
                   },
                   "ranges": [
                     {
@@ -3301,13 +3303,13 @@
               ],
               "triggers": []
             },
-            "V32XE9hyTJrFWyWRVVZdF": {
-              "chunkId": "frhCwNeEz8N8ZrYm2rdb7",
+            "NW9ywvDxowsnxhv1PzxTb": {
+              "chunkId": "3jbFi9yh6SqtP8kr8iZ6E",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "b7yFrld5khB0jx9sxUxvm"
+                    "id": "2QcbfLzv2mQ_rxa4LhGCY"
                   },
                   "ranges": [
                     {
@@ -3338,7 +3340,7 @@
                 },
                 {
                   "mappedParam": {
-                    "id": "SQD2ajTtRR5HRp3FDQt0C"
+                    "id": "EzyVRdojL_8QYgINWy1dq"
                   },
                   "ranges": [
                     {
@@ -3354,7 +3356,7 @@
                   "unmappedParams": [
                     {
                       "parameter": {
-                        "id": "AnZqn7w5TtE_hO3148NjT"
+                        "id": "EdCqbgseSUeQDKr2uFc4U"
                       },
                       "start": 0
                     }
@@ -3362,7 +3364,7 @@
                 },
                 {
                   "mappedParam": {
-                    "id": "SQD2ajTtRR5HRp3FDQt0C"
+                    "id": "EzyVRdojL_8QYgINWy1dq"
                   },
                   "ranges": [
                     {
@@ -3378,7 +3380,7 @@
                   "unmappedParams": [
                     {
                       "parameter": {
-                        "id": "AnZqn7w5TtE_hO3148NjT"
+                        "id": "EdCqbgseSUeQDKr2uFc4U"
                       },
                       "start": 1
                     }
@@ -3387,13 +3389,13 @@
               ],
               "triggers": []
             },
-            "89ZoksKIlvGDyAaGeNKgI": {
-              "chunkId": "QesxdfSXn_slm2AiATL2F",
+            "PREusaB3N5zt3qkqerMU_": {
+              "chunkId": "Rb9CF8vdJgOXr4cTRCkIq",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "Hhvp7h3mR5LhtUNBUYfU9",
+                    "id": "NY3tu1zW5PVy7M4lzHyAn",
                     "index": 3
                   },
                   "ranges": [
@@ -3411,13 +3413,13 @@
               ],
               "triggers": []
             },
-            "7YxcYU5YR9duoxS5oKmYc": {
-              "chunkId": "SoqGJsQO-h2I1NPt73HWW",
+            "lwMYPbgJN5abPvlsRF7Vs": {
+              "chunkId": "ncAnHBKCxC1srq9PpJAmg",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "A9pm7vojFOLv5umbis8Z_"
+                    "id": "lOdJkYpwdyqVb09g3S6NI"
                   },
                   "ranges": [
                     {
@@ -3434,13 +3436,13 @@
               ],
               "triggers": []
             },
-            "d2LIAVh7662UHo4iSfCG4": {
-              "chunkId": "BGub37dY5wwWDxKGAliz5",
+            "f74026CL1164tjgMm_-Ia": {
+              "chunkId": "FhsO7oLU01AusrIHvxiQc",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "VkjQwTvVBzAA_RehAA5zR"
+                    "id": "cVA4W81VACuyMfkLh7u75"
                   },
                   "ranges": [
                     {
@@ -3457,13 +3459,13 @@
               ],
               "triggers": []
             },
-            "3-t33wSHiBTV8IyUqXzZX": {
-              "chunkId": "nURCxiloBZPanw8xoFKIh",
+            "cjqtChII_N3lpqqKjNGeT": {
+              "chunkId": "4u7bLoHFEkbcXyQ2X6mr8",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "lUEkzAFHKZfj6Pc44hLvU"
+                    "id": "WIRkcmywHiO1IFpvLKK5o"
                   },
                   "ranges": [
                     {
@@ -3480,13 +3482,13 @@
               ],
               "triggers": []
             },
-            "c7f5ylzyf5KIEUkd7iGlE": {
-              "chunkId": "mQQfQQwQzYmDzdJmdNMTq",
+            "8xt1WHNIrqsFGyCWAjg3t": {
+              "chunkId": "K8O9eZzMFNUI0jMRQohle",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "U56R6ng3X1oetun61BYhd"
+                    "id": "DBjyrdSRxvKjPGKouoUmP"
                   },
                   "ranges": [
                     {
@@ -3503,13 +3505,13 @@
               ],
               "triggers": []
             },
-            "l2VWUL8mkCeeGnQgvE4o_": {
-              "chunkId": "lB_lIrFVtps-GOriEjJA7",
+            "OA5qxL8ka41zxNIEhoZJ2": {
+              "chunkId": "8_YH7cZpi5H1vkfh_DJ8c",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "CRF21oubI-fOlBgKglX4I",
+                    "id": "3muml-ScdZFUR4zwaatse",
                     "index": 0
                   },
                   "ranges": [
@@ -3527,13 +3529,13 @@
               ],
               "triggers": []
             },
-            "CAb7qxK5PDpM6DdjhyLwv": {
-              "chunkId": "d3ISpOzl-UUSrVM5OtXPd",
+            "wULpDGvsK_cQuUZfHxd0m": {
+              "chunkId": "zodhJYchbP4rVaSSrbcjf",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "EnyGxMduBZVVl25e7GdTc"
+                    "id": "iVioJ2AxnFVrF9tKxtKBI"
                   },
                   "ranges": [
                     {
@@ -3559,13 +3561,13 @@
               ],
               "triggers": []
             },
-            "5WP9X3z5VeWYjulqQKWyi": {
-              "chunkId": "FJj5jMauVqsQ7jbvSFDMx",
+            "vt4gtDFXOFPqYP_1mLk5d": {
+              "chunkId": "gWakz46X72t4_PDIUJpSs",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "eh5z9bRV2HgEFs9nWutq_"
+                    "id": "_Z9fKTJ1JsSHivWNqQwTG"
                   },
                   "ranges": [
                     {
@@ -3639,13 +3641,13 @@
               ],
               "triggers": []
             },
-            "cAJhpundZfEqPSzy5n0IB": {
-              "chunkId": "O8r2YmqoQ0l2TgWMIqssu",
+            "O_ix_g64E0bK2vCeLHnpD": {
+              "chunkId": "QpEJ2-uz2cgYDEBwp3GV1",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "QPSh4viZ3fsl3I1dAhAOD"
+                    "id": "jvzB8XdvEeZYA5EGaC9RB"
                   },
                   "ranges": [
                     {
@@ -3740,7 +3742,7 @@
                 },
                 {
                   "mappedParam": {
-                    "id": "3lVum61RPLR74dfQv_yV0"
+                    "id": "UYh7wCK43b05_Jp0vtJng"
                   },
                   "ranges": [
                     {
@@ -3756,7 +3758,7 @@
                   "unmappedParams": [
                     {
                       "parameter": {
-                        "id": "QPSh4viZ3fsl3I1dAhAOD"
+                        "id": "jvzB8XdvEeZYA5EGaC9RB"
                       },
                       "start": 1
                     }
@@ -3764,7 +3766,7 @@
                 },
                 {
                   "mappedParam": {
-                    "id": "3lVum61RPLR74dfQv_yV0"
+                    "id": "UYh7wCK43b05_Jp0vtJng"
                   },
                   "ranges": [
                     {
@@ -3780,7 +3782,7 @@
                   "unmappedParams": [
                     {
                       "parameter": {
-                        "id": "QPSh4viZ3fsl3I1dAhAOD"
+                        "id": "jvzB8XdvEeZYA5EGaC9RB"
                       },
                       "start": 2
                     }
@@ -3788,7 +3790,7 @@
                 },
                 {
                   "mappedParam": {
-                    "id": "3lVum61RPLR74dfQv_yV0"
+                    "id": "UYh7wCK43b05_Jp0vtJng"
                   },
                   "ranges": [
                     {
@@ -3804,7 +3806,7 @@
                   "unmappedParams": [
                     {
                       "parameter": {
-                        "id": "QPSh4viZ3fsl3I1dAhAOD"
+                        "id": "jvzB8XdvEeZYA5EGaC9RB"
                       },
                       "start": 3
                     }
@@ -3812,7 +3814,7 @@
                 },
                 {
                   "mappedParam": {
-                    "id": "3lVum61RPLR74dfQv_yV0"
+                    "id": "UYh7wCK43b05_Jp0vtJng"
                   },
                   "ranges": [
                     {
@@ -3828,7 +3830,7 @@
                   "unmappedParams": [
                     {
                       "parameter": {
-                        "id": "QPSh4viZ3fsl3I1dAhAOD"
+                        "id": "jvzB8XdvEeZYA5EGaC9RB"
                       },
                       "start": 4
                     }
@@ -3836,7 +3838,7 @@
                 },
                 {
                   "mappedParam": {
-                    "id": "3lVum61RPLR74dfQv_yV0"
+                    "id": "UYh7wCK43b05_Jp0vtJng"
                   },
                   "ranges": [
                     {
@@ -3852,7 +3854,7 @@
                   "unmappedParams": [
                     {
                       "parameter": {
-                        "id": "QPSh4viZ3fsl3I1dAhAOD"
+                        "id": "jvzB8XdvEeZYA5EGaC9RB"
                       },
                       "start": 5
                     }
@@ -3860,7 +3862,7 @@
                 },
                 {
                   "mappedParam": {
-                    "id": "anxYLW605lcfbK4jx4g4V"
+                    "id": "OsE1p6zQkDBCQ5lODum2f"
                   },
                   "ranges": [
                     {
@@ -3877,13 +3879,13 @@
               ],
               "triggers": []
             },
-            "IYOJ0ngnPpx6xWmjgIgTZ": {
-              "chunkId": "X7cco3D7rV-R7vd3_Jb3Q",
+            "mgT-m3A76TN18U9n31WLZ": {
+              "chunkId": "Mhzxlc3z1yconZKKOkCXb",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "IONEiJhvg8-B2M8y9Ekn1",
+                    "id": "Qrx6kq_Uosgpa_K8sRp1N",
                     "index": 0
                   },
                   "ranges": [
@@ -3901,13 +3903,13 @@
               ],
               "triggers": []
             },
-            "oSyUdWAuM-ZHyeMs_YFQy": {
-              "chunkId": "Gf_5-aXa3b0BY3Zd639xg",
+            "nkIKYFV2_f5GyYdaUKDD4": {
+              "chunkId": "hxFZgrUUvZYd_XuYACP3_",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "IONEiJhvg8-B2M8y9Ekn1",
+                    "id": "Qrx6kq_Uosgpa_K8sRp1N",
                     "index": 1
                   },
                   "ranges": [
@@ -3925,13 +3927,13 @@
               ],
               "triggers": []
             },
-            "WDTR3pItYM0xL8RqGxICY": {
-              "chunkId": "om3aZ4Y_LMFALuSrMpimY",
+            "m_unfBwdN0KKutofwOq5D": {
+              "chunkId": "Q_WqwCk9uesEwIILaPY45",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "xtkc1d0550iUCoBgWB0Sa"
+                    "id": "K-Efq8ZEuoqcz-dzk2vBW"
                   },
                   "ranges": [
                     {
@@ -3948,13 +3950,13 @@
               ],
               "triggers": []
             },
-            "s9rquVmbupYOwZlkNxasY": {
-              "chunkId": "om3aZ4Y_LMFALuSrMpimY",
+            "cBtIybeMHNgTQY1wBA2tt": {
+              "chunkId": "Q_WqwCk9uesEwIILaPY45",
               "index": 1,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "xtkc1d0550iUCoBgWB0Sa"
+                    "id": "K-Efq8ZEuoqcz-dzk2vBW"
                   },
                   "ranges": [
                     {
@@ -3977,7 +3979,7 @@
                 },
                 {
                   "mappedParam": {
-                    "id": "wO9L_RXL6MzdvorPPDqcZ"
+                    "id": "VJxRQqJiSbl83TcUuxsUS"
                   },
                   "ranges": [
                     {
@@ -3994,13 +3996,13 @@
               ],
               "triggers": []
             },
-            "lJM0q0Jm3iK54tLmONrDM": {
-              "chunkId": "KsgwneGgusAnPDB0V7exl",
+            "edfvzQCH1vZSBmj5vLGJ1": {
+              "chunkId": "yxTfKiCBt-m2jIsRTK2yy",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "fwg4hqQQhvs9edheBHS_W"
+                    "id": "reYU4KffmyKuIStpXaogD"
                   },
                   "ranges": [
                     {
@@ -4017,13 +4019,13 @@
               ],
               "triggers": []
             },
-            "JpOpN0giuPPlNX0zDjHmW": {
-              "chunkId": "KsgwneGgusAnPDB0V7exl",
+            "RerjQVhwwhZ2kXvuCj1Z2": {
+              "chunkId": "yxTfKiCBt-m2jIsRTK2yy",
               "index": 1,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "fwg4hqQQhvs9edheBHS_W"
+                    "id": "reYU4KffmyKuIStpXaogD"
                   },
                   "ranges": [
                     {
@@ -4046,7 +4048,7 @@
                 },
                 {
                   "mappedParam": {
-                    "id": "qwqsMluJMRfILIp7bKRHz"
+                    "id": "Kqi2guJKFuCaQm2f1TMeS"
                   },
                   "ranges": [
                     {
@@ -4063,13 +4065,13 @@
               ],
               "triggers": []
             },
-            "tSZK7T4tAVJVtfUnw2Yyi": {
-              "chunkId": "ofkE4tLtUunKZQJcpk7XK",
+            "IqkjfhKX-Mo407q1nyR-n": {
+              "chunkId": "bCz8yO1-guvQ8cde5s9Gm",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "Myb4uP23GA-Z_So1YJhzF"
+                    "id": "P7hudkBSWvGAeeuxwz4cO"
                   },
                   "ranges": [
                     {
@@ -4108,7 +4110,7 @@
                 },
                 {
                   "mappedParam": {
-                    "id": "moSquBk9b3OyNsZH7JQS5"
+                    "id": "GhMJCZ0Fxxys37fH22Kz5"
                   },
                   "ranges": [
                     {
@@ -4124,7 +4126,7 @@
                   "unmappedParams": [
                     {
                       "parameter": {
-                        "id": "Myb4uP23GA-Z_So1YJhzF"
+                        "id": "P7hudkBSWvGAeeuxwz4cO"
                       },
                       "start": 1
                     }
@@ -4133,13 +4135,13 @@
               ],
               "triggers": []
             },
-            "T9dVaDgftdr9liqvU8K6m": {
-              "chunkId": "_0jx_IwXAEc6rBkAnJ-11",
+            "KfRXJFQzokSeRs4YT7ZBW": {
+              "chunkId": "0F1BodY_uzj7l2GneL3M9",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "q7WyHw0R6Ph2Ae66psQi3"
+                    "id": "qECTe1IkJdf7gfC5oAN2o"
                   },
                   "ranges": [
                     {
@@ -4158,132 +4160,132 @@
             }
           },
           "conditions": {
-            "DNJX-9sj8iaukt1HQPamp": {
+            "VP922BIMrVZ9b1vAAWYSj": {
               "conditionType": "group",
               "parent": {
                 "type": "mappingGroup",
-                "id": "WDTR3pItYM0xL8RqGxICY"
+                "id": "m_unfBwdN0KKutofwOq5D"
               },
               "match": "any"
             },
-            "pol6-WLKb75OIthgaUWgc": {
+            "w27aTg6a_DNNmL9bS5L-1": {
               "conditionType": "chunkRef",
               "parent": {
                 "type": "condition",
-                "id": "DNJX-9sj8iaukt1HQPamp"
+                "id": "VP922BIMrVZ9b1vAAWYSj"
               },
-              "chunkId": "O8r2YmqoQ0l2TgWMIqssu",
+              "chunkId": "QpEJ2-uz2cgYDEBwp3GV1",
               "chunkStart": 0,
               "chunkEnd": 34
             },
-            "MY_U_DRjroDghJ3hHjHKF": {
+            "PanimtGkmAqQ-kztEo2k9": {
               "conditionType": "chunkRef",
               "parent": {
                 "type": "condition",
-                "id": "DNJX-9sj8iaukt1HQPamp"
+                "id": "VP922BIMrVZ9b1vAAWYSj"
               },
-              "chunkId": "O8r2YmqoQ0l2TgWMIqssu",
+              "chunkId": "QpEJ2-uz2cgYDEBwp3GV1",
               "chunkStart": 60,
               "chunkEnd": 209
             },
-            "Y395QsZ3x81_QNXeM6oHH": {
+            "0Yx1xnqXGnMa51Kypy6MV": {
               "conditionType": "group",
               "parent": {
                 "type": "mappingGroup",
-                "id": "s9rquVmbupYOwZlkNxasY"
+                "id": "cBtIybeMHNgTQY1wBA2tt"
               },
               "match": "any"
             },
-            "Hp4rlF2cKPRKyzo1JLuJT": {
+            "b9n-J5TGwumncH20DRrKA": {
               "conditionType": "chunkRef",
               "parent": {
                 "type": "condition",
-                "id": "Y395QsZ3x81_QNXeM6oHH"
+                "id": "0Yx1xnqXGnMa51Kypy6MV"
               },
-              "chunkId": "O8r2YmqoQ0l2TgWMIqssu",
+              "chunkId": "QpEJ2-uz2cgYDEBwp3GV1",
               "chunkStart": 35,
               "chunkEnd": 59
             },
-            "Pg_4GMK2wwGFNxDpFomyV": {
+            "je7nu6wufCM6as2zk0umc": {
               "conditionType": "chunkRef",
               "parent": {
                 "type": "condition",
-                "id": "Y395QsZ3x81_QNXeM6oHH"
+                "id": "0Yx1xnqXGnMa51Kypy6MV"
               },
-              "chunkId": "O8r2YmqoQ0l2TgWMIqssu",
+              "chunkId": "QpEJ2-uz2cgYDEBwp3GV1",
               "chunkStart": 210,
               "chunkEnd": 255
             },
-            "Dvztf2wxEkhonR4YTU6Gd": {
+            "a-jAD7yyLd8TKt6JPopi1": {
               "conditionType": "group",
               "parent": {
                 "type": "mappingGroup",
-                "id": "lJM0q0Jm3iK54tLmONrDM"
+                "id": "edfvzQCH1vZSBmj5vLGJ1"
               },
               "match": "any"
             },
-            "Oy99p0oFCdXos54rDh78V": {
+            "dWXnfo7rjzx7qnLa6t8KV": {
               "conditionType": "chunkRef",
               "parent": {
                 "type": "condition",
-                "id": "Dvztf2wxEkhonR4YTU6Gd"
+                "id": "a-jAD7yyLd8TKt6JPopi1"
               },
-              "chunkId": "FJj5jMauVqsQ7jbvSFDMx",
+              "chunkId": "gWakz46X72t4_PDIUJpSs",
               "chunkStart": 6,
               "chunkEnd": 10
             },
-            "MsNUnN9tierCWN3RrXb9f": {
+            "uu6m1pS0LCfrLIwGKVIFB": {
               "conditionType": "chunkRef",
               "parent": {
                 "type": "condition",
-                "id": "Dvztf2wxEkhonR4YTU6Gd"
+                "id": "a-jAD7yyLd8TKt6JPopi1"
               },
-              "chunkId": "FJj5jMauVqsQ7jbvSFDMx",
+              "chunkId": "gWakz46X72t4_PDIUJpSs",
               "chunkStart": 21,
               "chunkEnd": 25
             },
-            "u2bi2HOmdwgHeNcOT5aCU": {
+            "dNHT_DMZ5f5J5RnlIbCdg": {
               "conditionType": "chunkRef",
               "parent": {
                 "type": "condition",
-                "id": "Dvztf2wxEkhonR4YTU6Gd"
+                "id": "a-jAD7yyLd8TKt6JPopi1"
               },
-              "chunkId": "FJj5jMauVqsQ7jbvSFDMx",
+              "chunkId": "gWakz46X72t4_PDIUJpSs",
               "chunkStart": 111,
               "chunkEnd": 255
             },
-            "rpk1VbhHiyRbyRu6J2DbP": {
+            "Tz3JZavpzhYfmTGxGz_VI": {
               "conditionType": "group",
               "parent": {
                 "type": "mappingGroup",
-                "id": "JpOpN0giuPPlNX0zDjHmW"
+                "id": "RerjQVhwwhZ2kXvuCj1Z2"
               },
               "match": "any"
             },
-            "CjYFYAk-vgqzoQMkRXVr_": {
+            "v9OGl-wAImCnNEZi39jeK": {
               "conditionType": "chunkRef",
               "parent": {
                 "type": "condition",
-                "id": "rpk1VbhHiyRbyRu6J2DbP"
+                "id": "Tz3JZavpzhYfmTGxGz_VI"
               },
-              "chunkId": "FJj5jMauVqsQ7jbvSFDMx",
+              "chunkId": "gWakz46X72t4_PDIUJpSs",
               "chunkStart": 11,
               "chunkEnd": 20
             },
-            "r_9fcyxE7mmSTXZpZ6VpQ": {
+            "_ZO37numK275dExFzFzOZ": {
               "conditionType": "chunkRef",
               "parent": {
                 "type": "condition",
-                "id": "rpk1VbhHiyRbyRu6J2DbP"
+                "id": "Tz3JZavpzhYfmTGxGz_VI"
               },
-              "chunkId": "FJj5jMauVqsQ7jbvSFDMx",
+              "chunkId": "gWakz46X72t4_PDIUJpSs",
               "chunkStart": 26,
               "chunkEnd": 110
             }
           }
         }
       },
-      "FpInd5ieqfUpIeLtj2xqp": {
+      "DlGhQlxO6JJPWLi9Pc1Li": {
         "type": "deviceClass",
         "orgId": {
           "type": "org",
@@ -4304,7 +4306,7 @@
           "modelCategory": "other",
           "modelSubcategory": "other",
           "localized": {
-            "description": "qXr09ZhQ0moLnvg8GUmP-"
+            "description": "FrRrOesf5EAGyadqhoE_8"
           }
         },
         "libraries": {
@@ -4317,18 +4319,18 @@
         "resourceClasses": {},
         "commandClasses": {},
         "parameterEditors": [
-          "fHPLBBdkItjRiLBwuUwX6",
-          "c9RGpvSzWIwYPjXkmUAE3",
-          "86zpLymYE_bVMJseQ1C1G",
-          "UHlAK-lL_kmW3V5Sd_6c_",
-          "bcTfCDbDmdKU8pNhXSuul",
-          "Cj-pM2omW6-vC7RFVkrTf",
-          "fpLzJ1ExDq6b8BhkQ-0W5",
-          "T1C0NPKRLSxfn9hVqovuK",
-          "Z1ra879MDb208TLlXaM6d"
+          "LRH0tCXzyUOPVdUPckBQL",
+          "emr7KcIoeDzC7Tb09kMZd",
+          "eZau30qZqXhUY2YKfqhOg",
+          "6dFd3Sn9m7dKa5KqlMsps",
+          "eB3e59i9YNzHAKPSPiKks",
+          "8jyKjVt0jKyb94uG86K6g",
+          "jKqTCBfaOjcqUsZIZJ4au",
+          "UryHMpn9IZ1ZvnrSyV8wo",
+          "MVZTIstwA3VVzjkZfTRWb"
         ],
         "parameters": {
-          "fHPLBBdkItjRiLBwuUwX6": {
+          "LRH0tCXzyUOPVdUPckBQL": {
             "codexId": "zPos",
             "class": {
               "type": "imported",
@@ -4345,7 +4347,7 @@
             "default": 0,
             "localized": {}
           },
-          "c9RGpvSzWIwYPjXkmUAE3": {
+          "emr7KcIoeDzC7Tb09kMZd": {
             "codexId": "zRot",
             "class": {
               "type": "imported",
@@ -4362,7 +4364,7 @@
             "default": 0,
             "localized": {}
           },
-          "86zpLymYE_bVMJseQ1C1G": {
+          "eZau30qZqXhUY2YKfqhOg": {
             "codexId": "xSpin",
             "class": {
               "type": "imported",
@@ -4379,7 +4381,7 @@
             "default": 0,
             "localized": {}
           },
-          "UHlAK-lL_kmW3V5Sd_6c_": {
+          "6dFd3Sn9m7dKa5KqlMsps": {
             "codexId": "xPos",
             "class": {
               "type": "imported",
@@ -4396,7 +4398,7 @@
             "default": 0,
             "localized": {}
           },
-          "bcTfCDbDmdKU8pNhXSuul": {
+          "eB3e59i9YNzHAKPSPiKks": {
             "codexId": "yPos",
             "class": {
               "type": "imported",
@@ -4413,7 +4415,7 @@
             "default": 0,
             "localized": {}
           },
-          "Cj-pM2omW6-vC7RFVkrTf": {
+          "8jyKjVt0jKyb94uG86K6g": {
             "codexId": "yRot",
             "class": {
               "type": "imported",
@@ -4430,7 +4432,7 @@
             "default": 0,
             "localized": {}
           },
-          "fpLzJ1ExDq6b8BhkQ-0W5": {
+          "jKqTCBfaOjcqUsZIZJ4au": {
             "codexId": "xRot",
             "class": {
               "type": "imported",
@@ -4447,7 +4449,7 @@
             "default": 0,
             "localized": {}
           },
-          "T1C0NPKRLSxfn9hVqovuK": {
+          "UryHMpn9IZ1ZvnrSyV8wo": {
             "codexId": "ySpin",
             "class": {
               "type": "imported",
@@ -4464,7 +4466,7 @@
             "default": 0,
             "localized": {}
           },
-          "Z1ra879MDb208TLlXaM6d": {
+          "MVZTIstwA3VVzjkZfTRWb": {
             "codexId": "zSpin",
             "class": {
               "type": "imported",
@@ -4491,7 +4493,7 @@
         "commandClassReturnValues": {},
         "enumChoices": {},
         "structure3DNodes": {
-          "FJGiWf9_YeHvuvl0WwGgg": {
+          "PI3yEz3-1VzouC_dyKy2R": {
             "codexId": "node",
             "children": [],
             "transform": {
@@ -4505,7 +4507,7 @@
                 "target": {
                   "type": "parameter",
                   "parameter": {
-                    "id": "UHlAK-lL_kmW3V5Sd_6c_"
+                    "id": "6dFd3Sn9m7dKa5KqlMsps"
                   }
                 }
               },
@@ -4516,7 +4518,7 @@
                 "target": {
                   "type": "parameter",
                   "parameter": {
-                    "id": "fpLzJ1ExDq6b8BhkQ-0W5"
+                    "id": "jKqTCBfaOjcqUsZIZJ4au"
                   }
                 }
               },
@@ -4527,7 +4529,7 @@
                 "target": {
                   "type": "parameter",
                   "parameter": {
-                    "id": "bcTfCDbDmdKU8pNhXSuul"
+                    "id": "eB3e59i9YNzHAKPSPiKks"
                   }
                 }
               },
@@ -4538,7 +4540,7 @@
                 "target": {
                   "type": "parameter",
                   "parameter": {
-                    "id": "Cj-pM2omW6-vC7RFVkrTf"
+                    "id": "8jyKjVt0jKyb94uG86K6g"
                   }
                 }
               },
@@ -4549,7 +4551,7 @@
                 "target": {
                   "type": "parameter",
                   "parameter": {
-                    "id": "fHPLBBdkItjRiLBwuUwX6"
+                    "id": "LRH0tCXzyUOPVdUPckBQL"
                   }
                 }
               },
@@ -4560,7 +4562,7 @@
                 "target": {
                   "type": "parameter",
                   "parameter": {
-                    "id": "c9RGpvSzWIwYPjXkmUAE3"
+                    "id": "emr7KcIoeDzC7Tb09kMZd"
                   }
                 }
               }
@@ -4568,8 +4570,10 @@
             "localized": {}
           }
         },
+        "emitterGroups": {},
+        "emitters": {},
         "localizations": {
-          "qXr09ZhQ0moLnvg8GUmP-": {
+          "FrRrOesf5EAGyadqhoE_8": {
             "strings": {
               "en-US": "Movement control for visualization and other virtual environments."
             },
@@ -4584,57 +4588,57 @@
           ],
           "lifetime": "static",
           "rootNodes": [
-            "FJGiWf9_YeHvuvl0WwGgg"
+            "PI3yEz3-1VzouC_dyKy2R"
           ]
         },
         "dmxSerializer": {
           "chunks": {
-            "PNReQvAQ-iTiv2XWugOl5": {
+            "nnrEQ9WVRffr2xQsSQ8DR": {
               "offsets": [
                 4,
                 5
               ]
             },
-            "Xh7HadUpdfBX7BgIicQIf": {
+            "-gd9rPCkfBL_6n0z5jlxc": {
               "offsets": [
                 12
               ]
             },
-            "6wt859C9hxYOpvIX2tz0C": {
+            "JUMMG-aV5MSrzJiOD9aVA": {
               "offsets": [
                 2,
                 3
               ]
             },
-            "sCDCD-UriiRmAYfPy4I0z": {
+            "2TdcaRE64Q9eynnjTAwf9": {
               "offsets": [
                 0,
                 1
               ]
             },
-            "4cDqowxz9qazzH-c6wqhH": {
+            "SnzAosmQQwvgjSQV5ZGgt": {
               "offsets": [
                 13
               ]
             },
-            "m2zLQowfMkpvqbbezlYqV": {
+            "Jji7gNfLxikd-U-ynnZ70": {
               "offsets": [
                 6,
                 7
               ]
             },
-            "yBIYZkBVZ6RnznVKeiNN-": {
+            "mVil59QjEJjUk5trZdK5B": {
               "offsets": [
                 14
               ]
             },
-            "q00OVjk1GWhVMDupLOfRI": {
+            "iQSal7Y7YtbAKv7s4SzIY": {
               "offsets": [
                 8,
                 9
               ]
             },
-            "wPB8a0GkkbROGRMwG-NC0": {
+            "etFaAVKQWziyLQpIZRdxn": {
               "offsets": [
                 10,
                 11
@@ -4642,13 +4646,13 @@
             }
           },
           "mappingGroups": {
-            "8UOVzFlBG50vP_R3JNQ0D": {
-              "chunkId": "PNReQvAQ-iTiv2XWugOl5",
+            "yrm34XQMpKE6AUmPG8txB": {
+              "chunkId": "nnrEQ9WVRffr2xQsSQ8DR",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "fHPLBBdkItjRiLBwuUwX6"
+                    "id": "LRH0tCXzyUOPVdUPckBQL"
                   },
                   "ranges": [
                     {
@@ -4665,13 +4669,13 @@
               ],
               "triggers": []
             },
-            "uKLmAzeyPOpqakpev1toX": {
-              "chunkId": "Xh7HadUpdfBX7BgIicQIf",
+            "yqsCpKGiuTqhij0iveW0F": {
+              "chunkId": "-gd9rPCkfBL_6n0z5jlxc",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "86zpLymYE_bVMJseQ1C1G"
+                    "id": "eZau30qZqXhUY2YKfqhOg"
                   },
                   "ranges": [
                     {
@@ -4688,13 +4692,13 @@
               ],
               "triggers": []
             },
-            "RO1kHYwH3zOm5Ww2AX9_7": {
-              "chunkId": "6wt859C9hxYOpvIX2tz0C",
+            "Lze6CkRwdheYqntLx_O66": {
+              "chunkId": "JUMMG-aV5MSrzJiOD9aVA",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "bcTfCDbDmdKU8pNhXSuul"
+                    "id": "eB3e59i9YNzHAKPSPiKks"
                   },
                   "ranges": [
                     {
@@ -4711,13 +4715,13 @@
               ],
               "triggers": []
             },
-            "4P_W_XAjs9czr5p-zWkNF": {
-              "chunkId": "sCDCD-UriiRmAYfPy4I0z",
+            "c6WCO6pz7loSQCz2tSwk3": {
+              "chunkId": "2TdcaRE64Q9eynnjTAwf9",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "UHlAK-lL_kmW3V5Sd_6c_"
+                    "id": "6dFd3Sn9m7dKa5KqlMsps"
                   },
                   "ranges": [
                     {
@@ -4734,13 +4738,13 @@
               ],
               "triggers": []
             },
-            "zYbHTX08e00poKAVJtiuJ": {
-              "chunkId": "4cDqowxz9qazzH-c6wqhH",
+            "Ibo8kV47aFdqtCTdyUxrd": {
+              "chunkId": "SnzAosmQQwvgjSQV5ZGgt",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "T1C0NPKRLSxfn9hVqovuK"
+                    "id": "UryHMpn9IZ1ZvnrSyV8wo"
                   },
                   "ranges": [
                     {
@@ -4757,13 +4761,13 @@
               ],
               "triggers": []
             },
-            "2cCp-7qf-Z0QhEyiDRLW3": {
-              "chunkId": "m2zLQowfMkpvqbbezlYqV",
+            "1xH6fKPMTdmO-Vz2Gljxn": {
+              "chunkId": "Jji7gNfLxikd-U-ynnZ70",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "fpLzJ1ExDq6b8BhkQ-0W5"
+                    "id": "jKqTCBfaOjcqUsZIZJ4au"
                   },
                   "ranges": [
                     {
@@ -4780,13 +4784,13 @@
               ],
               "triggers": []
             },
-            "pfhDljrT_Qd8ici6KvjBA": {
-              "chunkId": "yBIYZkBVZ6RnznVKeiNN-",
+            "K0EI5_opdRNoMrjirrYfR": {
+              "chunkId": "mVil59QjEJjUk5trZdK5B",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "Z1ra879MDb208TLlXaM6d"
+                    "id": "MVZTIstwA3VVzjkZfTRWb"
                   },
                   "ranges": [
                     {
@@ -4803,13 +4807,13 @@
               ],
               "triggers": []
             },
-            "Ju6B9_gtdY16R3wbKo53-": {
-              "chunkId": "q00OVjk1GWhVMDupLOfRI",
+            "k9nd4XvlqrLVQLavTOmLY": {
+              "chunkId": "iQSal7Y7YtbAKv7s4SzIY",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "Cj-pM2omW6-vC7RFVkrTf"
+                    "id": "8jyKjVt0jKyb94uG86K6g"
                   },
                   "ranges": [
                     {
@@ -4826,13 +4830,13 @@
               ],
               "triggers": []
             },
-            "axlH0IonxUHGzRWA-XEfQ": {
-              "chunkId": "wPB8a0GkkbROGRMwG-NC0",
+            "QnHzR4kQgu64U02NsExGb": {
+              "chunkId": "etFaAVKQWziyLQpIZRdxn",
               "index": 0,
               "mappings": [
                 {
                   "mappedParam": {
-                    "id": "c9RGpvSzWIwYPjXkmUAE3"
+                    "id": "emr7KcIoeDzC7Tb09kMZd"
                   },
                   "ranges": [
                     {

@@ -48,24 +48,25 @@ function load(assetId: string) {
     listeners.forEach((listener) => listener());
   };
 
-  assetStorage
-    .getAsset(assetId)
-    .then((asset) => {
-      if (!asset) {
-        throw new LocalizedError(ERRORS.assetMissing);
-      }
-      // ponytail: parsed without a base path, so only a self-contained glTF
-      // loads: a GLB, or a .gltf with its buffers and images as data URIs.
-      // Resolving external files would need them stored alongside the model.
-      return new GLTFLoader().parseAsync(asset.data, "");
-    })
-    .then(
-      (gltf) => {
-        gltf.scenes.forEach(addMissingNormals);
-        settle({ status: "loaded", gltf });
-      },
-      (error: unknown) => settle({ status: "error", error }),
-    );
+  parseGltfAsset(assetId).then(
+    (gltf) => {
+      gltf.scenes.forEach(addMissingNormals);
+      settle({ status: "loaded", gltf });
+    },
+    (error: unknown) => settle({ status: "error", error }),
+  );
+}
+
+/** Reads a stored glTF file into a fresh set of three.js objects. */
+export async function parseGltfAsset(assetId: string): Promise<GLTF> {
+  const asset = await assetStorage.getAsset(assetId);
+  if (!asset) {
+    throw new LocalizedError(ERRORS.assetMissing);
+  }
+  // ponytail: parsed without a base path, so only a self-contained glTF
+  // loads: a GLB, or a .gltf with its buffers and images as data URIs.
+  // Resolving external files would need them stored alongside the model.
+  return new GLTFLoader().parseAsync(asset.data, "");
 }
 
 /**

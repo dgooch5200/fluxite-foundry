@@ -1,14 +1,16 @@
 import * as V6 from "../v6/state";
 import * as V7 from "./state";
 
-// v6 -> v7: add the structure-3d structure to device class documents
+// v6 -> v7: add the structure-3d and emitters structures to device class
+// documents
 
 /**
  * Migrates state from V6 to V7.
  *
  * Changes:
- * - Device class documents gain an empty `structure3DNodes` table. The
- *   optional `structure3D` is left absent.
+ * - Device class documents gain empty `structure3DNodes`, `emitterGroups` and
+ *   `emitters` tables. The optional `structure3D` and `emittersStructure` are
+ *   left absent.
  */
 export function migrateV6toV7(
   state: V6.AppPersistentState,
@@ -18,7 +20,7 @@ export function migrateV6toV7(
     documents: Object.fromEntries(
       Object.entries(state.documents).map(([id, document]) => [
         id,
-        { ...document, structure3DNodes: {} },
+        { ...document, structure3DNodes: {}, emitterGroups: {}, emitters: {} },
       ]),
     ),
   };

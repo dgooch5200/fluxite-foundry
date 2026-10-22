@@ -9,6 +9,8 @@ import {
 import structure3DSchema from "e173/libraries/motion/draft-2027-1/schemas/structure-3d.json";
 import encoreDocument from "e173/examples/draft-2027-1/device-classes/martin_mac_encore_performance_cld.fcd?raw";
 import movableDocument from "e173/examples/draft-2027-1/device-classes/movable.fcd?raw";
+import battenDocument from "../../../docs/rfcs/emitter_location_3d_batten.fcd?raw";
+import proposedStructure3DSchema from "../../../docs/rfcs/emitter_location_3d_structure-3d.json";
 import { getImportedDeviceClassEditor } from "./import";
 import {
   exportDeviceClass,
@@ -94,6 +96,66 @@ function withStructure3DNodes(nodes: object): DeviceClass {
   };
 }
 
+// Two cells of a batten, each a beam driven by its control group and naming an
+// emitter group or emitters, as in the emitter location proposal in
+// docs/rfcs.
+const EMITTER_BEAM_NODES = {
+  "cell-1": {
+    translate: [-0.125, 0, 0.04],
+    control: [
+      {
+        type: "beam",
+        axis: "z",
+        controlGroups: ["control-groups?/groups/0"],
+        emitters: ["emitters?/emitterGroups/cell-1"],
+        aperture: { width: 0.24, height: 0.06 },
+      },
+    ],
+  },
+  "cell-2": {
+    translate: [0.125, 0, 0.04],
+    control: [
+      {
+        type: "beam",
+        axis: "z",
+        controlGroups: ["control-groups?/groups/1"],
+        emitters: [
+          "emitters?/emitterGroups/cell-2/emitters/red",
+          "emitters?/emitterGroups/cell-2/emitters/green",
+        ],
+        aperture: { diameter: 0.05 },
+      },
+    ],
+  },
+};
+
+// The emitter location proposal's strip of WS2812 pixels, one node repeated
+// with each copy naming its own control group and emitter group, and four
+// heads turned by the elements of an array parameter.
+const REPEATED_NODES = {
+  strip: {
+    nodes: {
+      px: {
+        translate: [-0.59, 0, 0.002],
+        repeat: { count: 60, step: { translate: [0.02, 0, 0] }, index: "i" },
+        control: [
+          {
+            type: "beam",
+            axis: "z",
+            controlGroups: ["control-groups?/groups/${i}"],
+            emitters: ["emitters?/emitterGroups/px-${i}"],
+            aperture: { width: 0.005, height: 0.005 },
+          },
+        ],
+      },
+    },
+  },
+  head: {
+    repeat: { count: 4, step: { rotate: [0, 0, 90] }, index: "h" },
+    control: [{ type: "rotate", axis: "x", parameter: "tilt[${h}]" }],
+  },
+};
+
 describe("importing the MAC Encore structure 3D", () => {
   const editor = importDeviceClass(exampleDeviceClass(encoreDocument));
 
@@ -149,6 +211,36 @@ describe("importing the MAC Encore structure 3D", () => {
   });
 });
 
+describe("importing the emitter location proposal's batten", () => {
+  test("drives each cell's beam by its control group, at its emitter group", () => {
+    const editor = importDeviceClass(exampleDeviceClass(battenDocument));
+
+    const [, cell] = nodeNamed(editor, "cell-3");
+    const group = Object.keys(editor.emitterGroups).find(
+      (id) => editor.emitterGroups[EntityId(id)].codexId === "cell-3",
+    );
+    expect(group).toBeDefined();
+    expect(cell.transform).toEqual({
+      type: "trs",
+      translate: [0.125, 0, 0.04],
+      rotate: undefined,
+    });
+    expect(cell.controls).toEqual([
+      {
+        type: "beam",
+        axis: "z",
+        commonAxis: undefined,
+        target: {
+          type: "controlGroups",
+          controlGroups: ["control-groups?/groups/2"],
+        },
+        emitters: [{ group }],
+        aperture: { shape: "rectangle", width: 0.24, height: 0.06 },
+      },
+    ]);
+  });
+});
+
 describe("structure 3D import", () => {
   test("wraps rotations into [0, 360)", () => {
     const editor = importDeviceClass(
@@ -162,16 +254,21 @@ describe("structure 3D import", () => {
     });
   });
 
-  test("keeps a control with no target as a broken parameter reference", () => {
+  test("keeps a control with no target, needing what drives its type", () => {
     const editor = importDeviceClass(
       withStructure3DNodes({
-        node: { control: [{ type: "beam", axis: "z" }] },
+        node: {
+          control: [
+            { type: "beam", axis: "z" },
+            { type: "rotate", axis: "x" },
+          ],
+        },
       }),
     );
 
-    const [control] = nodeNamed(editor, "node")[1].controls;
-    expect(control.type).toBe("beam");
-    expect(control.target.type).toBe("parameter");
+    const [beam, rotate] = nodeNamed(editor, "node")[1].controls;
+    expect(beam.target).toEqual({ type: "controlGroups", controlGroups: [] });
+    expect(rotate.target.type).toBe("parameter");
   });
 
   test("leaves the structure absent when the device class has none", () => {
@@ -205,6 +302,30 @@ describe("structure 3D export", () => {
 
     expect(JSON.parse(JSON.stringify(exported))).toEqual({ nodes });
   });
+
+  test("round trips repeats, and references filled in per copy", () => {
+    const [exported] = exportedStructure3Ds(
+      exportDeviceClass(
+        importDeviceClass(withStructure3DNodes(REPEATED_NODES)),
+      ),
+    );
+
+    expect(JSON.parse(JSON.stringify(exported))).toEqual({
+      nodes: REPEATED_NODES,
+    });
+  });
+
+  test("round trips beams placed at emitters, with apertures", () => {
+    const [exported] = exportedStructure3Ds(
+      exportDeviceClass(
+        importDeviceClass(withStructure3DNodes(EMITTER_BEAM_NODES)),
+      ),
+    );
+
+    expect(JSON.parse(JSON.stringify(exported))).toEqual({
+      nodes: EMITTER_BEAM_NODES,
+    });
+  });
 });
 
 describe("exported structure 3D conforms to the schema", () => {
@@ -227,5 +348,61 @@ describe("exported structure 3D conforms to the schema", () => {
       validate(JSON.parse(JSON.stringify(structure)));
       expect(validate.errors ?? []).toEqual([]);
     }
+  });
+});
+
+// Beams' emitters and apertures aren't in the standard yet. The emitter
+// location proposal carries its own copy of the schema with them added.
+describe("exported structure 3D conforms to the emitter location proposal", () => {
+  const validate = new Ajv2019({ strict: false, allErrors: true }).compile(
+    proposedStructure3DSchema,
+  );
+
+  test.each([
+    ["its batten", () => exampleDeviceClass(battenDocument)],
+    [
+      "beams placed at emitters",
+      () => withStructure3DNodes(EMITTER_BEAM_NODES),
+    ],
+    ["repeated nodes", () => withStructure3DNodes(REPEATED_NODES)],
+  ])("for %s", (_, deviceClass) => {
+    const [structure] = exportedStructure3Ds(
+      exportDeviceClass(importDeviceClass(deviceClass())),
+    );
+
+    validate(JSON.parse(JSON.stringify(structure)));
+    expect(validate.errors ?? []).toEqual([]);
+  });
+
+  test.each([
+    [
+      "emitters or an aperture on a rotate control",
+      {
+        type: "rotate",
+        axis: "x",
+        parameter: "tilt",
+        emitters: ["emitters?/emitterGroups/main"],
+        aperture: { diameter: 0.1 },
+      },
+    ],
+    [
+      "a beam without control groups",
+      { type: "beam", axis: "z", emitters: ["emitters?/emitterGroups/main"] },
+    ],
+    [
+      "a beam driven by a parameter",
+      { type: "beam", axis: "z", parameter: "dimmer" },
+    ],
+    [
+      "a rotate control driven by control groups",
+      {
+        type: "rotate",
+        axis: "x",
+        controlGroups: ["control-groups?/groups/0"],
+      },
+    ],
+  ])("but not for %s", (_, control) => {
+    validate({ nodes: { head: { control: [control] } } });
+    expect(validate.errors).not.toBeNull();
   });
 });

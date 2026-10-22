@@ -14,6 +14,9 @@ import { MODEL_RESOURCE_CLASS } from "./validation";
 export const PAN = EntityId("pan-parameter");
 export const TRACK = EntityId("track-parameter");
 export const ROOT = EntityId("root-node");
+export const CELL_1 = EntityId("cell-1-group");
+export const CELL_2 = EntityId("cell-2-group");
+export const CELL_1_RED = EntityId("cell-1-red-emitter");
 
 /** The device class document that is open. */
 export function currentEditor(): DeviceClassDocument {
@@ -66,6 +69,28 @@ export function addMotionResource(
       access: ["read"],
       lifetime: "static",
     };
+  });
+}
+
+/**
+ * Gives the open device class an emitters structure with two groups: cell-1
+ * (CELL_1) holding a red emitter (CELL_1_RED), and an empty cell-2 (CELL_2).
+ */
+export function addEmitters() {
+  updateCurrentEditor(testUndoLabel("Add emitters"), (editor) => {
+    editor.emittersStructure = {
+      codexId: CodexId("emitters"),
+      access: ["read"],
+      lifetime: "static",
+      emitterGroups: [CELL_1, CELL_2],
+      controlGroups: [],
+    };
+    editor.emitterGroups[CELL_1] = {
+      codexId: CodexId("cell-1"),
+      emitters: [CELL_1_RED],
+    };
+    editor.emitterGroups[CELL_2] = { codexId: CodexId("cell-2"), emitters: [] };
+    editor.emitters[CELL_1_RED] = { codexId: CodexId("red"), group: CELL_1 };
   });
 }
 
