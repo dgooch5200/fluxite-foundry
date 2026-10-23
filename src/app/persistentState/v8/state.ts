@@ -277,14 +277,10 @@ export const AppSettingsSchema = z.object({
 
 export const DocumentTypeSchema = z.enum(documentTypes);
 
-// How the Structure 3D tab's 3D view colors a model. These are only for looking
-// at it and never change the model's own materials.
+// How the Structure 3D view colors a model; MODEL uses the glTF's materials.
 export const structure3DFinishes = {
-  // One plain gray for the whole model
   GRAY: "gray",
-  // A different color for each node's model
   BY_NODE: "byNode",
-  // The materials in the glTF file
   MODEL: "model",
 } as const;
 
@@ -301,10 +297,8 @@ export const SessionSchema = z.object({
   selectedDocumentId: EntityIdSchema.optional(),
   // Stringified FlexLayout model per document.
   layouts: z.record(EntityIdSchema, z.string()),
-  // How the Structure 3D tab's 3D view was last set up. Each field is absent
-  // until it is first changed.
-  // An unknown value, e.g. a finish since removed, falls back to the default,
-  // rather than failing the whole state's validation and losing it.
+  // An unknown value (e.g. a removed finish) is dropped so it can't fail the
+  // whole state's validation.
   structure3DView: z
     .object({
       // In pixels
@@ -651,10 +645,9 @@ export const DmxSerializerSchema = z.object({
 // Structure 3D Models
 // ---------------------------------------------------------------------------
 
-// The structure-3d structure from the E1.73-4 motion library. Its schema is
-// `e173/libraries/motion/<draft>/schemas/structure-3d.json`. Ranges the schema
-// places on values (e.g. rotations in [0, 360]) are enforced on import and in
-// the editor rather than here, so out-of-range data can't fail rehydration.
+// E1.73-4 motion library structure-3d (e173/libraries/motion/<draft>/schemas/).
+// Value ranges are enforced on import and in the editor, not here, so
+// out-of-range data can't fail rehydration.
 
 export const structure3DControlTypes = {
   LINEAR: "linear",
@@ -697,7 +690,6 @@ export type Structure3DModelQuality =
 
 export const Vec3Schema = z.tuple([z.number(), z.number(), z.number()]);
 
-// A node is placed either by translate/rotate or by a matrix, never both.
 export const Structure3DTransformSchema = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("trs"),
@@ -712,8 +704,6 @@ export const Structure3DTransformSchema = z.discriminatedUnion("type", [
   }),
 ]);
 
-// What drives a control: a parameter, or paths into control-groups structures,
-// never both.
 export const Structure3DControlTargetSchema = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("parameter"),
@@ -733,12 +723,11 @@ export const Structure3DControlSchema = z.object({
   target: Structure3DControlTargetSchema,
 });
 
-// The schema allows exactly one of low, medium or high per node.
 export const Structure3DVisualSchema = z.object({
   quality: z.enum(structure3DModelQualities),
   // A resource of the motion library's 3d-model class
   resource: EntityIdSchema,
-  // A glTF node or scene in the model. Absent means the default scene.
+  // Absent means the default scene
   nodeOrSceneName: z.string().optional(),
 });
 
@@ -758,7 +747,6 @@ export const Structure3DNodeSchema = z.object({
   }),
 });
 
-// structure-3d is not multipleAllowed, so a device class has at most one.
 export const Structure3DSchema = z.object({
   codexId: CodexIdSchema,
   access: z.array(AccessSchema),
@@ -810,7 +798,6 @@ export const DeviceClassDocumentSchema = z.object({
 
   dmxSerializers: z.record(EntityIdSchema, DmxSerializerSchema),
 
-  // Structure 3D
   structure3D: Structure3DSchema.optional(),
   structure3DNodes: z.record(EntityIdSchema, Structure3DNodeSchema),
 

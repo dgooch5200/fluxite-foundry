@@ -7,8 +7,10 @@ import {
   MappingBounds,
   MappingRange,
   Trigger,
+  Structure,
   UnmappedParam,
 } from "@cpwg-community/delver";
+import { z } from "zod";
 import { newEntityId } from "app/stateUtils";
 import { updateAppPersistentState, useAppPersistentStore } from "app/store";
 import {
@@ -26,6 +28,7 @@ import {
 } from "features/localizations/localize";
 import {
   codexIdAsEntityId,
+  codexToId,
   commandArgKeyToEditor,
   commandExclusionsToEditor,
   paramExclusionsToEditor,
@@ -64,11 +67,12 @@ import {
   Structure3DTransform,
   Structure3DVisual,
   Vec3,
+  Vec3Schema,
 } from "app/persistentState";
 import { getDefaultDeviceClass } from "codex/codex";
 import { emptyLibraryIndex, importClasses, LibraryIndex } from "codex/library";
 import { assetStorage } from "app/assetStorage";
-import { STRUCTURE_3D_CLASS, MOTION_LIBRARY } from "./export";
+import { isStructure3D } from "./export";
 
 export interface ArchiveToImport {
   archiveFile: File;
@@ -435,10 +439,8 @@ function importCommands(
 // Structure 3D
 // ---------------------------------------------------------------------------
 
-// delver does not look inside a structure's content, so the structure-3d
-// fields arrive as unvalidated JSON. Each is checked as it is read and dropped
-// if malformed, because a document that fails the state schema fails
-// rehydration.
+// delver doesn't validate a structure's content, so each structure-3d field is
+// checked as it is read and dropped if malformed.
 
 type JsonObject = Record<string, unknown>;
 
@@ -450,22 +452,13 @@ function asString(value: unknown): string | undefined {
   return typeof value === "string" ? value : undefined;
 }
 
-function isNumberArray(value: unknown): value is number[] {
-  return Array.isArray(value) && value.every((n) => typeof n === "number");
-}
-
-function asVec3(value: unknown): Vec3 | undefined {
-  return isNumberArray(value) && value.length === 3
-    ? [value[0], value[1], value[2]]
-    : undefined;
-}
-
-function isOneOf<T extends string>(
-  values: Record<string, T>,
-  value: unknown,
-): value is T {
-  return (Object.values(values) as unknown[]).includes(value);
-}
+const ImportedControlSchema = z.object({
+  type: z.enum(structure3DControlTypes),
+  axis: z.enum(structure3DAxes),
+  commonAxis: z.enum(structure3DCommonAxes).optional().catch(undefined),
+  parameter: z.string().optional().catch(undefined),
+  controlGroups: z.array(z.string()).optional().catch(undefined),
+});
 
 function importStructure3D(
   imported: DeviceClass,
@@ -474,24 +467,16 @@ function importStructure3D(
 ) {
   // structure-3d is not multipleAllowed, so only the first is kept.
   const entry = Object.entries(imported.structures ?? {}).find(
-    ([, structure]) =>
-      structure.type === "Other" &&
-      structure.value.library === MOTION_LIBRARY &&
-      structure.value.class === STRUCTURE_3D_CLASS,
+    (entry): entry is [string, Extract<Structure, { type: "Other" }>] =>
+      isStructure3D(entry[1]),
   );
-  if (!entry || entry[1].type !== "Other") {
+  if (!entry) {
     return;
   }
   const [codexId, { value: structure }] = entry;
 
-  const resourceIds = new Map(
-    Object.entries(editor.resources).map(([id, resource]) => [
-      resource.codexId as string,
-      EntityId(id),
-    ]),
-  );
+  const resourceIds = codexToId(editor.resources);
 
-  // Flattens a `nodes` map into the node table, parents before children.
   function importNodes(
     nodes: unknown,
     parent: EntityId | undefined,
@@ -534,18 +519,19 @@ function importStructure3D(
 function importTransform(node: JsonObject): Structure3DTransform {
   // A node giving both a matrix and translate/rotate is invalid. The matrix
   // wins, being the whole transform.
-  if (
-    isNumberArray(node.matrix) &&
-    node.matrix.length >= 12 &&
-    node.matrix.length <= 16
-  ) {
-    return { type: "matrix", matrix: node.matrix };
+  const matrix = z
+    .array(z.number())
+    .min(12)
+    .max(16)
+    .safeParse(node.matrix).data;
+  if (matrix) {
+    return { type: "matrix", matrix };
   }
 
-  const rotate = asVec3(node.rotate);
+  const rotate = Vec3Schema.safeParse(node.rotate).data;
   return {
     type: "trs",
-    translate: asVec3(node.translate),
+    translate: Vec3Schema.safeParse(node.translate).data,
     rotate: rotate?.map(wrapDegrees) as Vec3 | undefined,
   };
 }
@@ -556,47 +542,33 @@ function importControls(
 ): Structure3DControl[] {
   // The schema says an array, but some files (the MAC Encore example among
   // them) give a single control as a bare object.
-  const controls = Array.isArray(control)
-    ? control
-    : control === undefined
-      ? []
-      : [control];
+  const controls = Array.isArray(control) ? control : [control];
 
-  return controls.flatMap((c) =>
-    isJsonObject(c) &&
-    isOneOf(structure3DControlTypes, c.type) &&
-    isOneOf(structure3DAxes, c.axis)
+  return controls.flatMap((c) => {
+    const control = ImportedControlSchema.safeParse(c).data;
+    return control
       ? [
           {
-            type: c.type,
-            axis: c.axis,
-            commonAxis: isOneOf(structure3DCommonAxes, c.commonAxis)
-              ? c.commonAxis
-              : undefined,
-            target: importControlTarget(editor, c),
+            type: control.type,
+            axis: control.axis,
+            commonAxis: control.commonAxis,
+            target: importControlTarget(editor, control),
           },
         ]
-      : [],
-  );
+      : [];
+  });
 }
 
 function importControlTarget(
   editor: DeviceClassDocument,
-  control: JsonObject,
+  { parameter, controlGroups }: z.infer<typeof ImportedControlSchema>,
 ): Structure3DControlTarget {
-  const parameter = asString(control.parameter);
-  const controlGroups = control.controlGroups;
-  if (
-    parameter === undefined &&
-    Array.isArray(controlGroups) &&
-    controlGroups.every((path) => typeof path === "string")
-  ) {
+  if (parameter === undefined && controlGroups) {
     return { type: "controlGroups", controlGroups };
   }
 
-  // A control naming neither a parameter nor control groups is kept as a
-  // broken parameter reference rather than dropped, so that its type and axes
-  // survive and the editor shows it as needing a parameter.
+  // A control naming neither keeps its type and axes as a broken parameter
+  // reference, which the editor flags.
   const ref = parseParameterReference(parameter ?? "");
   return {
     type: "parameter",
@@ -614,11 +586,10 @@ const QUALITIES_BEST_FIRST = [
 
 function importVisual(
   model: unknown,
-  resourceIds: Map<string, EntityId>,
+  resourceIds: Map<CodexId, EntityId>,
 ): Structure3DVisual | undefined {
-  // `model.bounds` is not imported. The draft-2027-1 schema nests `extents`
-  // inside `center` while also requiring it beside `center`, so no bounds
-  // value can validate, and export must follow the schema.
+  // `model.bounds` is dropped: the draft-2027-1 schema requires `extents` both
+  // inside and beside `center`, so no bounds value validates.
   const visual = isJsonObject(model) ? model.visual : undefined;
   if (!isJsonObject(visual)) {
     return undefined;
@@ -635,7 +606,8 @@ function importVisual(
   return {
     quality,
     resource:
-      resourceIds.get(resourceCodexId) ?? codexIdAsEntityId(resourceCodexId),
+      resourceIds.get(CodexId(resourceCodexId)) ??
+      codexIdAsEntityId(resourceCodexId),
     nodeOrSceneName: asString(visual.nodeOrSceneName),
   };
 }

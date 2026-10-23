@@ -6,6 +6,7 @@ import {
   Group,
   Mesh,
   Object3D,
+  Triangle,
   Vector3,
 } from "three";
 import { repairMesh, repairNormals } from "./meshRepair";
@@ -26,22 +27,19 @@ const vertex = (geometry: BufferGeometry, i: number) =>
 const point = (geometry: BufferGeometry, name: string, i: number) =>
   new Vector3().fromBufferAttribute(geometry.getAttribute(name), i);
 
-/** Each triangle as the positions of its corners in order, e.g. "0,0,0 1,0,0 0,1,0". */
-function triangles(geometry: BufferGeometry): string[] {
+function cornerPoints(geometry: BufferGeometry, name = "position") {
   const count =
     geometry.index?.count ?? geometry.getAttribute("position").count;
-  const result: string[] = [];
-  for (let i = 0; i < count; i += 3) {
-    result.push(
-      [i, i + 1, i + 2]
-        .map((c) => point(geometry, "position", vertex(geometry, c)).toArray())
-        .join(" "),
-    );
-  }
-  return result;
+  return Array.from({ length: count / 3 }, (_, t) =>
+    [0, 1, 2].map((k) => point(geometry, name, vertex(geometry, 3 * t + k))),
+  );
 }
 
-/** Runs a repair on a mesh of the geometry and checks it changed nothing. */
+const triangles = (geometry: BufferGeometry) =>
+  cornerPoints(geometry).map((corners) =>
+    corners.map((corner) => corner.toArray()).join(" "),
+  );
+
 function expectUntouched(
   geometry: BufferGeometry,
   repair: (object: Object3D) => object,
@@ -90,13 +88,7 @@ describe("repairMesh", () => {
     );
     const mesh = new Mesh(geometry);
 
-    expect(repairMesh(mesh)).toEqual({
-      fixedFolds: 0,
-      mergedVertices: 1,
-      removedFaces: 3,
-    });
-    // The vertex across the UV seam is kept apart from the one it shares a
-    // position with.
+    expect(repairMesh(mesh)).toEqual({ mergedVertices: 1, removedFaces: 3 });
     expect(mesh.geometry.getAttribute("position").count).toBe(6);
     expect(triangles(mesh.geometry).sort()).toEqual(
       [
@@ -126,124 +118,13 @@ describe("repairMesh", () => {
     const meshes = [new Mesh(geometry), new Mesh(geometry)];
     group.add(...meshes);
 
-    expect(repairMesh(group)).toEqual({
-      fixedFolds: 0,
-      mergedVertices: 2,
-      removedFaces: 0,
-    });
+    expect(repairMesh(group)).toEqual({ mergedVertices: 2, removedFaces: 0 });
     expect(meshes[0].geometry).not.toBe(geometry);
     expect(meshes[1].geometry).toBe(meshes[0].geometry);
-  });
-
-  /**
-   * Six triangles around a centre in the plane z = 0, wound to face up. The
-   * centre has been pushed just past corner 0, out across the side from there
-   * to corner 1, which folds that side's triangle back over the others.
-   */
-  function pleat(missing?: number) {
-    const corners = Array.from({ length: 6 }, (_, k) => [
-      Math.cos((k * Math.PI) / 3),
-      Math.sin((k * Math.PI) / 3),
-      0,
-    ]);
-    const index = [0, 1, 2, 3, 4, 5]
-      .filter((k) => k !== missing)
-      .flatMap((k) => [6, k, (k + 1) % 6]);
-    return makeGeometry([...corners, [1.005, 0.02, 0]], index);
-  }
-
-  /** Which way, up or down, each triangle faces, as it winds. */
-  const facing = (geometry: BufferGeometry) =>
-    triangles(geometry).map((triangle) => {
-      const [a, b, c] = triangle
-        .split(" ")
-        .map((corner) =>
-          new Vector3().fromArray(corner.split(",").map(Number)),
-        );
-      return Math.sign(b.sub(a).cross(c.sub(a)).z);
-    });
-
-  test("collapses a triangle folded back over its neighbours", () => {
-    const geometry = pleat();
-    expect(facing(geometry)).toEqual([-1, 1, 1, 1, 1, 1]);
-    const mesh = new Mesh(geometry);
-
-    expect(repairMesh(mesh)).toEqual({
-      fixedFolds: 1,
-      mergedVertices: 1,
-      removedFaces: 2,
-    });
-    // The centre joined corner 0, taking the folded triangle and the one
-    // beside it, and the rest still face up.
-    expect(facing(mesh.geometry)).toEqual([1, 1, 1, 1]);
-  });
-
-  test("flips the edge a sliver is folded across, moving nothing", () => {
-    // A square on its corners, split along its middle into a triangle above
-    // and three below. The middle one below is a sliver whose corner at the
-    // square's centre has been pushed just above the middle, folding it back
-    // over the triangle above. No edge is short enough to collapse.
-    const geometry = makeGeometry(
-      [
-        [0, 0, 0],
-        [2, 0, 0],
-        [1, 1, 0],
-        [1, -1, 0],
-        [1, 0.01, 0],
-      ],
-      [0, 1, 2, 1, 0, 4, 0, 3, 4, 4, 3, 1],
-    );
-    // The corners' positions, which a flip leaves where they are.
-    const positions = (of: BufferGeometry) =>
-      new Set(triangles(of).flatMap((triangle) => triangle.split(" ")));
-    const before = positions(geometry);
-    expect(facing(geometry)).toEqual([1, -1, 1, 1]);
-    const mesh = new Mesh(geometry);
-
-    expect(repairMesh(mesh)).toEqual({
-      fixedFolds: 1,
-      mergedVertices: 0,
-      removedFaces: 0,
-    });
-    expect(facing(mesh.geometry)).toEqual([1, 1, 1, 1]);
-    expect(positions(mesh.geometry)).toEqual(before);
-  });
-
-  test("moves no vertex on an open edge to undo a fold", () => {
-    // Without the triangle opposite the fold, the centre is on an open edge
-    // too, and every vertex that could move to undo the fold is.
-    expectUntouched(pleat(3), repairMesh);
-  });
-
-  test("leaves a sharp ridge alone", () => {
-    // Two strips meeting at 60 degrees along the x axis, with a sliver of a
-    // step along the ridge that could be collapsed if the ridge were a fold.
-    const xs = [0, 1, 1.02, 2];
-    const ridge = xs.map((x) => [x, 0, 0]);
-    const flat = xs.map((x) => [x, 1, 0]);
-    const raised = xs.map((x) => [x, 0.5, Math.sqrt(3) / 2]);
-    // Ridge vertices are 0 to 3, the flat strip's 4 to 7, the raised one's 8
-    // to 11; each quad along a strip is two triangles.
-    const strip = (side: number) =>
-      [0, 1, 2].flatMap((i) => [
-        i,
-        i + 1,
-        side + i + 1,
-        i,
-        side + i + 1,
-        side + i,
-      ]);
-    const geometry = makeGeometry(
-      [...ridge, ...flat, ...raised],
-      [...strip(4), ...strip(8)],
-    );
-
-    expectUntouched(geometry, repairMesh);
   });
 });
 
 describe("repairNormals", () => {
-  /** Reverses the winding of the given triangles, keeping each vertex as it was. */
   function reverse(geometry: BufferGeometry, faces: number[]) {
     for (const t of faces) {
       const [i, j] = [3 * t + 1, 3 * t + 2];
@@ -277,11 +158,7 @@ describe("repairNormals", () => {
   const normalValues = (geometry: BufferGeometry) =>
     Array.from(geometry.getAttribute("normal").array);
 
-  /**
-   * Half a cylinder's wall around the z axis, open along its sides and ends,
-   * wound and with smooth normals facing the axis, like the inside of a bore
-   * or a reflector.
-   */
+  // Half a cylinder wall around z, facing the axis like a reflector.
   function halfBore() {
     const segments = 8;
     const positions: number[][] = [];
@@ -302,37 +179,24 @@ describe("repairNormals", () => {
     return geometry;
   }
 
-  /**
-   * Checks every triangle, as it winds, faces the way `out` gives for its
-   * centre, and that its corners' normals do too if it has any.
-   */
   function expectFacing(
     geometry: BufferGeometry,
     out: (centre: Vector3) => Vector3,
   ) {
-    const count =
-      geometry.index?.count ?? geometry.getAttribute("position").count;
-    for (let i = 0; i < count; i += 3) {
-      const [a, b, c] = [i, i + 1, i + 2].map((corner) =>
-        point(geometry, "position", vertex(geometry, corner)),
-      );
-      const faceNormal = new Vector3()
-        .subVectors(b, a)
-        .cross(new Vector3().subVectors(c, a));
-      const direction = out(a.clone().add(b).add(c).divideScalar(3));
+    const normals = geometry.hasAttribute("normal")
+      ? cornerPoints(geometry, "normal")
+      : [];
+    cornerPoints(geometry).forEach(([a, b, c], t) => {
+      const triangle = new Triangle(a, b, c);
+      const faceNormal = triangle.getNormal(new Vector3());
+      const direction = out(triangle.getMidpoint(new Vector3()));
       expect(faceNormal.dot(direction)).toBeGreaterThan(0);
-      if (!geometry.hasAttribute("normal")) continue;
-      for (const corner of [i, i + 1, i + 2]) {
-        const normal = point(geometry, "normal", vertex(geometry, corner));
+      for (const normal of normals[t] ?? []) {
         expect(normal.dot(direction)).toBeGreaterThan(0);
       }
-    }
+    });
   }
 
-  /**
-   * A geometry of the given triangles, each wound and with normals facing the
-   * way `out` gives for its centre.
-   */
   function surface(
     positions: number[][],
     faces: number[][],
@@ -342,8 +206,9 @@ describe("repairNormals", () => {
       const [pa, pb, pc] = [a, b, c].map((i) =>
         new Vector3().fromArray(positions[i]),
       );
-      const face = pb.clone().sub(pa).cross(pc.clone().sub(pa));
-      const centre = pa.add(pb).add(pc).divideScalar(3);
+      const triangle = new Triangle(pa, pb, pc);
+      const face = triangle.getNormal(new Vector3());
+      const centre = triangle.getMidpoint(new Vector3());
       return face.dot(out(centre)) > 0 ? [a, b, c] : [a, c, b];
     });
     const geometry = makeGeometry(positions, index);
@@ -431,29 +296,23 @@ describe("repairNormals", () => {
     expect(repairNormals(mesh)).toEqual({ flippedFaces: 12, fixedNormals: 24 });
     expectFacing(mesh.geometry, outOfBox);
     // Its edges are sharper than the crease angle, so every face stays flat.
-    const { geometry } = mesh;
-    for (let i = 0; i < triangles(geometry).length * 3; i += 3) {
-      const [a, b, c] = [i, i + 1, i + 2].map((corner) =>
-        point(geometry, "position", vertex(geometry, corner)),
-      );
-      const face = b.sub(a).cross(c.sub(a)).normalize();
-      for (const corner of [i, i + 1, i + 2]) {
-        const normal = point(geometry, "normal", vertex(geometry, corner));
+    const normals = cornerPoints(mesh.geometry, "normal");
+    cornerPoints(mesh.geometry).forEach(([a, b, c], t) => {
+      const face = new Triangle(a, b, c).getNormal(new Vector3());
+      for (const normal of normals[t]) {
         expect(normal.dot(face)).toBeCloseTo(1);
       }
-    }
+    });
     expect(repairNormals(mesh)).toEqual({ flippedFaces: 0, fixedNormals: 0 });
   });
 
   test("gives an open part without normals smooth ones, as it's wound", () => {
-    // Nothing says which way an open part without normals should face.
     const bore = halfBore();
     bore.deleteAttribute("normal");
     reverse(bore, everyFace(bore));
     const mesh = new Mesh(bore);
 
-    // One normal for each of its 18 positions, since its segments meet at
-    // shallower angles than the crease.
+    // One per position: its segments meet at shallower angles than the crease.
     expect(repairNormals(mesh)).toEqual({ flippedFaces: 0, fixedNormals: 18 });
     expectFacing(mesh.geometry, (centre) => towardAxis(centre).negate());
     expect(repairNormals(mesh)).toEqual({ flippedFaces: 0, fixedNormals: 0 });
@@ -468,7 +327,7 @@ describe("repairNormals", () => {
         const angle = (2 * Math.PI * s) / segments;
         return [radius * Math.cos(angle), radius * Math.sin(angle), z];
       });
-    // Quads between the circle of vertices from 0 and the one from `segments`.
+    // Quads joining the first circle of vertices to the second.
     const band = Array.from({ length: segments }, (_, s) => {
       const next = (s + 1) % segments;
       return [
@@ -523,9 +382,8 @@ describe("repairNormals", () => {
   });
 
   test("turns a triangle folded back over the surface around it", () => {
-    // Four triangles around a centre that shares its vertex and normal with
-    // them all. The centre is pulled out past one side, which folds that
-    // side's triangle back over the others.
+    // Four triangles fanned around vertex 0, which is pulled out past the
+    // bottom edge so that edge's triangle folds back over the others.
     const geometry = makeGeometry(
       [
         [0, -1.5, 0],

@@ -3,7 +3,6 @@ import { BoxGeometry, MathUtils, Mesh, PerspectiveCamera } from "three";
 import { OrbitControls } from "three-stdlib";
 import { frameObject, orbitCamera, zoomCamera } from "./camera";
 
-// A camera two meters in front of the origin, looking at it.
 function frontView(aspect = 1) {
   const camera = new PerspectiveCamera(45, aspect);
   camera.position.set(0, 0, 2);

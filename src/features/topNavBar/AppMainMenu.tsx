@@ -6,7 +6,6 @@ import {
   FolderOpenIcon,
   HardDriveDownloadIcon,
   HardDriveUploadIcon,
-  LoaderIcon,
   RefreshCwIcon,
   SaveIcon,
   SettingsIcon,
@@ -48,7 +47,6 @@ import {
   DropdownMenuTrigger,
 } from "components/scn-ui/DropdownMenu";
 import { Button } from "components/scn-ui/Button";
-import indexHtml from "../../../index.html?raw";
 
 const MESSAGES = {
   menuLabel: msg({ id: "navbar.mainMenu.label", message: "App Menu" }),
@@ -73,26 +71,6 @@ const MESSAGES = {
     message: "Failed to open migration report: {reason}",
   }),
 };
-
-// Temporary, for reviewing the loading screen's design. Shows the loading
-// screen from index.html over the app, which React replaced when it first
-// rendered, until it is clicked or Escape is pressed.
-function showLoadingScreen() {
-  const loadingScreen = new DOMParser()
-    .parseFromString(indexHtml, "text/html")
-    .querySelector<HTMLElement>(".app-loading");
-  if (!loadingScreen) return;
-  loadingScreen.style.zIndex = "9999";
-
-  const close = (event: Event) => {
-    if (event instanceof KeyboardEvent && event.key !== "Escape") return;
-    loadingScreen.remove();
-    document.removeEventListener("keydown", close);
-  };
-  loadingScreen.addEventListener("click", close);
-  document.addEventListener("keydown", close);
-  document.body.append(loadingScreen);
-}
 
 export const AppMainMenu = () => {
   const currentDocumentId = useCurrentDocumentId();
@@ -230,12 +208,6 @@ export const AppMainMenu = () => {
               >
                 <HardDriveDownloadIcon className="size-5" />
                 <Trans id="navbar.mainMenu.importState">Import State...</Trans>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={showLoadingScreen}>
-                <LoaderIcon className="size-5" />
-                <Trans id="navbar.mainMenu.showLoadingScreen">
-                  Show Loading Screen
-                </Trans>
               </DropdownMenuItem>
             </DropdownMenuSubContent>
           </DropdownMenuSub>

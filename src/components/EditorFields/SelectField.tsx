@@ -8,8 +8,7 @@ import {
 } from "components/scn-ui/Select";
 import { cn } from "utils/utils";
 
-// Radix reserves the empty string for "nothing selected", so an empty value
-// (such as a broken reference) is offered under this one instead.
+// Radix reserves the empty string for "nothing selected".
 const EMPTY_VALUE = "\u0000empty";
 const itemValue = (value: string) => (value === "" ? EMPTY_VALUE : value);
 

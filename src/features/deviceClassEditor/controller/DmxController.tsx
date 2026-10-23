@@ -58,9 +58,7 @@ export const DmxController = () => {
     [storedParamStates],
   );
 
-  // Initialize param states when the DMX driver changes. The live states are
-  // kept in the runtime store while the controller is on screen, so that other
-  // views can follow them.
+  // Initialize param states when the DMX driver changes
   useEffect(() => {
     if (!documentId || dmxController.state !== "available") {
       return;

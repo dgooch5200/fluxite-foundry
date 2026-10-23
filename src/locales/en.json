@@ -394,28 +394,6 @@
     ],
     "translation": "About {APP_NAME}"
   },
-  "deviceClassEditor.structure3DEditor.access": {
-    "message": "Access",
-    "placeholders": {},
-    "comments": [],
-    "origin": [
-      [
-        "src/features/structure3DEditor/Structure3DEditor.tsx"
-      ]
-    ],
-    "translation": "Access"
-  },
-  "deviceClassEditor.resourceEditor.access": {
-    "message": "Access",
-    "placeholders": {},
-    "comments": [],
-    "origin": [
-      [
-        "src/features/deviceClassEditor/resourcesEditor/ResourceEditor.tsx"
-      ]
-    ],
-    "translation": "Access"
-  },
   "deviceClassEditor.paramEditor.access": {
     "message": "Access",
     "placeholders": {},
@@ -423,6 +401,17 @@
     "origin": [
       [
         "src/features/deviceClassEditor/parametersEditor/ParameterEditor.tsx"
+      ]
+    ],
+    "translation": "Access"
+  },
+  "accessLifetimeFields.access": {
+    "message": "Access",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/components/AccessLifetimeFields.tsx"
       ]
     ],
     "translation": "Access"
@@ -2203,17 +2192,6 @@
     ],
     "translation": "Dark"
   },
-  "deviceClassEditor.newParameter.dataType": {
-    "message": "Data Type",
-    "placeholders": {},
-    "comments": [],
-    "origin": [
-      [
-        "src/features/deviceClassEditor/parametersEditor/NewParameterDialog.tsx"
-      ]
-    ],
-    "translation": "Data Type"
-  },
   "deviceClassEditor.paramClassDisplay.dataType": {
     "message": "Data Type",
     "placeholders": {},
@@ -3768,17 +3746,6 @@
     ],
     "translation": "Firmware Versions"
   },
-  "deviceClassEditor.structure3DViewport.meshRepaired": {
-    "message": "Fixed {fixedFolds, plural, one {# fold} other {# folds}}, merged {mergedVertices, plural, one {# duplicate vertex} other {# duplicate vertices}} and removed {removedFaces, plural, one {# bad face} other {# bad faces}}.",
-    "placeholders": {},
-    "comments": [],
-    "origin": [
-      [
-        "src/features/structure3DEditor/Viewport.tsx"
-      ]
-    ],
-    "translation": "Fixed {fixedFolds, plural, one {# fold} other {# folds}}, merged {mergedVertices, plural, one {# duplicate vertex} other {# duplicate vertices}} and removed {removedFaces, plural, one {# bad face} other {# bad faces}}."
-  },
   "navbar.exportCodex.archiveFileType": {
     "message": "Fluxite Codex Archive",
     "placeholders": {},
@@ -3828,12 +3795,6 @@
     "placeholders": {},
     "comments": [],
     "origin": [
-      [
-        "src/features/deviceClassEditor/localizationRegistry.ts"
-      ],
-      [
-        "src/features/deviceClassEditor/localizationRegistry.ts"
-      ],
       [
         "src/features/deviceClassEditor/localizationRegistry.ts"
       ]
@@ -4561,28 +4522,6 @@
     ],
     "translation": "License:"
   },
-  "deviceClassEditor.structure3DEditor.lifetime": {
-    "message": "Lifetime",
-    "placeholders": {},
-    "comments": [],
-    "origin": [
-      [
-        "src/features/structure3DEditor/Structure3DEditor.tsx"
-      ]
-    ],
-    "translation": "Lifetime"
-  },
-  "deviceClassEditor.resourceEditor.lifetime": {
-    "message": "Lifetime",
-    "placeholders": {},
-    "comments": [],
-    "origin": [
-      [
-        "src/features/deviceClassEditor/resourcesEditor/ResourceEditor.tsx"
-      ]
-    ],
-    "translation": "Lifetime"
-  },
   "deviceClassEditor.paramEditor.lifetime": {
     "message": "Lifetime",
     "placeholders": {},
@@ -4590,6 +4529,17 @@
     "origin": [
       [
         "src/features/deviceClassEditor/parametersEditor/ParameterEditor.tsx"
+      ]
+    ],
+    "translation": "Lifetime"
+  },
+  "accessLifetimeFields.lifetime": {
+    "message": "Lifetime",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/components/AccessLifetimeFields.tsx"
       ]
     ],
     "translation": "Lifetime"
@@ -4805,6 +4755,17 @@
       ]
     ],
     "translation": "Media Types"
+  },
+  "deviceClassEditor.structure3DViewport.meshRepaired": {
+    "message": "Merged {mergedVertices, plural, one {# duplicate vertex} other {# duplicate vertices}} and removed {removedFaces, plural, one {# bad face} other {# bad faces}}.",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/structure3DEditor/Viewport.tsx"
+      ]
+    ],
+    "translation": "Merged {mergedVertices, plural, one {# duplicate vertex} other {# duplicate vertices}} and removed {removedFaces, plural, one {# bad face} other {# bad faces}}."
   },
   "deviceClassEditor.paramInstantiation.minimumInstanceCount": {
     "message": "Minimum Instance Count",
@@ -5722,24 +5683,13 @@
     ],
     "translation": "Range start"
   },
-  "deviceClassEditor.structure3DEditor.read": {
+  "accessLifetimeFields.read": {
     "message": "Read",
     "placeholders": {},
     "comments": [],
     "origin": [
       [
-        "src/features/structure3DEditor/Structure3DEditor.tsx"
-      ]
-    ],
-    "translation": "Read"
-  },
-  "deviceClassEditor.resourceEditor.read": {
-    "message": "Read",
-    "placeholders": {},
-    "comments": [],
-    "origin": [
-      [
-        "src/features/deviceClassEditor/resourcesEditor/ResourceEditor.tsx"
+        "src/components/AccessLifetimeFields.tsx"
       ]
     ],
     "translation": "Read"
@@ -6707,17 +6657,6 @@
     ],
     "translation": "SHA-256"
   },
-  "navbar.mainMenu.showLoadingScreen": {
-    "message": "Show Loading Screen",
-    "placeholders": {},
-    "comments": [],
-    "origin": [
-      [
-        "src/features/topNavBar/AppMainMenu.tsx"
-      ]
-    ],
-    "translation": "Show Loading Screen"
-  },
   "sidebarLayout.open": {
     "message": "Show sidebar",
     "placeholders": {},
@@ -7654,17 +7593,6 @@
     ],
     "translation": "Undo {undoAction}"
   },
-  "deviceClassEditor.newParameter.unit": {
-    "message": "Unit",
-    "placeholders": {},
-    "comments": [],
-    "origin": [
-      [
-        "src/features/deviceClassEditor/parametersEditor/NewParameterDialog.tsx"
-      ]
-    ],
-    "translation": "Unit"
-  },
   "deviceClassEditor.paramClassDisplay.unit": {
     "message": "Unit",
     "placeholders": {},
@@ -7928,28 +7856,6 @@
     ],
     "translation": "View Migration Report"
   },
-  "deviceClassEditor.structure3DEditor.write": {
-    "message": "Write",
-    "placeholders": {},
-    "comments": [],
-    "origin": [
-      [
-        "src/features/structure3DEditor/Structure3DEditor.tsx"
-      ]
-    ],
-    "translation": "Write"
-  },
-  "deviceClassEditor.resourceEditor.write": {
-    "message": "Write",
-    "placeholders": {},
-    "comments": [],
-    "origin": [
-      [
-        "src/features/deviceClassEditor/resourcesEditor/ResourceEditor.tsx"
-      ]
-    ],
-    "translation": "Write"
-  },
   "deviceClassEditor.paramEditor.write": {
     "message": "Write",
     "placeholders": {},
@@ -7957,6 +7863,17 @@
     "origin": [
       [
         "src/features/deviceClassEditor/parametersEditor/ParameterEditor.tsx"
+      ]
+    ],
+    "translation": "Write"
+  },
+  "accessLifetimeFields.write": {
+    "message": "Write",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/components/AccessLifetimeFields.tsx"
       ]
     ],
     "translation": "Write"

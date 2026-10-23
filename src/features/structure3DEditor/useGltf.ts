@@ -21,10 +21,8 @@ export type GltfState =
 
 const LOADING: GltfState = { status: "loading" };
 
-// Parsed models by asset ID. A stored asset never changes, so an entry never
-// goes stale.
-// ponytail: entries live for the session, so a model that's no longer used
-// stays in memory; drop entries in app/assetLifecycle.ts if that adds up.
+// By asset ID. Stored assets never change, so entries never go stale.
+// TODO: entries are never dropped, so models no longer used stay in memory.
 const cache = new Map<string, GltfState>();
 const listeners = new Set<() => void>();
 let version = 0;
@@ -57,22 +55,15 @@ function load(assetId: string) {
   );
 }
 
-/** Reads a stored glTF file into a fresh set of three.js objects. */
 export async function parseGltfAsset(assetId: string): Promise<GLTF> {
   const asset = await assetStorage.getAsset(assetId);
   if (!asset) {
     throw new LocalizedError(ERRORS.assetMissing);
   }
-  // ponytail: parsed without a base path, so only a self-contained glTF
-  // loads: a GLB, or a .gltf with its buffers and images as data URIs.
-  // Resolving external files would need them stored alongside the model.
+  // TODO: no base path, so external buffers and images don't resolve.
   return new GLTFLoader().parseAsync(asset.data, "");
 }
 
-/**
- * The parsed glTF file of each of the given resources, in the same order.
- * Undefined for a resource that has no file.
- */
 export function useGltfs(resourceIds: EntityId[]): (GltfState | undefined)[] {
   const assetIds =
     useCurrentEditorPartShallow((editor) =>
@@ -96,7 +87,6 @@ export function useGltfs(resourceIds: EntityId[]): (GltfState | undefined)[] {
   );
 }
 
-/** The parsed glTF file of a resource. Undefined when it has no file. */
 export function useGltf(resourceId?: EntityId): GltfState | undefined {
   return useGltfs(resourceId ? [resourceId] : [])[0];
 }

@@ -266,15 +266,8 @@ export function parseParameterReference(
   }
 
   const codexId = CodexId(match[1]);
-  const indexStr = match[2];
-
-  // An index too large to hold exactly is no index at all.
-  const index = indexStr === undefined ? NaN : parseInt(indexStr, 10);
-  if (Number.isSafeInteger(index)) {
-    return { codexId, index };
-  }
-
-  return { codexId };
+  const index = Number(match[2]);
+  return Number.isSafeInteger(index) ? { codexId, index } : { codexId };
 }
 
 /**

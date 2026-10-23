@@ -377,7 +377,6 @@ describe("DmxParameterMapping - new ranges and entries", () => {
   const PAN = CodexId("pan");
   const TILT = CodexId("tilt");
 
-  // Gives a parameter its own minimum and maximum.
   function setBounds(codexId: CodexId, minimum: number, maximum: number) {
     updateCurrentEditor(testUndoLabel("Test Change"), (editor) => {
       const param = Object.values(editor.parameters).find(

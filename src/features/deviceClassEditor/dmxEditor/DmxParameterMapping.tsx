@@ -6,11 +6,11 @@ import { ReactNode, useId, useState } from "react";
 import { PlusIcon, TriangleAlertIcon, XIcon } from "lucide-react";
 import {
   DmxMapping,
+  DmxMappingBounds,
   DmxMappingRange,
   DmxUnmappedParam,
   EntityId,
   fcDataTypes,
-  Parameter,
   ParameterReference,
 } from "app/persistentState";
 import { StringSelector } from "components/StringSelector";
@@ -474,52 +474,35 @@ const RangeCard = ({
   );
 };
 
-// A number parameter's own minimum and maximum, so that what's new covers the
-// parameter's whole range.
-function numberBounds(param: Parameter): { start: number; end: number } {
-  return {
-    start: typeof param.minimum === "number" ? param.minimum : 0,
-    end: typeof param.maximum === "number" ? param.maximum : 1,
-  };
-}
-
-function getNewRange({
+function getNewBounds({
   param,
   paramClass,
   enumChoices,
-}: MappableParameter): DmxMappingRange {
+}: MappableParameter): DmxMappingBounds {
   switch (paramClass.dataType) {
-    case "boolean":
+    case fcDataTypes.BOOLEAN:
+      return { type: "bool", start: false, end: true };
+    case fcDataTypes.ENUM:
       return {
-        bounds: { type: "bool", start: false, end: true },
-        chunkValues: {
-          type: "range",
-          chunkStart: 0,
-          chunkEnd: 255,
-        },
+        type: "numeric",
+        start: 0,
+        end: enumChoices.length > 0 ? enumChoices.length - 1 : 0,
       };
-    case "enum": {
-      const lastIndex = enumChoices.length > 0 ? enumChoices.length - 1 : 0;
-      return {
-        bounds: { type: "numeric", start: 0, end: lastIndex },
-        chunkValues: {
-          type: "range",
-          chunkStart: 0,
-          chunkEnd: 255,
-        },
-      };
-    }
-    case "number":
+    case fcDataTypes.NUMBER:
     default:
       return {
-        bounds: { type: "numeric", ...numberBounds(param) },
-        chunkValues: {
-          type: "range",
-          chunkStart: 0,
-          chunkEnd: 255,
-        },
+        type: "numeric",
+        start: typeof param.minimum === "number" ? param.minimum : 0,
+        end: typeof param.maximum === "number" ? param.maximum : 1,
       };
   }
+}
+
+function getNewRange(mappable: MappableParameter): DmxMappingRange {
+  return {
+    bounds: getNewBounds(mappable),
+    chunkValues: { type: "range", chunkStart: 0, chunkEnd: 255 },
+  };
 }
 
 type ParameterCandidate = {
@@ -857,27 +840,7 @@ function getNewUnmappedParam(
   param: ParameterReference,
   mappable: MappableParameter,
 ): DmxUnmappedParam {
-  switch (mappable.paramClass.dataType) {
-    case fcDataTypes.BOOLEAN:
-      return {
-        parameter: param,
-        bounds: { type: "bool", start: false, end: true },
-      };
-    case fcDataTypes.ENUM: {
-      const lastIndex =
-        mappable.enumChoices.length > 0 ? mappable.enumChoices.length - 1 : 0;
-      return {
-        parameter: param,
-        bounds: { type: "numeric", start: 0, end: lastIndex },
-      };
-    }
-    case fcDataTypes.NUMBER:
-    default:
-      return {
-        parameter: param,
-        bounds: { type: "numeric", ...numberBounds(mappable.param) },
-      };
-  }
+  return { parameter: param, bounds: getNewBounds(mappable) };
 }
 
 /** Swaps the parameter an unmapped entry points at, resetting its bounds. */

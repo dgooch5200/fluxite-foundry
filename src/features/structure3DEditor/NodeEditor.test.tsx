@@ -1,25 +1,25 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import userEvent from "@testing-library/user-event";
-import { Group } from "three";
+import { Group, Matrix4 } from "three";
 import { act, render, screen } from "test/render";
 import {
   createEmptyDeviceClassEditor,
   resetAllStores,
-  testUndoLabel,
+  TEST_EDITOR_ID,
 } from "test/utils";
 import { assetStorage } from "app/assetStorage";
 import { EntityId } from "app/persistentState";
 import { openFile } from "app/openFile";
 import { initUndo, undo } from "app/undo";
-import { updateCurrentEditor } from "features/deviceClassEditor/state";
 import { NodeEditor } from "./NodeEditor";
 import { MOTION_LIBRARY } from "features/deviceClassEditor/export";
 import { MODEL_RESOURCE_CLASS } from "./validation";
 import {
-  addMotionResource,
   addStructureWithRoot,
+  control,
   currentEditor,
   ROOT,
+  showModelAtRoot,
 } from "./testFixtures";
 
 vi.mock("app/openFile", () => ({ openFile: vi.fn() }));
@@ -31,10 +31,6 @@ vi.mock("three-stdlib", () => ({
   },
 }));
 
-const MODEL = EntityId("model-resource");
-const EDITOR = EntityId("test-editor-id");
-
-// A model whose default scene holds a base with a head on it.
 function fakeGltf() {
   const scene = new Group();
   scene.name = "Scene";
@@ -93,7 +89,7 @@ describe("NodeEditor model", () => {
     });
 
     // The whole import is one change.
-    act(() => undo(EDITOR));
+    act(() => undo(TEST_EDITOR_ID));
     expect(currentEditor().resources).toEqual({});
     expect(currentEditor().structure3DNodes[ROOT].visual).toBeUndefined();
   });
@@ -104,16 +100,7 @@ describe("NodeEditor model", () => {
       new ArrayBuffer(4),
       "model/gltf-binary",
     );
-    addMotionResource(MODEL);
-    updateCurrentEditor(testUndoLabel("Show the model"), (editor) => {
-      editor.resources[MODEL].default = "model.glb";
-      editor.resourceAssets["model.glb"] = assetId;
-      editor.structure3DNodes[ROOT].visual = {
-        quality: "high",
-        resource: MODEL,
-        nodeOrSceneName: "Yoke",
-      };
-    });
+    showModelAtRoot(assetId, "Yoke");
     render(<NodeEditor id={ROOT} issues={[]} />);
 
     const missing = await screen.findByText(
@@ -149,14 +136,12 @@ describe("NodeEditor with references an import left empty", () => {
   });
 
   it("shows the node rather than failing", () => {
-    // What import makes of `"parameter": ""` and `"visual": {"high": ""}`
     addStructureWithRoot({
       controls: [
-        {
-          type: "rotate",
-          axis: "z",
-          target: { type: "parameter", parameter: { id: EntityId("") } },
-        },
+        control("rotate", {
+          type: "parameter",
+          parameter: { id: EntityId("") },
+        }),
       ],
       visual: { quality: "high", resource: EntityId("") },
     });
@@ -164,5 +149,44 @@ describe("NodeEditor with references an import left empty", () => {
     render(<NodeEditor id={ROOT} issues={[]} />);
 
     expect(screen.getByText("Controls")).toBeInTheDocument();
+  });
+});
+
+describe("NodeEditor transform", () => {
+  beforeEach(() => {
+    resetAllStores();
+    createEmptyDeviceClassEditor();
+    addStructureWithRoot();
+  });
+
+  const transform = () => currentEditor().structure3DNodes[ROOT].transform;
+
+  it("edits translate and rotate, then a matrix that starts at identity", async () => {
+    const user = userEvent.setup();
+    const enter = async (name: string, text: string) => {
+      const input = screen.getByRole("textbox", { name });
+      await user.clear(input);
+      await user.type(input, `${text}{Enter}`);
+    };
+    render(<NodeEditor id={ROOT} issues={[]} />);
+
+    await enter("Translate X", "2");
+    await enter("Rotate Z", "-90");
+    expect(transform()).toEqual({
+      type: "trs",
+      translate: [2, 0, 0],
+      rotate: [0, 0, 270],
+    });
+
+    await user.click(screen.getByRole("radio", { name: "Matrix" }));
+    expect(transform()).toEqual({
+      type: "matrix",
+      matrix: new Matrix4().toArray(),
+    });
+
+    await enter("Matrix row 1, column 4", "5");
+    expect(transform()).toMatchObject({
+      matrix: new Matrix4().setPosition(5, 0, 0).toArray(),
+    });
   });
 });

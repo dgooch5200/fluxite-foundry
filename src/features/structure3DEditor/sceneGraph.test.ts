@@ -24,10 +24,10 @@ import {
 import {
   addMissingNormals,
   buildStructureObject,
+  copyGltfObject,
   exportGlb,
-  shadeSmooth,
-  findGltfObject,
   gltfObjectNames,
+  shadeSmooth,
 } from "./sceneGraph";
 
 function makeNode(fields: Partial<Structure3DNode> = {}): Structure3DNode {
@@ -70,6 +70,11 @@ function expectVector(actual: Vector3, expected: [number, number, number]) {
   actual.toArray().forEach((v, i) => expect(v).toBeCloseTo(expected[i]));
 }
 
+const normalAt = (mesh: Mesh, i: number) =>
+  new Vector3()
+    .fromBufferAttribute(mesh.geometry.getAttribute("normal"), i)
+    .toArray();
+
 describe("buildStructureObject", () => {
   test("a rotate control turns everything below its node", () => {
     const root = buildStructureObject(
@@ -99,7 +104,7 @@ describe("buildStructureObject", () => {
       },
       [EntityId("slide")],
       {
-        controlValue: (_id, index) => (index === 1 ? 0.5 : 7),
+        controlValue: (control) => (control.type === "linear" ? 0.5 : 7),
         model: () => model,
       },
     );
@@ -175,7 +180,6 @@ function makeGltf() {
   base.position.set(1, 2, 3);
   base.rotation.set(0.5, 0, 0);
   base.scale.setScalar(2);
-  // GLTFLoader sanitizes names and keeps the original in userData.
   const arm = named("Pan_Arm");
   arm.userData.name = "Pan Arm";
   const main = named("Scene", base, arm);
@@ -183,40 +187,40 @@ function makeGltf() {
   return { scene: main, scenes: [main, alt] };
 }
 
-describe("findGltfObject", () => {
+describe("copyGltfObject", () => {
   test("finds a scene by name", () => {
     const gltf = makeGltf();
-    const found = findGltfObject(gltf, "Alt");
+    const found = copyGltfObject(gltf, "Alt");
     expect(found?.name).toBe("Alt");
     expect(found).not.toBe(gltf.scenes[1]);
   });
 
   test("finds a node by name, copied without its placement", () => {
-    const found = findGltfObject(makeGltf(), "Base");
+    const found = copyGltfObject(makeGltf(), "Base");
     expect(found?.children.map((c) => c.name)).toEqual(["Head"]);
     expect(found?.position.toArray()).toEqual([0, 0, 0]);
     expect(found?.quaternion.toArray()).toEqual([0, 0, 0, 1]);
   });
 
   test("keeps the scale a node has in the file, including its ancestors'", () => {
-    expect(findGltfObject(makeGltf(), "Base")?.scale.toArray()).toEqual([
+    expect(copyGltfObject(makeGltf(), "Base")?.scale.toArray()).toEqual([
       2, 2, 2,
     ]);
-    expect(findGltfObject(makeGltf(), "Head")?.scale.toArray()).toEqual([
+    expect(copyGltfObject(makeGltf(), "Head")?.scale.toArray()).toEqual([
       2, 2, 2,
     ]);
   });
 
   test("finds a node by its name in the file", () => {
-    expect(findGltfObject(makeGltf(), "Pan Arm")?.name).toBe("Pan_Arm");
+    expect(copyGltfObject(makeGltf(), "Pan Arm")?.name).toBe("Pan_Arm");
   });
 
   test.each([undefined, ""])("name %j gives the default scene", (name) => {
-    expect(findGltfObject(makeGltf(), name)?.name).toBe("Scene");
+    expect(copyGltfObject(makeGltf(), name)?.name).toBe("Scene");
   });
 
   test("an unknown name finds nothing", () => {
-    expect(findGltfObject(makeGltf(), "Nope")).toBeUndefined();
+    expect(copyGltfObject(makeGltf(), "Nope")).toBeUndefined();
   });
 });
 
@@ -254,12 +258,7 @@ describe("addMissingNormals", () => {
 
     addMissingNormals(new Group().add(folded, withNormals));
 
-    const normals = folded.geometry.getAttribute("normal");
-    const normal = (i: number) => [
-      normals.getX(i),
-      normals.getY(i),
-      normals.getZ(i),
-    ];
+    const normal = (i: number) => normalAt(folded, i);
     // Shared vertices would have averaged the two faces' normals.
     expect([0, 1, 2].map(normal)).toEqual([
       [0, 0, 1],
@@ -278,8 +277,7 @@ describe("addMissingNormals", () => {
 });
 
 describe("shadeSmooth", () => {
-  // Two triangles meeting along the edge from (0, 0, 0) to (0, 1, 0), the
-  // second turned up out of the first's plane by the given angle.
+  // Two triangles sharing the edge (0, 0, 0)-(0, 1, 0), folded by `degrees`.
   function foldedMesh(degrees: number) {
     const angle = (degrees * Math.PI) / 180;
     const geometry = new BufferGeometry();
@@ -297,14 +295,8 @@ describe("shadeSmooth", () => {
     return new Mesh(geometry);
   }
   // The normal at a vertex of the shared edge, as each triangle has it.
-  const edgeNormals = (mesh: Mesh) => {
-    const normals = mesh.geometry.getAttribute("normal");
-    return [0, 3].map((i) =>
-      [normals.getX(i), normals.getY(i), normals.getZ(i)].map((n) =>
-        Number(n.toFixed(3)),
-      ),
-    );
-  };
+  const edgeNormals = (mesh: Mesh) =>
+    [0, 3].map((i) => normalAt(mesh, i).map((n) => Number(n.toFixed(3))));
 
   test("blends faces meeting at a shallow angle, and keeps sharp edges", () => {
     const shallow = foldedMesh(10);
@@ -334,8 +326,6 @@ describe("shadeSmooth", () => {
 
 describe("exportGlb", () => {
   test("writes the file back with its names and animations", async () => {
-    // The loader renames "Moving Head" to "Moving_Head" and points the
-    // animation at that name.
     const head = new Mesh(new BoxGeometry(), new MeshStandardMaterial());
     head.name = "Moving Head";
     const scene = new Scene();
@@ -360,8 +350,6 @@ describe("exportGlb", () => {
     );
 
     expect(gltfObjectNames(exported)).toContain("Moving Head");
-    // The loader keeps no original for a scene's name, so it's read from the
-    // file.
     expect(exported.parser.json.scenes[0].name).toBe("Main Scene");
     expect(exported.animations).toHaveLength(1);
     expect(exported.animations[0].tracks).toHaveLength(1);

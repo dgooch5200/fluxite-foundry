@@ -117,7 +117,6 @@ export function useResourceAssetId(resource?: Resource): string | undefined {
 // Write
 // ---------------------------------------------------------------------------
 
-/** Returns the new resource's ID, or undefined if it couldn't be created. */
 export function createNewResource(
   library: string | undefined,
   resourceClass: CodexId,
@@ -231,7 +230,6 @@ function getFileName(assetId: string, mediaType?: string): string {
   }
 }
 
-/** The file extension (without the dot) used for assets of a media type. */
 export function getFileExtension(mediaType?: string): string | null {
   switch (mediaType) {
     case "image/png":

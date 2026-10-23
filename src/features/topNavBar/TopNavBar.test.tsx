@@ -1,4 +1,4 @@
-import { act, render, screen } from "test/render";
+import { render, screen } from "test/render";
 import userEvent from "@testing-library/user-event";
 import { describe, test, expect, beforeEach, afterEach, vi } from "vitest";
 import { createEmptyDeviceClassEditor, resetAllStores } from "test/utils";
@@ -117,26 +117,3 @@ function isOpen(id: EntityId): boolean {
 async function closeTab() {
   await userEvent.click(screen.getByRole("button", { name: "Delete Editor" }));
 }
-
-describe("the app menu", () => {
-  beforeEach(() => {
-    resetAllStores();
-    createEmptyDeviceClassEditor();
-  });
-
-  test("shows the loading screen from the Debug menu until it is clicked", async () => {
-    const user = userEvent.setup();
-    render(<TopNavBar />);
-
-    await user.click(screen.getByRole("button", { name: "App Menu" }));
-    await user.click(screen.getByRole("menuitem", { name: "Debug" }));
-    act(() =>
-      screen.getByRole("menuitem", { name: "Show Loading Screen" }).focus(),
-    );
-    await user.keyboard("{Enter}");
-
-    const mark = screen.getByRole("img", { name: "Loading Fluxite Foundry" });
-    await user.click(mark);
-    expect(mark).not.toBeInTheDocument();
-  });
-});

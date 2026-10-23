@@ -3,6 +3,7 @@ import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
 import { BoxIcon, PlusIcon, Trash2Icon, TriangleAlertIcon } from "lucide-react";
 import { EntityId, Structure3DNode } from "app/persistentState";
+import { LabeledIconButton } from "components/LabeledIconButton";
 import { Button } from "components/scn-ui/Button";
 import { Toggle } from "components/scn-ui/Toggle";
 import {
@@ -35,16 +36,11 @@ const LABELS = {
 };
 
 interface NodeTreeProps {
-  /** Undefined when the structure itself is selected. */
   selectedNodeId?: EntityId;
   issues: Record<EntityId, Structure3DIssue[]>;
   onSelect: (nodeId?: EntityId) => void;
 }
 
-/**
- * The structure's nodes as an indented tree, topped by a row for the structure
- * itself.
- */
 export const NodeTree = ({
   selectedNodeId,
   issues,
@@ -53,8 +49,6 @@ export const NodeTree = ({
   const { _ } = useLingui();
   const structure = useStructure3D();
   const nodes = useStructure3DNodes();
-  // When the sidebar is a drawer, it gets out of the way once the user has
-  // picked or added a node.
   const { close } = useSidebarLayout();
 
   const select = (nodeId?: EntityId) => {
@@ -142,24 +136,18 @@ const Branch = ({ ids, ...props }: BranchProps) => {
               <IssuesIcon issues={issues[id] ?? []} />
               {selected && (
                 <>
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    aria-label={_(LABELS.addChild)}
-                    title={_(LABELS.addChild)}
+                  <LabeledIconButton
+                    label={_(LABELS.addChild)}
                     onClick={() => onAddChild(id)}
                   >
                     <PlusIcon className="size-4" />
-                  </Button>
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    aria-label={_(LABELS.delete)}
-                    title={_(LABELS.delete)}
+                  </LabeledIconButton>
+                  <LabeledIconButton
+                    label={_(LABELS.delete)}
                     onClick={() => onDelete(id)}
                   >
                     <Trash2Icon className="size-4" />
-                  </Button>
+                  </LabeledIconButton>
                 </>
               )}
             </div>
@@ -171,7 +159,6 @@ const Branch = ({ ids, ...props }: BranchProps) => {
   );
 };
 
-/** A warning sign beside a node that has issues, which lists them on hover. */
 const IssuesIcon = ({ issues }: { issues: Structure3DIssue[] }) => {
   const { _ } = useLingui();
 

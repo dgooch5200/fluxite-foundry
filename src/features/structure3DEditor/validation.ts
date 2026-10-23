@@ -1,6 +1,4 @@
-// Checks a device class's 3D structure for data that refers to things that
-// don't fit or no longer exist. These are soft warnings: the data is still
-// stored, and the editor points the user at what to fix.
+// Soft warnings: the data is still stored, and the editor points at what to fix.
 
 import { MessageDescriptor } from "@lingui/core";
 import { msg } from "@lingui/core/macro";
@@ -18,7 +16,6 @@ import { MOTION_LIBRARY } from "features/deviceClassEditor/export";
 
 export const MODEL_RESOURCE_CLASS = "3d-model";
 
-// Which part of a node's form an issue belongs to.
 export type Structure3DIssueField = "model" | `control.${number}`;
 
 export interface Structure3DIssue {
@@ -58,7 +55,6 @@ const ISSUES = {
   }),
 };
 
-// The unit a control's parameter has to be measured in, if any.
 const REQUIRED_UNITS: Record<
   Structure3DControlType,
   { unit: FCUnitName; issue: MessageDescriptor } | undefined
@@ -68,7 +64,6 @@ const REQUIRED_UNITS: Record<
   beam: undefined,
 };
 
-/** The unit of a parameter, taken from its class. */
 export function parameterUnitName(
   parameter: Parameter,
   libraries: Record<string, string>,
@@ -85,7 +80,6 @@ export function parameterUnitName(
   return resolved?.library.parameterClasses[resolved.classId]?.unit?.name;
 }
 
-/** Whether a parameter in the given unit can drive a control of this type. */
 export function isCompatibleUnit(
   controlType: Structure3DControlType,
   unit: FCUnitName | undefined,
@@ -102,7 +96,6 @@ export function isModelResource(resource: Resource): boolean {
   );
 }
 
-/** The issues of each node of the structure that has any. */
 export function validateStructure3D(
   editor: DeviceClassDocument,
   store: Readonly<LibraryStore>,

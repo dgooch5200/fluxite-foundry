@@ -7,23 +7,23 @@ import { act, render, screen } from "test/render";
 import {
   createEmptyDeviceClassEditor,
   resetAllStores,
-  testUndoLabel,
+  TEST_EDITOR_ID,
 } from "test/utils";
 import { assetStorage } from "app/assetStorage";
 import { EntityId } from "app/persistentState";
 import { initUndo, undo } from "app/undo";
 import { setDmxParamStates } from "features/deviceClassEditor/controller/state";
-import { updateCurrentEditor } from "features/deviceClassEditor/state";
 import { ModelMenu, Structure3DViewport } from "./Viewport";
 import { gltfObjectNames } from "./sceneGraph";
 import { parseGltfAsset } from "./useGltf";
 import {
   addMotionParameters,
-  addMotionResource,
   addStructureWithRoot,
   currentEditor,
+  MODEL,
   PAN,
   ROOT,
+  showModelAtRoot,
   TRACK,
 } from "./testFixtures";
 
@@ -85,7 +85,6 @@ describe("Structure3DViewport", () => {
     ).toHaveAttribute("aria-valuemax", "1");
     expect(screen.queryByText(DRIVEN_BY_DMX)).not.toBeInTheDocument();
 
-    // Posing is only for looking, and doesn't change the document.
     const before = currentEditor();
     act(() => pan.focus());
     await user.keyboard("{ArrowRight}");
@@ -190,7 +189,7 @@ describe("Structure3DViewport", () => {
     render(<Structure3DViewport onSelectNode={vi.fn()} />);
 
     act(() =>
-      setDmxParamStates(EntityId("test-editor-id"), [
+      setDmxParamStates(TEST_EDITOR_ID, [
         { param: { id: "pan" }, value: { type: "numeric", value: 90 } },
       ]),
     );
@@ -207,11 +206,8 @@ describe("Structure3DViewport", () => {
 });
 
 describe("ModelMenu", () => {
-  const MODEL = EntityId("model-resource");
-  const EDITOR = EntityId("test-editor-id");
   let stopUndo: () => void;
 
-  // Stores a GLB of a box, inside out if asked, and shows it at the root node.
   async function showBox({ insideOut }: { insideOut: boolean }) {
     const geometry = new BoxGeometry();
     if (insideOut) {
@@ -236,18 +232,7 @@ describe("ModelMenu", () => {
       "model/gltf-binary",
       "Box.glb",
     );
-
-    addMotionResource(MODEL);
-    updateCurrentEditor(testUndoLabel("Show the box"), (editor) => {
-      editor.resources[MODEL].mediaType = "model/gltf-binary";
-      editor.resources[MODEL].default = "box.glb";
-      editor.resourceAssets["box.glb"] = assetId;
-      editor.structure3DNodes[ROOT].visual = {
-        quality: "high",
-        resource: MODEL,
-        nodeOrSceneName: "Moving Head",
-      };
-    });
+    showModelAtRoot(assetId, "Moving Head");
   }
 
   const renderMenu = () =>
@@ -299,7 +284,7 @@ describe("ModelMenu", () => {
       "Moving Head",
     );
 
-    act(() => undo(EDITOR));
+    act(() => undo(TEST_EDITOR_ID));
     expect(modelAssetId()).toBe(originalAssetId);
   });
 

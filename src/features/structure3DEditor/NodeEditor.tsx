@@ -12,6 +12,7 @@ import {
   XIcon,
 } from "lucide-react";
 import { toast } from "sonner";
+import { Matrix4 } from "three";
 import { useAuthoringLocale } from "app/store";
 import {
   CodexId,
@@ -29,6 +30,7 @@ import {
   Vec3,
 } from "app/persistentState";
 import { FieldSet } from "components/FieldSet";
+import { LabeledIconButton } from "components/LabeledIconButton";
 import { NumberInput } from "components/NumberInput";
 import { RenderError } from "components/RenderError";
 import { ValidatedInput } from "components/ValidatedInput";
@@ -42,12 +44,16 @@ import {
   validateNewItemId,
 } from "utils/inputValidation";
 import {
+  assignOrDelete,
   errorMessage,
   serializeParameterReference,
   wrapDegrees,
 } from "utils/utils";
-import { entityIdAsCodexId } from "features/deviceClassEditor/referenceResolution";
-import { gltfObjectNames } from "./sceneGraph";
+import {
+  entityIdAsCodexId,
+  resourceCurrentCodexId,
+} from "features/deviceClassEditor/referenceResolution";
+import { gltfObjectNames, nodeMatrix } from "./sceneGraph";
 import { useGltf } from "./useGltf";
 import {
   ControlParameterOption,
@@ -132,8 +138,7 @@ const MESSAGES = {
   }),
 };
 
-// The value that stands for "none" in selects, which can't use an empty string.
-// No ID or schema value contains angle brackets.
+// "None" in selects, apart from the "" a broken reference can hold.
 const NONE = "<none>";
 
 const AXES = Object.values(structure3DAxes);
@@ -141,20 +146,11 @@ const AXES = Object.values(structure3DAxes);
 // From the structure-3d schema
 const CONTROL_GROUP_PATH = /^[^?]+\?(\/groups\/\d+)+?$/;
 
-// prettier-ignore
-const IDENTITY_MATRIX = [
-  1, 0, 0, 0,
-  0, 1, 0, 0,
-  0, 0, 1, 0,
-  0, 0, 0, 1,
-];
-
 interface Props {
   id: EntityId;
   issues: Structure3DIssue[];
 }
 
-/** The form for one node of a 3D structure. */
 export const NodeEditor = ({ id, issues }: Props) => {
   const node = useStructure3DNode(id);
   const friendlyName = useStructure3DNodeFriendlyName(id);
@@ -217,12 +213,13 @@ export const NodeEditor = ({ id, issues }: Props) => {
             id={`${idPrefix}-accessoryLocation`}
             value={node.accessoryLocation ?? ""}
             onConfirm={(newValue) =>
-              modify((draft) => {
-                // Deleting an absent key records no change, where assigning
-                // undefined would.
-                if (newValue) draft.accessoryLocation = newValue;
-                else delete draft.accessoryLocation;
-              })
+              modify((draft) =>
+                assignOrDelete(
+                  draft,
+                  "accessoryLocation",
+                  newValue || undefined,
+                ),
+              )
             }
           />
         </FieldSet>
@@ -245,10 +242,6 @@ export const NodeEditor = ({ id, issues }: Props) => {
 
 type Modify = (recipe: (draft: Draft<Structure3DNode>) => void) => void;
 
-// ---------------------------------------------------------------------------
-// Transform
-// ---------------------------------------------------------------------------
-
 interface TransformFieldsProps {
   transform: Structure3DTransform;
   modify: Modify;
@@ -258,22 +251,17 @@ const TransformFields = ({ transform, modify }: TransformFieldsProps) => {
   const { _ } = useLingui();
   const labelId = useId();
 
-  // Switching starts the other kind of transform from identity, rather than
-  // converting, as a matrix can hold things translate and rotate can't.
-  const setType = (type: Structure3DTransform["type"]) =>
+  const setTransform = (newTransform: Structure3DTransform) =>
     modify((draft) => {
-      if (draft.transform.type !== type) {
-        draft.transform =
-          type === "trs" ? { type } : { type, matrix: [...IDENTITY_MATRIX] };
-      }
+      draft.transform = newTransform;
     });
 
-  const modifyTrs = (key: "translate" | "rotate", value: Vec3) =>
-    modify((draft) => {
-      if (draft.transform.type === "trs") {
-        draft.transform[key] = value;
-      }
-    });
+  // Starts from identity: a matrix can hold shear that translate and rotate can't.
+  const setType = (type: Structure3DTransform["type"]) =>
+    type !== transform.type &&
+    setTransform(
+      type === "trs" ? { type } : { type, matrix: new Matrix4().toArray() },
+    );
 
   return (
     <FieldSet>
@@ -317,7 +305,9 @@ const TransformFields = ({ transform, modify }: TransformFieldsProps) => {
                 _({ ...MESSAGES.translateAxis, values: { axis } })
               }
               value={transform.translate}
-              onCommit={(value) => modifyTrs("translate", value)}
+              onCommit={(translate) =>
+                setTransform({ ...transform, translate })
+              }
             />
             <Vec3Fields
               label={
@@ -330,21 +320,18 @@ const TransformFields = ({ transform, modify }: TransformFieldsProps) => {
               }
               value={transform.rotate}
               // The schema only allows angles from 0 to 360.
-              onCommit={(value) =>
-                modifyTrs("rotate", value.map(wrapDegrees) as Vec3)
+              onCommit={(rotate) =>
+                setTransform({
+                  ...transform,
+                  rotate: rotate.map(wrapDegrees) as Vec3,
+                })
               }
             />
           </>
         ) : (
           <MatrixFields
             matrix={transform.matrix}
-            onCommit={(matrix) =>
-              modify((draft) => {
-                if (draft.transform.type === "matrix") {
-                  draft.transform.matrix = matrix;
-                }
-              })
-            }
+            onCommit={(matrix) => setTransform({ type: "matrix", matrix })}
           />
         )}
       </div>
@@ -377,22 +364,41 @@ const Vec3Fields = ({
         {label}
       </span>
       {AXES.map((axis, index) => (
-        <NumberInput
+        <ElementInput
           key={axis}
-          aria-label={axisLabel(axis.toUpperCase())}
-          className="w-24"
-          hideControls
-          value={value[index]}
-          onCommit={(newValue) => {
-            const next: Vec3 = [...value];
-            next[index] = newValue;
-            onCommit(next);
-          }}
+          label={axisLabel(axis.toUpperCase())}
+          values={value}
+          index={index}
+          onCommit={(next) => onCommit(next as Vec3)}
         />
       ))}
     </div>
   );
 };
+
+interface ElementInputProps {
+  label: string;
+  values: number[];
+  index: number;
+  onCommit: (values: number[]) => void;
+}
+
+const ElementInput = ({
+  label,
+  values,
+  index,
+  onCommit,
+}: ElementInputProps) => (
+  <NumberInput
+    aria-label={label}
+    className="w-24"
+    hideControls
+    value={values[index]}
+    onCommit={(value) =>
+      onCommit(values.map((old, i) => (i === index ? value : old)))
+    }
+  />
+);
 
 interface MatrixFieldsProps {
   matrix: number[];
@@ -401,7 +407,7 @@ interface MatrixFieldsProps {
 
 const MatrixFields = ({ matrix, onCommit }: MatrixFieldsProps) => {
   const { _ } = useLingui();
-  const cells = matrixCells(matrix);
+  const cells = nodeMatrix({ type: "matrix", matrix }).toArray();
 
   return (
     <div className="grid w-fit grid-cols-4 gap-2">
@@ -409,20 +415,15 @@ const MatrixFields = ({ matrix, onCommit }: MatrixFieldsProps) => {
         [0, 1, 2, 3].map((column) => {
           const index = column * 4 + row;
           return (
-            <NumberInput
+            <ElementInput
               key={index}
-              aria-label={_({
+              label={_({
                 ...MESSAGES.matrixCell,
                 values: { row: row + 1, column: column + 1 },
               })}
-              className="w-24"
-              hideControls
-              value={cells[index]}
-              onCommit={(newValue) => {
-                const next = [...cells];
-                next[index] = newValue;
-                onCommit(next);
-              }}
+              values={cells}
+              index={index}
+              onCommit={onCommit}
             />
           );
         }),
@@ -430,22 +431,6 @@ const MatrixFields = ({ matrix, onCommit }: MatrixFieldsProps) => {
     </div>
   );
 };
-
-// A matrix's 16 values, column-major as in glTF. The schema also allows 12
-// values, which leave out the bottom row.
-function matrixCells(matrix: number[]): number[] {
-  if (matrix.length === 12) {
-    return [0, 1, 2, 3].flatMap((column) => [
-      ...matrix.slice(column * 3, column * 3 + 3),
-      column === 3 ? 1 : 0,
-    ]);
-  }
-  return IDENTITY_MATRIX.map((identity, index) => matrix[index] ?? identity);
-}
-
-// ---------------------------------------------------------------------------
-// Controls
-// ---------------------------------------------------------------------------
 
 interface ControlsFieldsProps {
   controls: Structure3DControl[];
@@ -556,7 +541,6 @@ const ControlItem = ({
       }
     });
 
-  // A parameter can only be offered when there is one to pick.
   const drivenByValues =
     parameterOptions.length > 0 || target.type === "parameter"
       ? ["parameter", "controlGroups"]
@@ -618,7 +602,7 @@ const ControlItem = ({
             displayValues={[
               _(MESSAGES.none),
               ...Object.values(structure3DCommonAxes).map((axis) =>
-                axis.length === 1 ? axis.toUpperCase() : capitalCase(axis),
+                capitalCase(axis),
               ),
             ]}
             selectedValue={control.commonAxis ?? NONE}
@@ -663,7 +647,7 @@ const ControlItem = ({
             <ParameterSelect
               id={`${idPrefix}-parameter`}
               selected={target.parameter}
-              options={compatibleOptions(control.type)}
+              compatibleOptions={compatibleOptions(control.type)}
               allOptions={parameterOptions}
               onSelect={(ref) =>
                 onChange((draft) => {
@@ -693,16 +677,13 @@ const ControlItem = ({
             />
           </FieldSet>
         )}
-        <Button
-          size="icon"
-          variant="ghost"
+        <LabeledIconButton
           className="ml-auto"
-          aria-label={_(MESSAGES.removeControl)}
-          title={_(MESSAGES.removeControl)}
+          label={_(MESSAGES.removeControl)}
           onClick={onRemove}
         >
           <Trash2Icon />
-        </Button>
+        </LabeledIconButton>
       </div>
       <FieldIssues issues={issues} />
     </Item>
@@ -712,21 +693,16 @@ const ControlItem = ({
 interface ParameterSelectProps {
   id: string;
   selected: ParameterReference;
-  // The parameters that fit the control
-  options: ControlParameterOption[];
+  compatibleOptions: ControlParameterOption[];
   allOptions: ControlParameterOption[];
   onSelect: (ref: ParameterReference) => void;
 }
 
-/**
- * Picks from the parameters that fit a control. The parameter that is chosen
- * already is shown even if it doesn't fit or no longer exists, so the form
- * doesn't misreport the data; its issue is shown beside the control.
- */
+/** Keeps the chosen parameter listed even when it no longer fits or exists. */
 const ParameterSelect = ({
   id,
   selected,
-  options,
+  compatibleOptions,
   allOptions,
   onSelect,
 }: ParameterSelectProps) => {
@@ -740,8 +716,8 @@ const ParameterSelect = ({
       index: selected.index,
     });
 
-  const labels = options.map((option) => option.label);
-  if (!options.some(isSelected)) {
+  const labels = compatibleOptions.map((option) => option.label);
+  if (!compatibleOptions.some(isSelected)) {
     labels.push(selectedLabel);
   }
 
@@ -752,7 +728,9 @@ const ParameterSelect = ({
       values={labels}
       selectedValue={selectedLabel}
       onSelectionChanged={(label) => {
-        const option = options.find((option) => option.label === label);
+        const option = compatibleOptions.find(
+          (option) => option.label === label,
+        );
         if (option && !isSelected(option)) {
           onSelect(option.ref);
         }
@@ -794,17 +772,15 @@ const ControlGroupsField = ({
               onChange(paths.map((p, i) => (i === index ? newValue : p)))
             }
           />
-          <Button
-            size="icon"
-            variant="ghost"
-            aria-label={_({
+          <LabeledIconButton
+            label={_({
               ...MESSAGES.removeControlGroupPath,
               values: { number: index + 1 },
             })}
             onClick={() => onChange(paths.filter((_p, i) => i !== index))}
           >
             <XIcon />
-          </Button>
+          </LabeledIconButton>
         </div>
       ))}
       <ValidatedInput
@@ -828,10 +804,6 @@ function validateControlGroupPath(input: string): InputValidationResult {
     : { isValid: false, feedback: MESSAGES.invalidControlGroupPath };
 }
 
-// ---------------------------------------------------------------------------
-// Model
-// ---------------------------------------------------------------------------
-
 interface ModelFieldsProps {
   id: EntityId;
   visual?: Structure3DVisual;
@@ -839,7 +811,6 @@ interface ModelFieldsProps {
   modify: Modify;
 }
 
-/** The node's 3D model: a 3d-model resource, and what to show of it. */
 const ModelFields = ({ id, visual, issues, modify }: ModelFieldsProps) => {
   const { _ } = useLingui();
   const idPrefix = useId();
@@ -852,22 +823,18 @@ const ModelFields = ({ id, visual, issues, modify }: ModelFieldsProps) => {
       id: resourceId,
       label: resource.codexId,
     }));
-  // The resource that is chosen already is shown even if it doesn't fit or no
-  // longer exists; its issue is shown below.
   if (visual && !choices.some((choice) => choice.id === visual.resource)) {
     choices.push({
       id: visual.resource,
-      label: resources[visual.resource]?.codexId ?? visual.resource,
+      label: resourceCurrentCodexId({ resources }, visual.resource),
     });
   }
 
-  // The names in the model, once it has been read. Until then, or if it can't
-  // be, the name is typed.
+  // Until the model has been read, or if it can't be, the name is typed.
   const names =
     gltf?.status === "loaded" ? gltfObjectNames(gltf.gltf) : undefined;
   const name = visual?.nodeOrSceneName;
   const nameMissing = names && name && !names.includes(name);
-  // A stored name the model doesn't have is still offered, with its issue below.
   const nameChoices = nameMissing ? [...names, name] : (names ?? []);
 
   const modelIssues = [...issues];
@@ -889,9 +856,9 @@ const ModelFields = ({ id, visual, issues, modify }: ModelFieldsProps) => {
 
   const setNodeOrSceneName = (newValue: string) =>
     modify((draft) => {
-      if (!draft.visual) return;
-      if (newValue) draft.visual.nodeOrSceneName = newValue;
-      else delete draft.visual.nodeOrSceneName;
+      if (draft.visual) {
+        assignOrDelete(draft.visual, "nodeOrSceneName", newValue || undefined);
+      }
     });
 
   const importModel = () =>
@@ -1007,10 +974,6 @@ const ModelFields = ({ id, visual, issues, modify }: ModelFieldsProps) => {
     </FieldSet>
   );
 };
-
-// ---------------------------------------------------------------------------
-// Utils
-// ---------------------------------------------------------------------------
 
 const FieldIssues = ({ issues }: { issues: Structure3DIssue[] }) => {
   const { _ } = useLingui();

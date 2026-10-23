@@ -129,7 +129,7 @@ describe("migrateState", () => {
   });
 
   describe("when the state is already at the current version", () => {
-    it("drops a view setting it no longer knows rather than resetting", () => {
+    it("drops a view setting it no longer knows", () => {
       const state = getDefaultState();
       const stale = {
         ...state,

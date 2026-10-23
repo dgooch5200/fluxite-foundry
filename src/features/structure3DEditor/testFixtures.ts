@@ -2,33 +2,35 @@ import { useAppPersistentStore } from "app/store";
 import {
   CodexId,
   DeviceClassDocument,
-  documentTypes,
   EntityId,
+  Structure3DControl,
   Structure3DNode,
 } from "app/persistentState";
 import { testUndoLabel } from "test/utils";
-import { updateCurrentEditor } from "features/deviceClassEditor/state";
-import { MOTION_LIBRARY } from "features/deviceClassEditor/export";
+import {
+  getCurrentEditor,
+  updateCurrentEditor,
+} from "features/deviceClassEditor/state";
+import {
+  MOTION_LIBRARY,
+  STRUCTURE_3D_CLASS,
+} from "features/deviceClassEditor/export";
 import { MODEL_RESOURCE_CLASS } from "./validation";
 
 export const PAN = EntityId("pan-parameter");
 export const TRACK = EntityId("track-parameter");
 export const ROOT = EntityId("root-node");
+export const MODEL = EntityId("model-resource");
 
-/** The device class document that is open. */
 export function currentEditor(): DeviceClassDocument {
-  const state = useAppPersistentStore.getState();
-  const document = state.documents[state.session.selectedDocumentId!];
-  if (document?.type !== documentTypes.DEVICE_CLASS) {
+  const editor = getCurrentEditor(useAppPersistentStore.getState());
+  if (!editor) {
     throw new Error("The open document is not a device class");
   }
-  return document;
+  return editor;
 }
 
-/**
- * Gives the open device class a parameter measured in degrees (pan) and one
- * measured in meters (track), both from the motion library.
- */
+/** pan is measured in degrees, track in meters. */
 export function addMotionParameters() {
   updateCurrentEditor(testUndoLabel("Add parameters"), (editor) => {
     for (const [id, codexId, classId] of [
@@ -50,7 +52,6 @@ export function addMotionParameters() {
   });
 }
 
-/** Gives the open device class a resource of the given motion library class. */
 export function addMotionResource(
   id: EntityId,
   classId = MODEL_RESOURCE_CLASS,
@@ -69,11 +70,17 @@ export function addMotionResource(
   });
 }
 
-/** Gives the open device class a structure with a single node, ROOT. */
+export function control(
+  type: Structure3DControl["type"],
+  target: Structure3DControl["target"],
+): Structure3DControl {
+  return { type, axis: "x", target };
+}
+
 export function addStructureWithRoot(node: Partial<Structure3DNode> = {}) {
   updateCurrentEditor(testUndoLabel("Add structure"), (editor) => {
     editor.structure3D = {
-      codexId: CodexId("structure-3d"),
+      codexId: CodexId(STRUCTURE_3D_CLASS),
       access: ["read"],
       lifetime: "static",
       rootNodes: [ROOT],
@@ -85,6 +92,20 @@ export function addStructureWithRoot(node: Partial<Structure3DNode> = {}) {
       controls: [],
       localized: {},
       ...node,
+    };
+  });
+}
+
+export function showModelAtRoot(assetId: string, nodeOrSceneName: string) {
+  addMotionResource(MODEL);
+  updateCurrentEditor(testUndoLabel("Show the model"), (editor) => {
+    editor.resources[MODEL].mediaType = "model/gltf-binary";
+    editor.resources[MODEL].default = "model.glb";
+    editor.resourceAssets["model.glb"] = assetId;
+    editor.structure3DNodes[ROOT].visual = {
+      quality: "high",
+      resource: MODEL,
+      nodeOrSceneName,
     };
   });
 }

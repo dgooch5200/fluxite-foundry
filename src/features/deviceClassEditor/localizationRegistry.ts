@@ -22,6 +22,11 @@ import {
 
 type DeviceClassEntryKey = LocalizableEntryKey<DeviceClassDocument>;
 
+const FRIENDLY_NAME_LABEL = msg({
+  id: "localizations.field.friendlyName",
+  message: "Friendly name",
+});
+
 // ---------------------------------------------------------------------------
 // The registry
 // ---------------------------------------------------------------------------
@@ -115,12 +120,7 @@ export const DEVICE_CLASS_LOCALIZATIONS: LocalizationRegistry<DeviceClassDocumen
         message: "Parameter",
       }),
       fields: {
-        friendlyName: {
-          label: msg({
-            id: "localizations.field.friendlyName",
-            message: "Friendly name",
-          }),
-        },
+        friendlyName: { label: FRIENDLY_NAME_LABEL },
       },
     },
 
@@ -128,12 +128,7 @@ export const DEVICE_CLASS_LOCALIZATIONS: LocalizationRegistry<DeviceClassDocumen
       kind: "table",
       label: msg({ id: "localizations.entity.command", message: "Command" }),
       fields: {
-        friendlyName: {
-          label: msg({
-            id: "localizations.field.friendlyName",
-            message: "Friendly name",
-          }),
-        },
+        friendlyName: { label: FRIENDLY_NAME_LABEL },
       },
     },
 
@@ -144,12 +139,7 @@ export const DEVICE_CLASS_LOCALIZATIONS: LocalizationRegistry<DeviceClassDocumen
         message: "Structure 3D node",
       }),
       fields: {
-        friendlyName: {
-          label: msg({
-            id: "localizations.field.friendlyName",
-            message: "Friendly name",
-          }),
-        },
+        friendlyName: { label: FRIENDLY_NAME_LABEL },
       },
     },
 

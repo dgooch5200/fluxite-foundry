@@ -38,16 +38,21 @@ import {
   useLibraries,
   useSourceLocale,
 } from "features/deviceClassEditor/state";
-import { MOTION_LIBRARY } from "features/deviceClassEditor/export";
+import {
+  MOTION_LIBRARY,
+  STRUCTURE_3D_CLASS,
+} from "features/deviceClassEditor/export";
 import {
   removeDeviceClassLocalizations,
   setDeviceClassLocalizedValue,
 } from "features/deviceClassEditor/localizationRegistry";
 import {
   createNewResource,
+  getFileExtension,
   modifyResource,
   updateResourceAsset,
 } from "features/deviceClassEditor/resourcesEditor/state";
+import { useParameters } from "features/deviceClassEditor/parametersEditor/state";
 import {
   MODEL_RESOURCE_CLASS,
   parameterUnitName,
@@ -103,11 +108,13 @@ const GLTF_FILE_TYPE = msg({
   message: "glTF Model",
 });
 
+const GLB_MEDIA_TYPE = "model/gltf-binary";
+
 const NO_NODES: Record<EntityId, Structure3DNode> = {};
 const NO_RESOURCES: Record<EntityId, Resource> = {};
 const NO_ISSUES: Record<EntityId, Structure3DIssue[]> = {};
+const NO_VIEW_SETTINGS: Structure3DViewSettings = {};
 
-/** A parameter, or one element of an array parameter, that can drive a control. */
 export interface ControlParameterOption {
   ref: ParameterReference;
   // The reference as Fluxite Codex writes it, e.g. "pan" or "frame[1]"
@@ -131,7 +138,6 @@ export function useStructure3DNode(id: EntityId): Structure3DNode | undefined {
   return useCurrentEditorPart((editor) => editor.structure3DNodes[id]);
 }
 
-/** The node's friendly name in the authoring locale, or "" if it has none. */
 export function useStructure3DNodeFriendlyName(id: EntityId): string {
   const locale = useAuthoringLocale();
   const sourceLocale = useSourceLocale();
@@ -145,14 +151,15 @@ export function useStructure3DNodeFriendlyName(id: EntityId): string {
   );
 }
 
-/** The codexIds of the node's siblings, not including its own. */
 export function useStructure3DSiblingCodexIds(id: EntityId): string[] {
   return (
     useCurrentEditorPartShallow((editor) =>
-      siblingIds(editor, id)
-        .filter((siblingId) => siblingId !== id)
-        .map((siblingId) => editor.structure3DNodes[siblingId]?.codexId)
-        .filter((codexId) => codexId !== undefined),
+      nodeCodexIds(
+        editor,
+        (childIds(editor, editor.structure3DNodes[id]?.parent) ?? []).filter(
+          (siblingId) => siblingId !== id,
+        ),
+      ),
     ) ?? []
   );
 }
@@ -162,7 +169,7 @@ export function useResources(): Record<EntityId, Resource> {
 }
 
 export function useControlParameterOptions(): ControlParameterOption[] {
-  const parameters = useCurrentEditorPart((editor) => editor.parameters);
+  const parameters = useParameters();
   const libraries = useLibraries();
   const deviceLibrary = useDeviceLibrary();
   const store = useLibraryStore();
@@ -196,7 +203,6 @@ export function useControlParameterOptions(): ControlParameterOption[] {
   }, [parameters, libraries, deviceLibrary, store]);
 }
 
-/** The issues of each node of the structure that has any. */
 export function useStructure3DIssues(): Record<EntityId, Structure3DIssue[]> {
   // The whole document, as the checks look across several of its tables.
   const editor = useCurrentEditorPart((editor) => editor);
@@ -207,14 +213,28 @@ export function useStructure3DIssues(): Record<EntityId, Structure3DIssue[]> {
   );
 }
 
+export function useStructure3DViewSettings(): Structure3DViewSettings {
+  return (
+    useAppPersistentStore((state) => state.session.structure3DView) ??
+    NO_VIEW_SETTINGS
+  );
+}
+
 // ---------------------------------------------------------------------------
 // Write
 // ---------------------------------------------------------------------------
 
-/**
- * Gives the device class a 3D structure, importing the motion library that
- * defines it if the device class doesn't already.
- */
+export function setStructure3DViewSettings(
+  settings: Partial<Structure3DViewSettings>,
+) {
+  updateAppPersistentState((state) => {
+    state.session.structure3DView = {
+      ...state.session.structure3DView,
+      ...settings,
+    };
+  });
+}
+
 export function createStructure3D() {
   const motionLibrary = getNewestVersionOfEachLibrary(
     useAppRuntimeStore.getState().libraries,
@@ -230,7 +250,7 @@ export function createStructure3D() {
     }
 
     editor.structure3D = {
-      codexId: CodexId("structure-3d"),
+      codexId: CodexId(STRUCTURE_3D_CLASS),
       access: ["read"],
       lifetime: "static",
       rootNodes: [],
@@ -246,10 +266,6 @@ export function modifyStructure3D(recipe: (draft: Draft<Structure3D>) => void) {
   });
 }
 
-/**
- * Adds a node under the given parent, or at the top of the structure if there
- * is none. Returns the new node's ID.
- */
 export function addStructure3DNode(parent?: EntityId): EntityId {
   const id = newEntityId();
 
@@ -258,22 +274,13 @@ export function addStructure3DNode(parent?: EntityId): EntityId {
       return;
     }
 
-    const siblings = parent
-      ? editor.structure3DNodes[parent]?.children
-      : editor.structure3D.rootNodes;
+    const siblings = childIds(editor, parent);
     if (!siblings) {
       return;
     }
 
     editor.structure3DNodes[id] = {
-      codexId: CodexId(
-        getUniqueItemId(
-          siblings
-            .map((sibling) => editor.structure3DNodes[sibling]?.codexId)
-            .filter((codexId) => codexId !== undefined),
-          "node",
-        ),
-      ),
+      codexId: CodexId(getUniqueItemId(nodeCodexIds(editor, siblings), "node")),
       parent,
       children: [],
       transform: { type: "trs" },
@@ -314,10 +321,6 @@ export function modifyStructure3DNodeLocalizedValue(
   });
 }
 
-/**
- * Asks for a glTF file and shows it at the node, as a new 3d-model resource
- * named after the file. Does nothing if the user cancels.
- */
 export async function importGltfModel(nodeId: EntityId) {
   const documentId =
     useAppPersistentStore.getState().session.selectedDocumentId;
@@ -326,20 +329,18 @@ export async function importGltfModel(nodeId: EntityId) {
     return;
   }
 
-  // The desktop app reads files without a media type, so it comes from the
-  // extension.
+  // The desktop app reads files without a media type.
   const mediaType = file.name.toLowerCase().endsWith(".gltf")
     ? "model/gltf+json"
-    : "model/gltf-binary";
+    : GLB_MEDIA_TYPE;
   const assetId = await assetStorage.storeAsset(
     await file.data.arrayBuffer(),
     mediaType,
     file.name,
   );
 
-  // Reading and storing a large file takes a while, and the user may have
-  // switched documents or removed the node meanwhile. The stored asset is left
-  // for startup cleanup.
+  // The user may have switched documents or removed the node while a large
+  // file was stored. The orphaned asset is left for startup cleanup.
   const state = useAppPersistentStore.getState();
   const editor = getCurrentEditor(state);
   if (
@@ -379,32 +380,18 @@ export async function importGltfModel(nodeId: EntityId) {
   });
 }
 
-/**
- * Cleans up the mesh of the model shown at the node: welds duplicate vertices
- * and removes faces that are degenerate or doubled. Undefined if there was
- * nothing to repair.
- */
 export function repairModelMesh(
   nodeId: EntityId,
 ): Promise<MeshRepairSummary | undefined> {
   return repairModel(nodeId, UNDO.repairMesh, repairMesh);
 }
 
-/**
- * Turns the faces of the model shown at the node outward and gives them
- * normals that match. Undefined if there was nothing to repair.
- */
 export function repairModelNormals(
   nodeId: EntityId,
 ): Promise<NormalsRepairSummary | undefined> {
   return repairModel(nodeId, UNDO.repairNormals, repairNormals);
 }
 
-/**
- * Repairs the part of the model file that the node shows, and stores the
- * repaired file as the model resource's new one. Other nodes showing the same
- * file see the repair too.
- */
 async function repairModel<Summary extends Record<string, number>>(
   nodeId: EntityId,
   label: MessageDescriptor,
@@ -432,12 +419,14 @@ async function repairModel<Summary extends Record<string, number>>(
     ?.originalFileName;
   const repairedAssetId = await assetStorage.storeAsset(
     await exportGlb(gltf),
-    "model/gltf-binary",
-    originalFileName?.replace(/\.[^.]*$/, ".glb"),
+    GLB_MEDIA_TYPE,
+    originalFileName?.replace(
+      /\.[^.]*$/,
+      `.${getFileExtension(GLB_MEDIA_TYPE)}`,
+    ),
   );
 
-  // As with an import, the document may have changed meanwhile. The stored
-  // asset is left for startup cleanup.
+  // As with an import, the document may have changed meanwhile.
   const latest = useAppPersistentStore.getState();
   if (
     latest.session.selectedDocumentId !== documentId ||
@@ -448,14 +437,13 @@ async function repairModel<Summary extends Record<string, number>>(
 
   asOneChange(label, () => {
     modifyResource(visual.resource, (draft) => {
-      draft.mediaType = "model/gltf-binary";
+      draft.mediaType = GLB_MEDIA_TYPE;
     });
     updateResourceAsset(visual.resource, repairedAssetId);
   });
   return summary;
 }
 
-/** Deletes a node along with everything beneath it. */
 export function deleteStructure3DNode(id: EntityId) {
   updateCurrentEditor(UNDO.deleteNode, (editor) => {
     const node = editor.structure3DNodes[id];
@@ -470,15 +458,10 @@ export function deleteStructure3DNode(id: EntityId) {
       subtree.map((entityId) => ({ table: "structure3DNodes", entityId })),
     );
 
-    if (node.parent) {
-      const parent = editor.structure3DNodes[node.parent];
-      if (parent) {
-        parent.children = parent.children.filter((child) => child !== id);
-      }
-    } else if (editor.structure3D) {
-      editor.structure3D.rootNodes = editor.structure3D.rootNodes.filter(
-        (root) => root !== id,
-      );
+    const siblings = childIds(editor, node.parent);
+    const at = siblings?.indexOf(id) ?? -1;
+    if (at >= 0) {
+      siblings?.splice(at, 1);
     }
 
     for (const entityId of subtree) {
@@ -491,16 +474,22 @@ export function deleteStructure3DNode(id: EntityId) {
 // Utils
 // ---------------------------------------------------------------------------
 
-function siblingIds(
+function childIds(
   editor: Pick<DeviceClassDocument, "structure3D" | "structure3DNodes">,
-  id: EntityId,
-): EntityId[] {
-  const parent = editor.structure3DNodes[id]?.parent;
-  return (
-    (parent
-      ? editor.structure3DNodes[parent]?.children
-      : editor.structure3D?.rootNodes) ?? []
-  );
+  parent?: EntityId,
+): EntityId[] | undefined {
+  return parent
+    ? editor.structure3DNodes[parent]?.children
+    : editor.structure3D?.rootNodes;
+}
+
+function nodeCodexIds(
+  editor: Pick<DeviceClassDocument, "structure3DNodes">,
+  ids: EntityId[],
+) {
+  return ids
+    .map((id) => editor.structure3DNodes[id]?.codexId)
+    .filter((codexId) => codexId !== undefined);
 }
 
 function collectSubtree(
@@ -509,25 +498,4 @@ function collectSubtree(
 ): EntityId[] {
   const children = editor.structure3DNodes[id]?.children ?? [];
   return [id, ...children.flatMap((child) => collectSubtree(editor, child))];
-}
-
-const NO_VIEW_SETTINGS: Structure3DViewSettings = {};
-
-/** How the 3D view was last set up. Fields never changed are absent. */
-export function useStructure3DViewSettings(): Structure3DViewSettings {
-  return (
-    useAppPersistentStore((state) => state.session.structure3DView) ??
-    NO_VIEW_SETTINGS
-  );
-}
-
-export function setStructure3DViewSettings(
-  settings: Partial<Structure3DViewSettings>,
-) {
-  updateAppPersistentState((state) => {
-    state.session.structure3DView = {
-      ...state.session.structure3DView,
-      ...settings,
-    };
-  });
 }

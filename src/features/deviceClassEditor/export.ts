@@ -18,6 +18,7 @@ import {
   Resource,
   ResourceClass,
   SerializerClass,
+  Structure,
   StructureClass,
   Trigger,
   UnitName,
@@ -38,7 +39,6 @@ import {
   Structure3DControl,
 } from "app/persistentState";
 import { select, selectWithIds } from "app/stateUtils";
-import { serializeParameterReference } from "utils/utils";
 import { buildExportKeys, ExportKeys } from "./exportKeys";
 import {
   classReferenceCodexId,
@@ -48,15 +48,25 @@ import {
   commandCurrentCodexId,
   paramExclusionsToCodex,
   parameterCurrentCodexId,
+  parameterReferenceString,
+  resourceCurrentCodexId,
 } from "./referenceResolution";
 import { z } from "zod";
 
 type InternalParameterCount = z.infer<typeof ParameterCountSchema>;
 
-// The E1.73-4 motion library, which defines the structure-3d structure class
-// and the 3d-model resource class.
 export const MOTION_LIBRARY = "org.esta.lib.motion";
 export const STRUCTURE_3D_CLASS = "structure-3d";
+
+export function isStructure3D(
+  structure: Structure,
+): structure is Extract<Structure, { type: "Other" }> {
+  return (
+    structure.type === "Other" &&
+    structure.value.library === MOTION_LIBRARY &&
+    structure.value.class === STRUCTURE_3D_CLASS
+  );
+}
 
 function convertParamReference(
   editor: DeviceClassDocument,
@@ -782,7 +792,6 @@ function exportStructure3DNodes(
 
   for (const nodeId of nodeIds) {
     const node = editor.structure3DNodes[nodeId];
-    // A dangling child id has nothing to write.
     if (!node) {
       continue;
     }
@@ -806,9 +815,7 @@ function exportStructure3DNodes(
       model: visual
         ? {
             visual: {
-              [visual.quality]:
-                editor.resources[visual.resource]?.codexId ??
-                entityIdAsCodexId(visual.resource),
+              [visual.quality]: resourceCurrentCodexId(editor, visual.resource),
               nodeOrSceneName: visual.nodeOrSceneName,
             },
           }
@@ -833,12 +840,7 @@ function exportStructure3DControl(
     axis: control.axis,
     commonAxis: control.commonAxis,
     ...(target.type === "parameter"
-      ? {
-          parameter: serializeParameterReference({
-            codexId: parameterCurrentCodexId(editor, target.parameter),
-            index: target.parameter.index,
-          }),
-        }
+      ? { parameter: parameterReferenceString(editor, target.parameter) }
       : { controlGroups: target.controlGroups }),
   };
 }

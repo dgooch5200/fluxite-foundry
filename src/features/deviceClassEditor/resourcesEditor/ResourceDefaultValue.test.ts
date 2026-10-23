@@ -1,7 +1,6 @@
 import { describe, test, expect } from "vitest";
 import { acceptsMediaType } from "./ResourceDefaultValue";
 
-// A file the browser could not identify, as it reports for glTF models.
 function untypedFile(name: string): File {
   return new File([], name);
 }

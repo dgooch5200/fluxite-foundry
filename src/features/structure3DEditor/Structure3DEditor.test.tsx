@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import userEvent from "@testing-library/user-event";
 import { act, render, screen } from "test/render";
 import {
@@ -12,10 +12,14 @@ import { MOTION_LIBRARY } from "features/deviceClassEditor/export";
 import {
   addMotionParameters,
   addStructureWithRoot,
+  control,
   currentEditor,
   PAN,
   ROOT,
 } from "./testFixtures";
+
+// happy-dom has no WebGL.
+vi.mock("./Viewport", () => ({ Structure3DViewport: () => null }));
 
 const PARAMETER_MISSING =
   "The parameter that drove this control no longer exists. Choose another one.";
@@ -91,11 +95,7 @@ describe("Structure3DEditor", () => {
     const user = userEvent.setup();
     addStructureWithRoot({
       controls: [
-        {
-          type: "rotate",
-          axis: "x",
-          target: { type: "parameter", parameter: { id: PAN } },
-        },
+        control("rotate", { type: "parameter", parameter: { id: PAN } }),
       ],
     });
     render(<Structure3DEditor />);
@@ -108,7 +108,6 @@ describe("Structure3DEditor", () => {
       }),
     );
 
-    // Beside the control, and on the node in the tree
     expect(screen.getByText(PARAMETER_MISSING)).toBeInTheDocument();
     expect(
       screen.getByRole("img", { name: PARAMETER_MISSING }),
@@ -153,7 +152,6 @@ describe("Structure3DEditor", () => {
     expect(Object.keys(editor.localizations)).toHaveLength(
       localizationCount - 1,
     );
-    // The structure itself is selected in place of the deleted node.
     expect(screen.getByRole("button", { name: "Structure" })).toHaveAttribute(
       "aria-pressed",
       "true",

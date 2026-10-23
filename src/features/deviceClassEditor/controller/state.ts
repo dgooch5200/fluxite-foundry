@@ -26,11 +26,6 @@ export function setDmxControllerLayout(
   });
 }
 
-/**
- * The live parameter states of the current document's DMX test controller,
- * keyed by `serializeParamRef`. Undefined when the controller isn't running,
- * which is to say it isn't on screen or has no driver.
- */
 export function useDmxParamStates():
   | Record<string, DriverParamState>
   | undefined {
@@ -40,7 +35,6 @@ export function useDmxParamStates():
   );
 }
 
-/** Replaces a document's parameter states with those of a fresh driver. */
 export function setDmxParamStates(
   documentId: EntityId,
   paramStates: DriverParamState[],
@@ -52,7 +46,6 @@ export function setDmxParamStates(
   });
 }
 
-/** Records the parameter states a driver reports changed. */
 export function updateDmxParamStates(
   documentId: EntityId,
   updates: DriverParamState[],
@@ -65,14 +58,9 @@ export function updateDmxParamStates(
   });
 }
 
-// How many controllers each document has on screen. A document can have several
-// controller tabs, which share one entry, so only the last to go clears it.
+// A document's controller tabs share one entry, so only the last to close clears it.
 const controllersOnScreen = new Map<EntityId, number>();
 
-/**
- * Shares a controller's parameter states while it is on screen. Each call is
- * paired with a call to {@link hideDmxParamStates}.
- */
 export function showDmxParamStates(
   documentId: EntityId,
   paramStates: DriverParamState[],

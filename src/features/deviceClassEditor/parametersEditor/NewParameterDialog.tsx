@@ -21,8 +21,7 @@ import {
 import { ParameterClassDisplay } from "./ParameterClassDisplay";
 import { validateNewItemId } from "utils/inputValidation";
 import { useAuthoringLocale, useLibraryStore } from "app/store";
-import { getUniqueItemId, unitToString } from "utils/utils";
-import { getDataTypeFriendlyName } from "codex/util/enums";
+import { getUniqueItemId } from "utils/utils";
 import { useDeviceLocalLibrary } from "../state";
 import { createNewParameter, useParameterCodexIds } from "./state";
 import { lookupParameterClass } from "../stateTransformations";
@@ -67,19 +66,6 @@ export const NewParameterDialog = ({ isOpen, onClose }: Props) => {
     return <ParameterClassDisplay paramClass={resolvedClass!} />;
   };
 
-  // The class sets the parameter's data type and unit.
-  const describeItemClass = (item: SelectedItemClass) => {
-    const resolvedClass = lookupParameterClass(item.resolved, locale);
-    if (!resolvedClass) return "";
-    const dataType = getDataTypeFriendlyName(resolvedClass.dataType);
-    return resolvedClass.unit
-      ? `${dataType} · ${unitToString(resolvedClass.unit)}`
-      : dataType;
-  };
-
-  const selectedClass =
-    newItemClass && lookupParameterClass(newItemClass.resolved, locale);
-
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent>
@@ -108,30 +94,11 @@ export const NewParameterDialog = ({ isOpen, onClose }: Props) => {
                   kind="parameterClasses"
                   onSelectedClassChanged={setNewItemClass}
                   tooltipRenderer={renderItemClassTooltip}
-                  optionDetail={describeItemClass}
                   libraryStore={libraryStore}
                   localLibrary={localLibrary}
                 />
               </td>
             </tr>
-            {selectedClass && (
-              <>
-                <tr>
-                  <td>
-                    <Trans id="deviceClassEditor.newParameter.dataType">
-                      Data Type
-                    </Trans>
-                  </td>
-                  <td>{getDataTypeFriendlyName(selectedClass.dataType)}</td>
-                </tr>
-                <tr>
-                  <td>
-                    <Trans id="deviceClassEditor.newParameter.unit">Unit</Trans>
-                  </td>
-                  <td>{unitToString(selectedClass.unit)}</td>
-                </tr>
-              </>
-            )}
             <TextEditorTableRow
               label={_(MESSAGES.id)}
               value={newItemId}

@@ -12,9 +12,8 @@ export interface AppRuntimeState {
   // One DMX test driver per open device class document, keyed by the document's
   // id. A document with no DMX serializer has no entry.
   dmxControllers: Record<EntityId, DmxController>;
-  // The parameter states of each document's running DMX test controller, keyed
-  // by `serializeParamRef`. A document whose controller isn't on screen has no
-  // entry.
+  // Keyed by `serializeParamRef`. A document whose DMX test controller isn't on
+  // screen has no entry.
   dmxParamStates: Record<EntityId, Record<string, DriverParamState>>;
   // Live sACN output from the DMX test controller (only possible on desktop).
   sacnOutput: SacnOutputState;

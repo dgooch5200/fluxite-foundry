@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { EntityId, Structure3DControl } from "app/persistentState";
+import { EntityId } from "app/persistentState";
 import { loadDefaultLibraries } from "codex/libraryStore";
 import { createEmptyDeviceClassEditor, resetAllStores } from "test/utils";
 import { validateStructure3D } from "./validation";
@@ -7,13 +7,14 @@ import {
   addMotionParameters,
   addMotionResource,
   addStructureWithRoot,
+  control,
   currentEditor,
+  MODEL,
   PAN,
   ROOT,
   TRACK,
 } from "./testFixtures";
 
-const MODEL = EntityId("model");
 const SHAPE = EntityId("shape");
 
 function issueIds() {
@@ -24,13 +25,6 @@ function issueIds() {
       list.map((issue) => `${issue.field} ${issue.message.id}`),
     ]),
   );
-}
-
-function control(
-  type: Structure3DControl["type"],
-  target: Structure3DControl["target"],
-): Structure3DControl {
-  return { type, axis: "x", target };
 }
 
 describe("validateStructure3D", () => {

@@ -381,18 +381,12 @@ function getAcceptedMediaType(mediaType?: string): string | undefined {
   if (!mediaType || mediaType === "application/octet-stream") {
     return undefined;
   }
-  // The extension too, so pickers that don't know the media type (e.g. glTF)
-  // still offer the file.
+  // Pickers hide files of media types they don't know, such as glTF.
   const extension = getFileExtension(mediaType);
   return extension ? `${mediaType},.${extension}` : mediaType;
 }
 
-/**
- * Whether a selected file may be used as the value of a resource with the
- * expected media type. Browsers report files they don't recognize, such as glTF
- * models, as untyped or as generic binary, so those are matched on their
- * extension.
- */
+// Browsers type files they don't recognize as "" or generic binary.
 export function acceptsMediaType(file: File, expectedType?: string): boolean {
   if (
     !expectedType ||

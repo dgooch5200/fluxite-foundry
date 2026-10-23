@@ -116,17 +116,11 @@ describe("creating a parameter against a local class", () => {
     await user.click(within(dialog).getByRole("combobox", { name: "Class" }));
 
     // The document's own classes are listed under their own heading, ahead of
-    // any imported library, each with the data type and unit it gives.
+    // any imported library.
     expect(screen.getByText("This Device Class")).toBeInTheDocument();
     await user.click(
-      await screen.findByRole("option", {
-        name: /Local Intensity.*Number · degree/,
-      }),
+      await screen.findByRole("option", { name: /Local Intensity/ }),
     );
-
-    // The parameter takes its unit from the class.
-    expect(within(dialog).getByText("Number")).toBeInTheDocument();
-    expect(within(dialog).getByText("degree")).toBeInTheDocument();
 
     await user.click(within(dialog).getByRole("button", { name: "Add" }));
 

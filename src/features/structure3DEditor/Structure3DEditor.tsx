@@ -1,20 +1,10 @@
-import { ReactNode, useId, useState } from "react";
+import { useId, useState } from "react";
 import { Trans } from "@lingui/react/macro";
-import { capitalCase } from "change-case";
 import { PlusIcon } from "lucide-react";
-import {
-  Access,
-  accesses,
-  CodexId,
-  EntityId,
-  Lifetime,
-  lifetimes,
-  Structure3D,
-} from "app/persistentState";
+import { CodexId, EntityId, Structure3D } from "app/persistentState";
+import { AccessLifetimeFields } from "components/AccessLifetimeFields";
 import { FieldSet } from "components/FieldSet";
-import { LabeledCheckbox } from "components/LabeledCheckbox";
 import { ValidatedInput } from "components/ValidatedInput";
-import { SelectField } from "components/EditorFields/SelectField";
 import { Button } from "components/scn-ui/Button";
 import { Label } from "components/scn-ui/Label";
 import {
@@ -32,21 +22,9 @@ import {
 } from "./state";
 import { NodeTree } from "./NodeTree";
 import { NodeEditor } from "./NodeEditor";
+import { Structure3DViewport } from "./Viewport";
 
-/** What the 3D viewport is given to show and change the selection with. */
-export interface Structure3DViewportProps {
-  /** Undefined when the structure itself is selected. */
-  selectedNodeId?: EntityId;
-  onSelectNode: (nodeId?: EntityId) => void;
-}
-
-interface Props {
-  /** Draws a 3D view of the structure above the selected item's form. */
-  renderViewport?: (props: Structure3DViewportProps) => ReactNode;
-}
-
-/** Edits the device class's structure-3d structure from the motion library. */
-export const Structure3DEditor = ({ renderViewport }: Props) => {
+export const Structure3DEditor = () => {
   const structure = useStructure3D();
   const nodes = useStructure3DNodes();
   const issues = useStructure3DIssues();
@@ -70,10 +48,10 @@ export const Structure3DEditor = ({ renderViewport }: Props) => {
         />
       </SidebarLayoutSidebar>
       <SidebarLayoutMain className="flex flex-col overflow-auto">
-        {renderViewport?.({
-          selectedNodeId: selected,
-          onSelectNode: setSelectedNodeId,
-        })}
+        <Structure3DViewport
+          selectedNodeId={selected}
+          onSelectNode={setSelectedNodeId}
+        />
         <div className="min-w-xs m-2 px-4 py-5 flex flex-col gap-4">
           <div className="text-xl font-semibold">
             {selectedNode ? (
@@ -117,17 +95,8 @@ const EmptyState = () => (
   </div>
 );
 
-/** The form for the structure as a whole. */
 const StructureEditor = ({ structure }: { structure: Structure3D }) => {
   const idPrefix = useId();
-
-  const setAccess = (access: Access, checked: boolean) =>
-    modifyStructure3D((draft) => {
-      draft.access = draft.access.filter((value) => value !== access);
-      if (checked) {
-        draft.access.push(access);
-      }
-    });
 
   return (
     <div className="flex flex-wrap gap-4">
@@ -146,56 +115,16 @@ const StructureEditor = ({ structure }: { structure: Structure3D }) => {
           validator={(input) => validateNewItemId(input, [])}
         />
       </FieldSet>
-      <FieldSet>
-        <Label id={`${idPrefix}-access`}>
-          <Trans id="deviceClassEditor.structure3DEditor.access">Access</Trans>
-        </Label>
-        <div
-          role="group"
-          aria-labelledby={`${idPrefix}-access`}
-          className="flex h-9 items-center gap-4 px-1"
-        >
-          <LabeledCheckbox
-            checked={structure.access.includes(accesses.READ)}
-            onChange={(checked) => setAccess(accesses.READ, checked)}
-          >
-            <Trans id="deviceClassEditor.structure3DEditor.read">Read</Trans>
-          </LabeledCheckbox>
-          <LabeledCheckbox
-            disabled={structure.lifetime === lifetimes.STATIC}
-            checked={structure.access.includes(accesses.WRITE)}
-            onChange={(checked) => setAccess(accesses.WRITE, checked)}
-          >
-            <Trans id="deviceClassEditor.structure3DEditor.write">Write</Trans>
-          </LabeledCheckbox>
-        </div>
-      </FieldSet>
-      <FieldSet>
-        <Label htmlFor={`${idPrefix}-lifetime`}>
-          <Trans id="deviceClassEditor.structure3DEditor.lifetime">
-            Lifetime
-          </Trans>
-        </Label>
-        <SelectField
-          id={`${idPrefix}-lifetime`}
-          values={Object.values(lifetimes)}
-          displayValues={Object.values(lifetimes).map((value) =>
-            capitalCase(value),
-          )}
-          selectedValue={structure.lifetime}
-          onSelectionChanged={(value) =>
-            modifyStructure3D((draft) => {
-              draft.lifetime = value as Lifetime;
-              // A static item can't be written.
-              if (value === lifetimes.STATIC) {
-                draft.access = draft.access.filter(
-                  (access) => access !== accesses.WRITE,
-                );
-              }
-            })
-          }
-        />
-      </FieldSet>
+      <AccessLifetimeFields
+        access={structure.access}
+        lifetime={structure.lifetime}
+        onChange={(access, lifetime) =>
+          modifyStructure3D((draft) => {
+            draft.access = access;
+            draft.lifetime = lifetime;
+          })
+        }
+      />
     </div>
   );
 };

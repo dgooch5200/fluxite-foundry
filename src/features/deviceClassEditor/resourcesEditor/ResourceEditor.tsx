@@ -1,7 +1,6 @@
 import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
 import { useEffect, useId } from "react";
-import { capitalCase } from "change-case";
 import { msg } from "@lingui/core/macro";
 import {
   modifyResource,
@@ -17,19 +16,12 @@ import { Label } from "components/scn-ui/Label";
 import { ValidatedInput } from "components/ValidatedInput";
 import { validateNewItemId } from "utils/inputValidation";
 import { AppInput } from "components/AppInput";
-import { LabeledCheckbox } from "components/LabeledCheckbox";
+import { AccessLifetimeFields } from "components/AccessLifetimeFields";
 import { SelectField } from "components/EditorFields/SelectField";
 import { ItemClassDisplay } from "components/ItemClassDisplay";
 import { ResourceClassDisplay } from "./ResourceClassDisplay";
 import { AssetId, ResourceDefaultValue } from "./ResourceDefaultValue";
-import {
-  Access,
-  accesses,
-  CodexId,
-  EntityId,
-  Lifetime,
-  lifetimes,
-} from "app/persistentState";
+import { CodexId, EntityId } from "app/persistentState";
 
 const UNDO_CHANGE_MEDIA_TYPE = msg({
   id: "deviceClassEditor.resources.undo.changeMediaType",
@@ -165,46 +157,16 @@ export const ResourceEditor = ({ id }: Props) => {
             }
           />
         </FieldSet>
-        <FieldSet>
-          <Label htmlFor={`${idPrefix}-access`}>
-            <Trans id="deviceClassEditor.resourceEditor.access">Access</Trans>
-          </Label>
-          <AccessCheckboxes
-            id={`${idPrefix}-access`}
-            access={resource.access}
-            lifetime={resource.lifetime}
-            onAccessChanged={(newAccess) =>
-              modifyResource(id, (draft) => {
-                draft.access = newAccess;
-              })
-            }
-          />
-        </FieldSet>
-        <FieldSet>
-          <Label htmlFor={`${idPrefix}-lifetime`}>
-            <Trans id="deviceClassEditor.resourceEditor.lifetime">
-              Lifetime
-            </Trans>
-          </Label>
-          <SelectField
-            id={`${idPrefix}-lifetime`}
-            values={Object.values(lifetimes)}
-            displayValues={Object.values(lifetimes).map((val) =>
-              capitalCase(val),
-            )}
-            selectedValue={resource.lifetime}
-            onSelectionChanged={(newValue) =>
-              modifyResource(id, (draft) => {
-                draft.lifetime = newValue as Lifetime;
-                if (newValue === lifetimes.STATIC) {
-                  draft.access = draft.access.filter(
-                    (value) => value === accesses.READ,
-                  );
-                }
-              })
-            }
-          />
-        </FieldSet>
+        <AccessLifetimeFields
+          access={resource.access}
+          lifetime={resource.lifetime}
+          onChange={(access, lifetime) =>
+            modifyResource(id, (draft) => {
+              draft.access = access;
+              draft.lifetime = lifetime;
+            })
+          }
+        />
         {mediaType}
       </div>
       <FieldSet>
@@ -221,46 +183,6 @@ export const ResourceEditor = ({ id }: Props) => {
           onDelete={() => updateResourceAsset(id)}
         />
       </FieldSet>
-    </div>
-  );
-};
-
-interface AccessCheckboxesProps {
-  id: string;
-  access: Access[];
-  lifetime: Lifetime;
-  onAccessChanged: (access: Access[]) => void;
-}
-
-const AccessCheckboxes = ({
-  id,
-  access,
-  lifetime,
-  onAccessChanged,
-}: AccessCheckboxesProps) => {
-  const updateAccess = (checked: boolean, relevantAccess: Access) => {
-    if (checked && !access.includes(relevantAccess)) {
-      onAccessChanged([...access, relevantAccess]);
-    } else if (!checked) {
-      onAccessChanged(access.filter((a) => a !== relevantAccess));
-    }
-  };
-
-  return (
-    <div id={id} className="flex w-xs h-9 items-center gap-4 px-1">
-      <LabeledCheckbox
-        checked={access.includes(accesses.READ)}
-        onChange={(checked) => updateAccess(checked, accesses.READ)}
-      >
-        <Trans id="deviceClassEditor.resourceEditor.read">Read</Trans>
-      </LabeledCheckbox>
-      <LabeledCheckbox
-        disabled={lifetime === lifetimes.STATIC}
-        checked={access.includes(accesses.WRITE)}
-        onChange={(checked) => updateAccess(checked, accesses.WRITE)}
-      >
-        <Trans id="deviceClassEditor.resourceEditor.write">Write</Trans>
-      </LabeledCheckbox>
     </div>
   );
 };

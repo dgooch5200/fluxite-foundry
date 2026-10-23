@@ -10,10 +10,11 @@ import {
   EntityId,
   ParameterReference,
 } from "app/persistentState";
+import { serializeParameterReference } from "utils/utils";
 
 // Builds codexId -> entityId over a table of entities that carry a codexId.
 // First writer wins for duplicate codexIds, which are already an invalid state.
-function codexToId(
+export function codexToId(
   table: Record<string, { codexId: CodexId }>,
 ): Map<CodexId, EntityId> {
   const map = new Map<CodexId, EntityId>();
@@ -47,6 +48,26 @@ export function parameterCurrentCodexId(
   ref: ParameterReference,
 ): CodexId {
   return editor.parameters[ref.id]?.codexId ?? entityIdAsCodexId(ref.id);
+}
+
+// The reference as Fluxite Codex writes it, e.g. "color[2]".
+export function parameterReferenceString(
+  editor: Pick<DeviceClassDocument, "parameters">,
+  ref: ParameterReference,
+): string {
+  return serializeParameterReference({
+    codexId: parameterCurrentCodexId(editor, ref),
+    index: ref.index,
+  });
+}
+
+// --- Resource references --------------------------------------------------
+
+export function resourceCurrentCodexId(
+  editor: Pick<DeviceClassDocument, "resources">,
+  id: EntityId,
+): CodexId {
+  return editor.resources[id]?.codexId ?? entityIdAsCodexId(id);
 }
 
 // --- Command references ---------------------------------------------------

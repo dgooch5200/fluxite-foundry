@@ -119,7 +119,6 @@ export const ParameterEditor = ({ id }: Props) => {
             )}
           />
         </FieldSet>
-        {/* Set by the class, so shown here but changed in the class editor */}
         <FieldSet>
           <Label htmlFor={`${idPrefix}-data-type`}>
             <Trans id="deviceClassEditor.paramEditor.dataType">Data Type</Trans>

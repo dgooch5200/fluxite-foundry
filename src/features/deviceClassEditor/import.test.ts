@@ -1,5 +1,6 @@
 import { describe, test, expect } from "vitest";
 import { getImportedDeviceClassEditor } from "./import";
+import { createMinimalDeviceClass } from "test/utils";
 import {
   CodexId,
   DeviceClassDocument,
@@ -29,32 +30,6 @@ import type {
 // ============================================================================
 // Test Helpers
 // ============================================================================
-
-function createMinimalDeviceClass(): DeviceClass {
-  return {
-    libraries: {},
-    "@description": "test.description",
-    publishDate: "2024-01-01T00:00:00.000Z",
-    author: "Test Author",
-    locale: "de-DE",
-    info: {
-      manufacturer: {
-        name: "Test Manufacturer",
-        url: "https://example.com",
-        estaId: "1234",
-      },
-      model: {
-        name: "Test Model",
-        category: "lighting",
-        subcategory: "fixed-profile",
-      },
-      compatibility: {
-        firmwareVersions: ["1.0.0", "2.0.0"],
-      },
-    },
-    history: { "1.0.0": "Initial release" },
-  };
-}
 
 // Parameter class helpers
 type ParamClassOpts = Partial<Omit<ParameterClass, "@name">> & {

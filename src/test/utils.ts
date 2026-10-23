@@ -1,6 +1,7 @@
 import { act, getByText, screen } from "@testing-library/react";
 import { vi } from "vitest";
 import { MessageDescriptor } from "@lingui/core";
+import type { DeviceClass } from "@cpwg-community/delver";
 import { useAppPersistentStore, useAppRuntimeStore } from "app/store";
 import {
   AppPersistentState,
@@ -91,13 +92,15 @@ export function resetAllStores() {
   resetAppRuntimeStore();
 }
 
+export const TEST_EDITOR_ID = EntityId("test-editor-id");
+
 /**
  * Creates a minimal empty device class editor for testing.
  * This avoids the default parameters that come with createDeviceClassEditor().
  */
 export function createEmptyDeviceClassEditor() {
   const state = useAppPersistentStore.getState();
-  const editorId = EntityId("test-editor-id");
+  const editorId = TEST_EDITOR_ID;
   const descriptionKey = LocalizationKey("test description");
 
   state.documents[editorId] = {
@@ -160,6 +163,32 @@ function defaultLibraryVersions(): Record<string, string> {
       library.version,
     ]),
   );
+}
+
+export function createMinimalDeviceClass(): DeviceClass {
+  return {
+    libraries: {},
+    "@description": "test.description",
+    publishDate: "2024-01-01T00:00:00.000Z",
+    author: "Test Author",
+    locale: "de-DE",
+    info: {
+      manufacturer: {
+        name: "Test Manufacturer",
+        url: "https://example.com",
+        estaId: "1234",
+      },
+      model: {
+        name: "Test Model",
+        category: "lighting",
+        subcategory: "fixed-profile",
+      },
+      compatibility: {
+        firmwareVersions: ["1.0.0", "2.0.0"],
+      },
+    },
+    history: { "1.0.0": "Initial release" },
+  };
 }
 
 export function getEditorTableRow(

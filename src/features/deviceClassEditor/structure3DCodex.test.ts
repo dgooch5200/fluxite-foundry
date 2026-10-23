@@ -12,9 +12,11 @@ import movableDocument from "e173/examples/draft-2027-1/device-classes/movable.f
 import { getImportedDeviceClassEditor } from "./import";
 import {
   exportDeviceClass,
+  isStructure3D,
   STRUCTURE_3D_CLASS,
   MOTION_LIBRARY,
 } from "./export";
+import { createMinimalDeviceClass } from "test/utils";
 
 function exampleDeviceClass(documentText: string): DeviceClass {
   const { document, errors } = parseFluxiteCodexDocument(documentText);
@@ -46,40 +48,17 @@ function nodeNamed(
   return [EntityId(entry[0]), entry[1]];
 }
 
-// The structure-3d `default` objects in an exported device class.
 function exportedStructure3Ds(deviceClass: DeviceClass): object[] {
   return Object.values(deviceClass.structures ?? {}).flatMap((structure) =>
-    structure.type === "Other" &&
-    structure.value.library === MOTION_LIBRARY &&
-    structure.value.class === STRUCTURE_3D_CLASS &&
-    structure.value.default
+    isStructure3D(structure) && structure.value.default
       ? [structure.value.default]
       : [],
   );
 }
 
-function minimalDeviceClass(): DeviceClass {
-  return {
-    libraries: {},
-    "@description": "description",
-    publishDate: "2024-01-01T00:00:00.000Z",
-    author: "Test Author",
-    locale: "en-US",
-    info: {
-      manufacturer: { name: "Test Manufacturer" },
-      model: {
-        name: "Test Model",
-        category: "lighting",
-        subcategory: "fixed-profile",
-      },
-    },
-    history: {},
-  };
-}
-
 function withStructure3DNodes(nodes: object): DeviceClass {
   return {
-    ...minimalDeviceClass(),
+    ...createMinimalDeviceClass(),
     structures: {
       structure: {
         type: "Other",
@@ -176,7 +155,7 @@ describe("structure 3D import", () => {
   });
 
   test("leaves the structure absent when the device class has none", () => {
-    const editor = importDeviceClass(minimalDeviceClass());
+    const editor = importDeviceClass(createMinimalDeviceClass());
 
     expect(editor.structure3D).toBeUndefined();
     expect(editor.structure3DNodes).toEqual({});

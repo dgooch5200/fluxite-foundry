@@ -1,9 +1,10 @@
 import { describe, test, expect } from "vitest";
 import { treeifyError } from "zod";
-import { nanoid } from "nanoid";
 import { migrateV7toV8 } from "./migrate";
 import * as V7 from "../v7/state";
 import * as V8 from "./state";
+
+const DOC_ID = V7.EntityId("doc1");
 
 function createV7State(): V7.AppPersistentState {
   return {
@@ -23,7 +24,7 @@ function createV7State(): V7.AppPersistentState {
 }
 
 function createV7Document(): V7.DeviceClassDocument {
-  const devClassDesc = nanoid();
+  const devClassDesc = V7.LocalizationKey("desc");
   return {
     type: "deviceClass",
     orgId: { type: "user", id: "test-user-id" },
@@ -39,7 +40,7 @@ function createV7Document(): V7.DeviceClassDocument {
       modelCategory: "lighting",
       modelSubcategory: "fixed-profile",
       localized: {
-        description: devClassDesc as V7.LocalizationKey,
+        description: devClassDesc,
       },
     },
     libraries: {},
@@ -69,41 +70,26 @@ function createV7Document(): V7.DeviceClassDocument {
 
 function stateWithDocument(): V7.AppPersistentState {
   const state = createV7State();
-  state.documents["doc1" as V7.EntityId] = createV7Document();
+  state.documents[DOC_ID] = createV7Document();
   return state;
 }
 
 describe("migrateV7toV8", () => {
-  test("gives each device class document an empty structure 3D node table", () => {
-    const result = migrateV7toV8(stateWithDocument());
-
-    expect(result.documents["doc1" as V8.EntityId].structure3DNodes).toEqual(
-      {},
-    );
-  });
-
-  test("leaves the structure 3D structure absent", () => {
-    const result = migrateV7toV8(stateWithDocument());
-
-    expect(result.documents["doc1" as V8.EntityId]).not.toHaveProperty(
-      "structure3D",
-    );
-  });
-
-  test("preserves the rest of each document", () => {
+  test("adds an empty structure 3D node table and changes nothing else", () => {
     const state = stateWithDocument();
 
     const result = migrateV7toV8(state);
 
-    const { structure3DNodes: _, ...rest } =
-      result.documents["doc1" as V8.EntityId];
-    expect(rest).toEqual(state.documents["doc1" as V7.EntityId]);
+    expect(result.documents[DOC_ID]).toStrictEqual({
+      ...state.documents[DOC_ID],
+      structure3DNodes: {},
+    });
   });
 
   test("preserves settings and session untouched", () => {
     const state = stateWithDocument();
     state.session.layouts = {
-      ["doc1" as V7.EntityId]: '{"type":"row"}',
+      [DOC_ID]: '{"type":"row"}',
     };
 
     const result = migrateV7toV8(state);
