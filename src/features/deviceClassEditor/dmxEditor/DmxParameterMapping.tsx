@@ -46,10 +46,14 @@ import {
 import { MappingRangeEditorDialog } from "./MappingRangeEditorDialog";
 import { MappingRangeText } from "./MappingRangeText";
 import {
+  BoundValue,
+  boundsEnd,
+  boundsStart,
   EffectiveEnumChoice,
   formatEnumBoundValue,
   getEffectiveEnd,
   normalizeEndValue,
+  toBounds,
 } from "./mappingUtils";
 import { MappableParameter, useMappableParameters } from "./state";
 
@@ -487,8 +491,7 @@ function getNewRange({
   switch (paramClass.dataType) {
     case "boolean":
       return {
-        start: false,
-        end: true,
+        bounds: { type: "bool", start: false, end: true },
         chunkValues: {
           type: "range",
           chunkStart: 0,
@@ -498,8 +501,7 @@ function getNewRange({
     case "enum": {
       const lastIndex = enumChoices.length > 0 ? enumChoices.length - 1 : 0;
       return {
-        start: 0,
-        end: lastIndex,
+        bounds: { type: "numeric", start: 0, end: lastIndex },
         chunkValues: {
           type: "range",
           chunkStart: 0,
@@ -510,7 +512,7 @@ function getNewRange({
     case "number":
     default:
       return {
-        ...numberBounds(param),
+        bounds: { type: "numeric", ...numberBounds(param) },
         chunkValues: {
           type: "range",
           chunkStart: 0,
@@ -583,11 +585,12 @@ const UnmappedParameterTableRowBoolean = ({
     referenceDisplayString(param.parameter, mappableParams) ?? "";
   const allEligibleStrs = [...eligibleCandidates.map((c) => c.str), paramStr];
 
-  const effectiveEnd = getEffectiveEnd(param.start, param.end);
+  const start = boundsStart(param.bounds);
+  const effectiveEnd = getEffectiveEnd(start, boundsEnd(param.bounds));
 
   const handleEndChange = (newValue: string) => {
     const parsed = newValue === "true";
-    const normalized = normalizeEndValue(param.start, parsed);
+    const normalized = normalizeEndValue(start, parsed);
     onUpdate(updateUnmappedParamEnd(mapping, index, normalized));
   };
 
@@ -608,7 +611,7 @@ const UnmappedParameterTableRowBoolean = ({
         <SelectField
           className="w-24"
           values={selectValues}
-          selectedValue={(param.start as boolean).toString()}
+          selectedValue={(start as boolean).toString()}
           onSelectionChanged={(newValue) => {
             onUpdate(
               updateUnmappedParamStart(mapping, index, newValue === "true"),
@@ -647,11 +650,12 @@ const UnmappedParameterTableRowNumeric = ({
     referenceDisplayString(param.parameter, mappableParams) ?? "";
   const allEligibleStrs = [...eligibleCandidates.map((c) => c.str), paramStr];
 
-  const effectiveEnd = getEffectiveEnd(param.start, param.end);
+  const start = boundsStart(param.bounds);
+  const effectiveEnd = getEffectiveEnd(start, boundsEnd(param.bounds));
 
   const handleEndChange = (newValue: string) => {
     const parsed = parseInt(newValue);
-    const normalized = normalizeEndValue(param.start, parsed);
+    const normalized = normalizeEndValue(start, parsed);
     onUpdate(updateUnmappedParamEnd(mapping, index, normalized));
   };
 
@@ -672,7 +676,7 @@ const UnmappedParameterTableRowNumeric = ({
         <TextEditorField
           className="w-24"
           aria-label={_(MESSAGES.rangeStart)}
-          value={param.start?.toString() ?? ""}
+          value={start?.toString() ?? ""}
           onConfirm={(newValue) => {
             onUpdate(
               updateUnmappedParamStart(mapping, index, parseInt(newValue)),
@@ -710,43 +714,44 @@ const UnmappedParameterTableRowEnum = ({
     referenceDisplayString(param.parameter, mappableParams) ?? "";
   const allEligibleStrs = [...eligibleCandidates.map((c) => c.str), paramStr];
   const enumChoices = mappable?.enumChoices ?? [];
-  const effectiveEnd = getEffectiveEnd(param.start, param.end);
+  const start = boundsStart(param.bounds);
+  const effectiveEnd = getEffectiveEnd(start, boundsEnd(param.bounds));
 
   // Check if a bound value is valid (matches an available choice)
-  const isValidIndex = (val: number | boolean | undefined): boolean => {
-    if (val === undefined) return true;
+  const isValidIndex = (val: BoundValue): boolean => {
+    if (val === null) return true;
     if (typeof val !== "number" || !Number.isInteger(val)) return false;
     return enumChoices.some((c) => c.index === val);
   };
 
-  const startIsValid = isValidIndex(param.start);
+  const startIsValid = isValidIndex(start);
   const endIsValid = isValidIndex(effectiveEnd);
 
   // Convert bound value to select value string
-  const boundToSelectValue = (val: number | boolean | undefined): string => {
-    if (val === undefined) return "null";
+  const boundToSelectValue = (val: BoundValue): string => {
+    if (val === null) return "null";
     if (typeof val === "number" && Number.isInteger(val)) {
       return val.toString();
     }
     return `invalid:${val}`;
   };
 
-  const startValue = boundToSelectValue(param.start);
+  const startValue = boundToSelectValue(start);
   const endValue = boundToSelectValue(effectiveEnd);
 
   // Format choice label: "Name (index)"
   const formatChoice = (choice: EffectiveEnumChoice): string =>
     formatEnumBoundValue(choice.index, enumChoices);
 
-  const parseEnumValue = (val: string): number | undefined => {
-    if (val === "null") return undefined;
+  const parseEnumValue = (val: string): number | null => {
+    if (val === "null") return null;
     const parsed = parseInt(val, 10);
-    return isNaN(parsed) ? undefined : parsed;
+    return isNaN(parsed) ? null : parsed;
   };
 
   const handleEndChange = (val: string) => {
     const parsed = parseEnumValue(val);
-    const normalized = normalizeEndValue(param.start, parsed);
+    const normalized = normalizeEndValue(start, parsed);
     onUpdate(updateUnmappedParamEnd(mapping, index, normalized));
   };
 
@@ -798,7 +803,7 @@ const UnmappedParameterTableRowEnum = ({
             <SelectValue
               placeholder={
                 !startIsValid
-                  ? formatEnumBoundValue(param.start, enumChoices)
+                  ? formatEnumBoundValue(start, enumChoices)
                   : undefined
               }
             />
@@ -856,23 +861,21 @@ function getNewUnmappedParam(
     case fcDataTypes.BOOLEAN:
       return {
         parameter: param,
-        start: false,
-        end: true,
+        bounds: { type: "bool", start: false, end: true },
       };
     case fcDataTypes.ENUM: {
       const lastIndex =
         mappable.enumChoices.length > 0 ? mappable.enumChoices.length - 1 : 0;
       return {
         parameter: param,
-        start: 0,
-        end: lastIndex,
+        bounds: { type: "numeric", start: 0, end: lastIndex },
       };
     }
     case fcDataTypes.NUMBER:
     default:
       return {
         parameter: param,
-        ...numberBounds(mappable.param),
+        bounds: { type: "numeric", ...numberBounds(mappable.param) },
       };
   }
 }
@@ -915,11 +918,12 @@ function removeUnmappedParam(
 function updateUnmappedParamStart(
   mapping: DmxMapping,
   paramIndex: number,
-  newStart: number | boolean | undefined,
+  newStart: BoundValue,
 ): DmxMapping {
+  const oldParam = mapping.unmappedParams![paramIndex];
   const newParam = {
-    ...mapping.unmappedParams![paramIndex],
-    start: newStart,
+    ...oldParam,
+    bounds: toBounds(newStart, boundsEnd(oldParam.bounds)),
   };
   return {
     ...mapping,
@@ -936,9 +940,10 @@ function updateUnmappedParamEnd(
   paramIndex: number,
   newEnd: number | boolean | undefined,
 ): DmxMapping {
+  const oldParam = mapping.unmappedParams![paramIndex];
   const newParam = {
-    ...mapping.unmappedParams![paramIndex],
-    end: newEnd,
+    ...oldParam,
+    bounds: toBounds(boundsStart(oldParam.bounds), newEnd),
   };
   return {
     ...mapping,

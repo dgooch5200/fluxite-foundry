@@ -19,7 +19,7 @@ import {
   Parameter,
   Resource,
   Command,
-  DmxSerializerState,
+  DmxSerializer,
 } from "app/persistentState";
 
 // ============================================================================
@@ -65,9 +65,10 @@ function createMinimalEditor(): DeviceClassDocument {
     commandClassArguments: {},
     commandClassReturnValues: {},
     enumChoices: {},
+    dmxSerializers: {},
     structure3DNodes: {},
     localizations: {},
-    sourceLocale: "en-US",
+    sourceLocale: "de-DE",
   };
 }
 
@@ -385,8 +386,7 @@ function rangeToChunkValues(range: {
   end: number;
 }) {
   return {
-    start: range.start,
-    end: range.end,
+    bounds: { type: "numeric" as const, start: range.start, end: range.end },
     chunkValues: {
       type: "range" as const,
       chunkStart: range.chunkStart,
@@ -395,8 +395,11 @@ function rangeToChunkValues(range: {
   };
 }
 
-function createDmxState(): NonNullable<DeviceClassDocument["dmxSerializer"]> {
+function createDmxState(codexId = "dmx"): DmxSerializer {
   return {
+    codexId: CodexId(codexId),
+    access: ["read"],
+    lifetime: "static",
     chunks: {},
     mappingGroups: {},
     conditions: {},
@@ -404,7 +407,7 @@ function createDmxState(): NonNullable<DeviceClassDocument["dmxSerializer"]> {
 }
 
 function addDmxChunk(
-  dmx: DmxSerializerState,
+  dmx: DmxSerializer,
   id: string,
   offsets: number[],
 ): EntityId {
@@ -414,7 +417,7 @@ function addDmxChunk(
 }
 
 function addDmxMappingGroup(
-  dmx: DmxSerializerState,
+  dmx: DmxSerializer,
   id: string,
   chunkId: EntityId,
   index: number,
@@ -438,8 +441,7 @@ function addDmxMappingGroup(
           id: EntityId(u.parameter.codexId),
           index: u.parameter.index,
         },
-        start: u.start,
-        end: u.end,
+        bounds: { type: "numeric", start: u.start, end: u.end },
       })),
     })),
     triggers: [],
@@ -448,7 +450,7 @@ function addDmxMappingGroup(
 }
 
 function addDmxChunkRefCondition(
-  dmx: DmxSerializerState,
+  dmx: DmxSerializer,
   id: string,
   parent: { type: "mappingGroup" | "condition"; id: EntityId },
   chunkId: EntityId,
@@ -467,7 +469,7 @@ function addDmxChunkRefCondition(
 }
 
 function addDmxGroupCondition(
-  dmx: DmxSerializerState,
+  dmx: DmxSerializer,
   id: string,
   parent: { type: "mappingGroup" | "condition"; id: EntityId },
   match: "any" | "all",
@@ -489,6 +491,7 @@ describe("exportDeviceClass", () => {
     expect(result["@description"]).toBe("test.description");
     expect(result.publishDate).toBe("2024-01-01T00:00:00.000Z");
     expect(result.author).toBe("Test Author");
+    expect(result.locale).toBe("de-DE");
     expect(result.info.manufacturer.name).toBe("Test Manufacturer");
     expect(result.info.manufacturer.url).toBe("https://example.com");
     expect(result.info.manufacturer.estaId).toBe("1234");
@@ -1047,7 +1050,7 @@ describe("exportParameters", () => {
       maximum: 100,
       minimumModifier: "minMod",
       maximumModifier: "maxMod",
-      default: 50,
+      default: { type: "numeric", value: 50 },
       wrapping: true,
       friendlyName: "value.friendly",
     });
@@ -1065,9 +1068,31 @@ describe("exportParameters", () => {
       maximum: 100,
       minimumModifier: "minMod",
       maximumModifier: "maxMod",
-      default: 50,
+      default: { type: "numeric", value: 50 },
       looping: true,
     });
+  });
+
+  test("omits the default of a parameter that has none", () => {
+    const editor = createMinimalEditor();
+    const pcId = addParamClass(editor, "pc-1", "test.param");
+    addParam(editor, "p-1", "value", localClass("test.param", pcId));
+
+    const result = exportDeviceClass(editor);
+
+    expect(result.parameters?.value.default).toBeUndefined();
+  });
+
+  test("exports an inactive default", () => {
+    const editor = createMinimalEditor();
+    const pcId = addParamClass(editor, "pc-1", "test.param");
+    addParam(editor, "p-1", "value", localClass("test.param", pcId), {
+      default: { type: "inactive" },
+    });
+
+    const result = exportDeviceClass(editor);
+
+    expect(result.parameters?.value.default).toEqual({ type: "inactive" });
   });
 
   test("exports parameter with enum exclusions", () => {
@@ -1460,7 +1485,7 @@ describe("exportDeviceClass integration", () => {
 });
 
 describe("exportDmxSerializer", () => {
-  test("does not export DMX when dmxSerializer is undefined", () => {
+  test("does not export DMX when there are no DMX serializers", () => {
     const editor = createMinimalEditor();
     const result = exportDeviceClass(editor);
 
@@ -1470,7 +1495,7 @@ describe("exportDmxSerializer", () => {
   test("exports simple DMX serializer with one chunk and one mapping group", () => {
     const editor = createMinimalEditor();
     const dmx = createDmxState();
-    editor.dmxSerializer = dmx;
+    editor.dmxSerializers[EntityId("serializer-1")] = dmx;
 
     const chunkId = addDmxChunk(dmx, "chunk-1", [0]);
     addDmxMappingGroup(dmx, "mg-1", chunkId, 0, [
@@ -1509,7 +1534,7 @@ describe("exportDmxSerializer", () => {
     });
 
     const dmx = createDmxState();
-    editor.dmxSerializer = dmx;
+    editor.dmxSerializers[EntityId("serializer-1")] = dmx;
     const chunkId = addDmxChunk(dmx, "chunk-1", [0]);
     dmx.mappingGroups[EntityId("mg-1")] = {
       chunkId,
@@ -1533,7 +1558,7 @@ describe("exportDmxSerializer", () => {
   test("generates chunk ID based on offsets", () => {
     const editor = createMinimalEditor();
     const dmx = createDmxState();
-    editor.dmxSerializer = dmx;
+    editor.dmxSerializers[EntityId("serializer-1")] = dmx;
 
     const chunk1Id = addDmxChunk(dmx, "chunk-1", [0, 1, 2]);
     const chunk2Id = addDmxChunk(dmx, "chunk-2", [5]);
@@ -1552,7 +1577,7 @@ describe("exportDmxSerializer", () => {
   test("exports multiple mapping groups sorted by index", () => {
     const editor = createMinimalEditor();
     const dmx = createDmxState();
-    editor.dmxSerializer = dmx;
+    editor.dmxSerializers[EntityId("serializer-1")] = dmx;
 
     const chunkId = addDmxChunk(dmx, "chunk-1", [0]);
     addDmxMappingGroup(dmx, "mg-1", chunkId, 2, [
@@ -1583,7 +1608,7 @@ describe("exportDmxSerializer", () => {
   test("exports parameter references with indices", () => {
     const editor = createMinimalEditor();
     const dmx = createDmxState();
-    editor.dmxSerializer = dmx;
+    editor.dmxSerializers[EntityId("serializer-1")] = dmx;
 
     const chunkId = addDmxChunk(dmx, "chunk-1", [0]);
     addDmxMappingGroup(dmx, "mg-1", chunkId, 0, [
@@ -1610,7 +1635,7 @@ describe("exportDmxSerializer", () => {
   test("exports chunk reference condition", () => {
     const editor = createMinimalEditor();
     const dmx = createDmxState();
-    editor.dmxSerializer = dmx;
+    editor.dmxSerializers[EntityId("serializer-1")] = dmx;
 
     const chunk1Id = addDmxChunk(dmx, "chunk-1", [0]);
     const chunk2Id = addDmxChunk(dmx, "chunk-2", [1]);
@@ -1641,7 +1666,7 @@ describe("exportDmxSerializer", () => {
   test("exports group condition with children", () => {
     const editor = createMinimalEditor();
     const dmx = createDmxState();
-    editor.dmxSerializer = dmx;
+    editor.dmxSerializers[EntityId("serializer-1")] = dmx;
 
     const chunk1Id = addDmxChunk(dmx, "chunk-1", [0]);
     const chunk2Id = addDmxChunk(dmx, "chunk-2", [1]);
@@ -1700,7 +1725,7 @@ describe("exportDmxSerializer", () => {
   test("exports nested group conditions", () => {
     const editor = createMinimalEditor();
     const dmx = createDmxState();
-    editor.dmxSerializer = dmx;
+    editor.dmxSerializers[EntityId("serializer-1")] = dmx;
 
     const chunk1Id = addDmxChunk(dmx, "chunk-1", [0]);
     const chunk2Id = addDmxChunk(dmx, "chunk-2", [1]);
@@ -1752,19 +1777,52 @@ describe("exportDmxSerializer", () => {
     }
   });
 
-  test("does not export empty chunks", () => {
+  test("exports a serializer with nothing in it without a default value", () => {
     const editor = createMinimalEditor();
-    editor.dmxSerializer = createDmxState();
+    editor.dmxSerializers[EntityId("serializer-1")] = createDmxState();
 
     const result = exportDeviceClass(editor);
 
-    expect(result.serializers).toBeUndefined();
+    expect(result.serializers).toEqual({
+      dmx: { type: "EstaDmx", value: { access: ["read"], lifetime: "static" } },
+    });
+  });
+
+  test("exports each serializer under its ID with its access and lifetime", () => {
+    const editor = createMinimalEditor();
+    const basic = createDmxState("basic");
+    addDmxChunk(basic, "chunk-1", [0]);
+    const extended = {
+      ...createDmxState("extended"),
+      access: ["read" as const, "write" as const],
+      lifetime: "persistent" as const,
+    };
+    addDmxChunk(extended, "chunk-2", [0, 1]);
+    editor.dmxSerializers[EntityId("serializer-1")] = basic;
+    editor.dmxSerializers[EntityId("serializer-2")] = extended;
+
+    const result = exportDeviceClass(editor);
+
+    expect(Object.keys(result.serializers ?? {})).toEqual([
+      "basic",
+      "extended",
+    ]);
+    const exportedBasic = result.serializers!.basic;
+    const exportedExtended = result.serializers!.extended;
+    expect(exportedBasic.value.access).toEqual(["read"]);
+    expect(exportedBasic.value.lifetime).toBe("static");
+    expect(Object.keys(exportedBasic.value.default!.chunks)).toEqual(["0"]);
+    expect(exportedExtended.value.access).toEqual(["read", "write"]);
+    expect(exportedExtended.value.lifetime).toBe("persistent");
+    expect(Object.keys(exportedExtended.value.default!.chunks)).toEqual([
+      "0-1",
+    ]);
   });
 
   test("omits unmappedParams field when not present (not undefined)", () => {
     const editor = createMinimalEditor();
     const dmx = createDmxState();
-    editor.dmxSerializer = dmx;
+    editor.dmxSerializers[EntityId("serializer-1")] = dmx;
 
     const chunkId = addDmxChunk(dmx, "chunk-1", [0]);
     addDmxMappingGroup(dmx, "mg-1", chunkId, 0, [
@@ -1785,7 +1843,7 @@ describe("exportDmxSerializer", () => {
   test("omits conditions field when not present (not undefined)", () => {
     const editor = createMinimalEditor();
     const dmx = createDmxState();
-    editor.dmxSerializer = dmx;
+    editor.dmxSerializers[EntityId("serializer-1")] = dmx;
 
     const chunkId = addDmxChunk(dmx, "chunk-1", [0]);
     addDmxMappingGroup(dmx, "mg-1", chunkId, 0, [
@@ -1806,7 +1864,7 @@ describe("exportDmxSerializer", () => {
   test("exports complete DMX with multiple chunks, mapping groups, and conditions", () => {
     const editor = createMinimalEditor();
     const dmx = createDmxState();
-    editor.dmxSerializer = dmx;
+    editor.dmxSerializers[EntityId("serializer-1")] = dmx;
 
     const chunk1Id = addDmxChunk(dmx, "chunk-1", [0, 1]);
     const chunk2Id = addDmxChunk(dmx, "chunk-2", [2]);

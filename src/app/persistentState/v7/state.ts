@@ -277,20 +277,6 @@ export const AppSettingsSchema = z.object({
 
 export const DocumentTypeSchema = z.enum(documentTypes);
 
-// How the Structure 3D tab's 3D view colors a model. These are only for looking
-// at it and never change the model's own materials.
-export const structure3DFinishes = {
-  // One plain gray for the whole model
-  GRAY: "gray",
-  // A different color for each node's model
-  BY_NODE: "byNode",
-  // The materials in the glTF file
-  MODEL: "model",
-} as const;
-
-export type Structure3DFinish =
-  (typeof structure3DFinishes)[keyof typeof structure3DFinishes];
-
 // What the app is doing with its documents right now, as opposed to what the
 // documents themselves contain. Document-specific information that is not
 // exported in a save file.
@@ -301,20 +287,6 @@ export const SessionSchema = z.object({
   selectedDocumentId: EntityIdSchema.optional(),
   // Stringified FlexLayout model per document.
   layouts: z.record(EntityIdSchema, z.string()),
-  // How the Structure 3D tab's 3D view was last set up. Each field is absent
-  // until it is first changed.
-  // An unknown value, e.g. a finish since removed, falls back to the default,
-  // rather than failing the whole state's validation and losing it.
-  structure3DView: z
-    .object({
-      // In pixels
-      height: z.number().optional().catch(undefined),
-      finish: z.enum(structure3DFinishes).optional().catch(undefined),
-      ambientOcclusion: z.boolean().optional().catch(undefined),
-      smoothShading: z.boolean().optional().catch(undefined),
-    })
-    .optional()
-    .catch(undefined),
 });
 
 // ---------------------------------------------------------------------------
@@ -385,6 +357,12 @@ export const CommandClassSchema = z.object({
 
 export const ParameterValueSchema = z.union([z.number(), z.boolean()]);
 
+export const ParameterDefaultSchema = z.discriminatedUnion("type", [
+  z.object({ type: z.literal("numeric"), value: z.number() }),
+  z.object({ type: z.literal("bool"), value: z.boolean() }),
+  z.object({ type: z.literal("inactive") }),
+]);
+
 export const ParameterCountSchema = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("fixed"),
@@ -411,7 +389,7 @@ export const ParameterSchema = z.object({
   maximum: ParameterValueSchema.optional(),
   minimumModifier: z.string().optional(),
   maximumModifier: z.string().optional(),
-  default: ParameterValueSchema.optional(),
+  default: ParameterDefaultSchema.optional(),
   wrapping: z.boolean().optional(),
   localized: z.object({
     friendlyName: LocalizationKeySchema.optional(),
@@ -525,6 +503,20 @@ export const DmxSequenceStepSchema = z.object({
 
 export const DmxMappingBoundSchema = z.union([z.number(), z.boolean()]);
 
+export const DmxMappingBoundsSchema = z.discriminatedUnion("type", [
+  z.object({ type: z.literal("null") }),
+  z.object({
+    type: z.literal("numeric"),
+    start: z.number(),
+    end: z.number().optional(),
+  }),
+  z.object({
+    type: z.literal("bool"),
+    start: z.boolean(),
+    end: z.boolean().optional(),
+  }),
+]);
+
 export const DmxMappingChunkValuesSchema = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("range"),
@@ -538,15 +530,13 @@ export const DmxMappingChunkValuesSchema = z.discriminatedUnion("type", [
 ]);
 
 export const DmxMappingRangeSchema = z.object({
-  start: DmxMappingBoundSchema.optional(),
-  end: DmxMappingBoundSchema.optional(),
+  bounds: DmxMappingBoundsSchema,
   chunkValues: DmxMappingChunkValuesSchema,
 });
 
 export const DmxUnmappedParamSchema = z.object({
   parameter: ParameterReferenceSchema,
-  start: DmxMappingBoundSchema.optional(),
-  end: DmxMappingBoundSchema.optional(),
+  bounds: DmxMappingBoundsSchema,
 });
 
 export const DmxMappingSchema = z.object({
@@ -618,130 +608,15 @@ export const DmxChunkSchema = z.object({
   offsets: z.array(z.number()),
 });
 
-// Serializer state - flat maps for all entities
-export const DmxSerializerStateSchema = z.object({
-  chunks: z.record(EntityIdSchema, DmxChunkSchema),
-  mappingGroups: z.record(EntityIdSchema, DmxMappingGroupSchema),
-  conditions: z.record(EntityIdSchema, DmxConditionSchema),
-});
-
-// ---------------------------------------------------------------------------
-// Structure 3D Models
-// ---------------------------------------------------------------------------
-
-// The structure-3d structure from the E1.73-4 motion library. Its schema is
-// `e173/libraries/motion/<draft>/schemas/structure-3d.json`. Ranges the schema
-// places on values (e.g. rotations in [0, 360]) are enforced on import and in
-// the editor rather than here, so out-of-range data can't fail rehydration.
-
-export const structure3DControlTypes = {
-  LINEAR: "linear",
-  ROTATE: "rotate",
-  BEAM: "beam",
-} as const;
-
-export type Structure3DControlType =
-  (typeof structure3DControlTypes)[keyof typeof structure3DControlTypes];
-
-export const structure3DAxes = {
-  X: "x",
-  Y: "y",
-  Z: "z",
-} as const;
-
-export type Structure3DAxis =
-  (typeof structure3DAxes)[keyof typeof structure3DAxes];
-
-export const structure3DCommonAxes = {
-  PAN: "pan",
-  TILT: "tilt",
-  BARREL: "barrel",
-  X: "x",
-  Y: "y",
-  Z: "z",
-} as const;
-
-export type Structure3DCommonAxis =
-  (typeof structure3DCommonAxes)[keyof typeof structure3DCommonAxes];
-
-export const structure3DModelQualities = {
-  LOW: "low",
-  MEDIUM: "medium",
-  HIGH: "high",
-} as const;
-
-export type Structure3DModelQuality =
-  (typeof structure3DModelQualities)[keyof typeof structure3DModelQualities];
-
-export const Vec3Schema = z.tuple([z.number(), z.number(), z.number()]);
-
-// A node is placed either by translate/rotate or by a matrix, never both.
-export const Structure3DTransformSchema = z.discriminatedUnion("type", [
-  z.object({
-    type: z.literal("trs"),
-    translate: Vec3Schema.optional(),
-    // Degrees, applied as Tait-Bryan ZYX.
-    rotate: Vec3Schema.optional(),
-  }),
-  z.object({
-    type: z.literal("matrix"),
-    // 12 to 16 values
-    matrix: z.array(z.number()),
-  }),
-]);
-
-// What drives a control: a parameter, or paths into control-groups structures,
-// never both.
-export const Structure3DControlTargetSchema = z.discriminatedUnion("type", [
-  z.object({
-    type: z.literal("parameter"),
-    parameter: ParameterReferenceSchema,
-  }),
-  z.object({
-    type: z.literal("controlGroups"),
-    // e.g. "control-groups?/groups/0/groups/1"
-    controlGroups: z.array(z.string()),
-  }),
-]);
-
-export const Structure3DControlSchema = z.object({
-  type: z.enum(structure3DControlTypes),
-  axis: z.enum(structure3DAxes),
-  commonAxis: z.enum(structure3DCommonAxes).optional(),
-  target: Structure3DControlTargetSchema,
-});
-
-// The schema allows exactly one of low, medium or high per node.
-export const Structure3DVisualSchema = z.object({
-  quality: z.enum(structure3DModelQualities),
-  // A resource of the motion library's 3d-model class
-  resource: EntityIdSchema,
-  // A glTF node or scene in the model. Absent means the default scene.
-  nodeOrSceneName: z.string().optional(),
-});
-
-export const Structure3DNodeSchema = z.object({
-  // The node's key in its parent's `nodes`
-  codexId: CodexIdSchema,
-  // Absent for the structure's top-level nodes
-  parent: EntityIdSchema.optional(),
-  children: z.array(EntityIdSchema),
-  transform: Structure3DTransformSchema,
-  // A key in the device class's accessoryLocations
-  accessoryLocation: z.string().optional(),
-  controls: z.array(Structure3DControlSchema),
-  visual: Structure3DVisualSchema.optional(),
-  localized: z.object({
-    friendlyName: LocalizationKeySchema.optional(),
-  }),
-});
-
-// structure-3d is not multipleAllowed, so a device class has at most one.
-export const Structure3DSchema = z.object({
+// An EstaDmx serializer of the device class. The serializer's default value is
+// stored as flat maps for all of its entities.
+export const DmxSerializerSchema = z.object({
   codexId: CodexIdSchema,
   access: z.array(AccessSchema),
   lifetime: LifetimeSchema,
-  rootNodes: z.array(EntityIdSchema),
+  chunks: z.record(EntityIdSchema, DmxChunkSchema),
+  mappingGroups: z.record(EntityIdSchema, DmxMappingGroupSchema),
+  conditions: z.record(EntityIdSchema, DmxConditionSchema),
 });
 
 export const LocalizationDbSchema = z
@@ -786,12 +661,7 @@ export const DeviceClassDocumentSchema = z.object({
 
   enumChoices: z.record(EntityIdSchema, EnumChoiceSchema),
 
-  // DMX serializer
-  dmxSerializer: DmxSerializerStateSchema.optional(),
-
-  // Structure 3D
-  structure3D: Structure3DSchema.optional(),
-  structure3DNodes: z.record(EntityIdSchema, Structure3DNodeSchema),
+  dmxSerializers: z.record(EntityIdSchema, DmxSerializerSchema),
 
   localizations: z.record(LocalizationKeySchema, LocalizationSchema),
 
@@ -814,7 +684,6 @@ export const AppStateSchema = z.object({
 
 export type AppPersistentState = z.infer<typeof AppStateSchema>;
 export type Session = z.infer<typeof SessionSchema>;
-export type Structure3DViewSettings = NonNullable<Session["structure3DView"]>;
 export type Document = z.infer<typeof DocumentSchema>;
 export type DeviceClassDocument = z.infer<typeof DeviceClassDocumentSchema>;
 export type DeviceClassBasicData = z.infer<typeof DeviceClassBasicDataSchema>;
@@ -824,6 +693,7 @@ export type SerializerClass = z.infer<typeof SerializerClassSchema>;
 export type ResourceClass = z.infer<typeof ResourceClassSchema>;
 export type CommandClass = z.infer<typeof CommandClassSchema>;
 export type ParameterCount = z.infer<typeof ParameterCountSchema>;
+export type ParameterDefault = z.infer<typeof ParameterDefaultSchema>;
 export type Parameter = z.infer<typeof ParameterSchema>;
 export type Resource = z.infer<typeof ResourceSchema>;
 export type Command = z.infer<typeof CommandSchema>;
@@ -849,6 +719,7 @@ export type DmxChunkRefCondition = z.infer<typeof DmxChunkRefConditionSchema>;
 export type DmxConditionGroup = z.infer<typeof DmxConditionGroupSchema>;
 export type DmxCondition = z.infer<typeof DmxConditionSchema>;
 export type DmxMappingBound = z.infer<typeof DmxMappingBoundSchema>;
+export type DmxMappingBounds = z.infer<typeof DmxMappingBoundsSchema>;
 export type DmxMappingRange = z.infer<typeof DmxMappingRangeSchema>;
 export type DmxUnmappedParam = z.infer<typeof DmxUnmappedParamSchema>;
 export type DmxMapping = z.infer<typeof DmxMappingSchema>;
@@ -857,17 +728,7 @@ export type DmxTriggerMapping = z.infer<typeof DmxTriggerMappingSchema>;
 export type DmxTrigger = z.infer<typeof DmxTriggerSchema>;
 export type DmxMappingGroup = z.infer<typeof DmxMappingGroupSchema>;
 export type DmxChunk = z.infer<typeof DmxChunkSchema>;
-export type DmxSerializerState = z.infer<typeof DmxSerializerStateSchema>;
-
-export type Vec3 = z.infer<typeof Vec3Schema>;
-export type Structure3DTransform = z.infer<typeof Structure3DTransformSchema>;
-export type Structure3DControlTarget = z.infer<
-  typeof Structure3DControlTargetSchema
->;
-export type Structure3DControl = z.infer<typeof Structure3DControlSchema>;
-export type Structure3DVisual = z.infer<typeof Structure3DVisualSchema>;
-export type Structure3DNode = z.infer<typeof Structure3DNodeSchema>;
-export type Structure3D = z.infer<typeof Structure3DSchema>;
+export type DmxSerializer = z.infer<typeof DmxSerializerSchema>;
 
 export const EntityId = (id: string) => id as EntityId;
 export const CodexId = (id: string) => id as CodexId;

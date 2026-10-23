@@ -136,6 +136,7 @@ export function createEmptyDeviceClassEditor() {
     commandClassArguments: {},
     commandClassReturnValues: {},
     enumChoices: {},
+    dmxSerializers: {},
     structure3DNodes: {},
     localizations: {
       [descriptionKey]: {

@@ -30,7 +30,6 @@ function importDeviceClass(deviceClass: DeviceClass): DeviceClassDocument {
     "test",
     "1.0.0",
     deviceClass,
-    "en-US",
   );
 }
 
@@ -52,7 +51,8 @@ function exportedStructure3Ds(deviceClass: DeviceClass): object[] {
   return Object.values(deviceClass.structures ?? {}).flatMap((structure) =>
     structure.type === "Other" &&
     structure.value.library === MOTION_LIBRARY &&
-    structure.value.class === STRUCTURE_3D_CLASS
+    structure.value.class === STRUCTURE_3D_CLASS &&
+    structure.value.default
       ? [structure.value.default]
       : [],
   );
@@ -64,6 +64,7 @@ function minimalDeviceClass(): DeviceClass {
     "@description": "description",
     publishDate: "2024-01-01T00:00:00.000Z",
     author: "Test Author",
+    locale: "en-US",
     info: {
       manufacturer: { name: "Test Manufacturer" },
       model: {

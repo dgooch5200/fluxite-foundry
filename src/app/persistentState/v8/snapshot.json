@@ -1,0 +1,5367 @@
+{
+  "formatVersion": 1,
+  "exportedAt": "2026-10-23T03:32:52.708Z",
+  "stateVersion": 8,
+  "state": {
+    "appSettings": {
+      "theme": "system",
+      "orgId": {
+        "type": "org",
+        "id": "com.example"
+      },
+      "authoringLocale": "en-US",
+      "uiLocale": "system"
+    },
+    "session": {
+      "openDocuments": [
+        "oS4GDh1UYvPCfGl91Ej1u",
+        "fHcL9QZluu-xcgj9xJ9qm"
+      ],
+      "selectedDocumentId": "oS4GDh1UYvPCfGl91Ej1u",
+      "layouts": {
+        "oS4GDh1UYvPCfGl91Ej1u": "{\"type\":\"row\",\"weight\":100,\"id\":\"ws5zBpbl5qvM79JXVpQi2\",\"children\":[{\"type\":\"tabset\",\"weight\":50,\"id\":\"aOweiCiBLHA7RHcl2-P7U\",\"children\":[{\"type\":\"tab\",\"name\":\"Parameters Editor\",\"component\":\"parametersEditor\",\"id\":\"r--MdxDPaVx2vV2ru9vw2\"}]},{\"type\":\"tabset\",\"weight\":50,\"id\":\"9DW4_h6dXL3xwwSqViN_c\",\"children\":[{\"type\":\"tab\",\"name\":\"Device Info Editor\",\"component\":\"deviceInfoEditor\",\"id\":\"KGOLD2-aW44tcBsd9A1ye\"}]}]}",
+        "fHcL9QZluu-xcgj9xJ9qm": "{\"type\":\"row\",\"weight\":100,\"id\":\"hvgyfcfwYoX3UkVEDNRsp\",\"children\":[{\"type\":\"tabset\",\"weight\":50,\"id\":\"2PHX5Jt-6xxTU6g7HS4PJ\",\"children\":[{\"type\":\"tab\",\"name\":\"Parameters Editor\",\"component\":\"parametersEditor\",\"id\":\"CGZ1qJ-vkw9TA3fqnbZ4E\"}]},{\"type\":\"tabset\",\"weight\":50,\"id\":\"r7R8GO2-uNycnqTt4G_Aq\",\"children\":[{\"type\":\"tab\",\"name\":\"Device Info Editor\",\"component\":\"deviceInfoEditor\",\"id\":\"FYpthX2xvaL7Zd78-ahrz\"}]}]}"
+      }
+    },
+    "documents": {
+      "oS4GDh1UYvPCfGl91Ej1u": {
+        "type": "deviceClass",
+        "orgId": {
+          "type": "org",
+          "id": "com.martin"
+        },
+        "deviceClassId": "encore-performance-cold",
+        "deviceClassVersion": "1.0.0",
+        "basicData": {
+          "publishDate": "2023-01-01T09:00:00Z",
+          "author": "ESTA E1.73 Task Group",
+          "history": {
+            "2023-01-01T09:00:00Z": "Initial release"
+          },
+          "manufacturerName": "HARMAN",
+          "manufacturerUrl": "https://www.martin.com",
+          "manufacturerEstaId": "4d50",
+          "modelName": "MAC Encore Performance CLD",
+          "modelCategory": "lighting",
+          "modelSubcategory": "moving-profile",
+          "compatibleFirmwareVersions": [
+            "1.0.0"
+          ],
+          "localized": {
+            "description": "nUAD-NLQcmwrpkXz_R-c8"
+          }
+        },
+        "libraries": {
+          "org.esta.lib.core": "1.0.0",
+          "org.esta.lib.intensity-color": "1.0.0",
+          "org.esta.lib.motion": "1.0.0"
+        },
+        "parameterClasses": {
+          "ZUTtNTq0QK6Ery6HxHuZ3": {
+            "codexId": "effects/animation/rotate/offset",
+            "dataType": "number",
+            "unit": {
+              "name": "degree"
+            },
+            "localized": {
+              "name": "eAlps4ApOr9M9KoTOuZCy",
+              "description": "3_0Ewry9H4qU5MCNXzuWv"
+            }
+          },
+          "SSLUOVUiCSbiTwK0TLbBt": {
+            "codexId": "effects/animation/incline/angle",
+            "dataType": "number",
+            "unit": {
+              "name": "degree"
+            },
+            "localized": {
+              "name": "2fuAd43TC9x6-AwcY3fup",
+              "description": "u4rnCYnxxg8FOHFsDvumQ"
+            }
+          },
+          "yN8yG2svGN3HoJuqy3gPf": {
+            "codexId": "shape/iris/insert",
+            "dataType": "number",
+            "unit": {
+              "name": "ratio"
+            },
+            "localized": {
+              "name": "HoEb_zgPLpEcJ3877df7o",
+              "description": "isoUmcpzhT1N_aL3UDGDM"
+            }
+          },
+          "0xE4nPckGvauzx-9h8wDN": {
+            "codexId": "physical/fan-mode",
+            "dataType": "number",
+            "unit": {
+              "name": "none"
+            },
+            "localized": {
+              "name": "7i6X04Mb8F9NIz79PXisU",
+              "description": "DTsYbIQyirItd4YshfumB"
+            }
+          },
+          "qQPj9-jypxU-dH0McPNAK": {
+            "codexId": "color/ctc",
+            "dataType": "number",
+            "unit": {
+              "name": "ratio"
+            },
+            "localized": {
+              "name": "ekWbteO8iU3mCcL73cls8",
+              "description": "ki2JFvNtViF8RoNCf-LTN"
+            }
+          },
+          "WzEni6pmDLJN_omAEoHFI": {
+            "codexId": "macro/offset",
+            "dataType": "number",
+            "unit": {
+              "name": "degree"
+            },
+            "localized": {
+              "name": "eAlps4ApOr9M9KoTOuZCy",
+              "description": "BhpnolscYnggyjDPUfdmY"
+            }
+          },
+          "mCMjEA3OmItf8BZDlpYOT": {
+            "codexId": "shape/frame/rotate/offset",
+            "dataType": "number",
+            "unit": {
+              "name": "degree"
+            },
+            "localized": {
+              "name": "eAlps4ApOr9M9KoTOuZCy",
+              "description": "lw-Q0fu7kjKTOCCv-WdAv"
+            }
+          },
+          "7Ta8izPBXG81aJyy9_2EW": {
+            "codexId": "macro/rate",
+            "dataType": "number",
+            "unit": {
+              "name": "hertz"
+            },
+            "localized": {
+              "name": "uaQ_Pxm6PAjK05lEsxnoV",
+              "description": "i2DNfp626L_ywbgerOXxp"
+            }
+          },
+          "XNNENp6_XFl9FhTt7Oc2A": {
+            "codexId": "gobo/rotate/spin",
+            "dataType": "number",
+            "unit": {
+              "name": "rpm"
+            },
+            "localized": {
+              "name": "O5sZX64ywQXitfdnEWUGo",
+              "description": "5-4qgQkLjoNQZ77cpVREc"
+            }
+          },
+          "ps4Py1eVRKddlX_gB6X6o": {
+            "codexId": "gobo/select/cycle-fixed",
+            "dataType": "number",
+            "unit": {
+              "name": "hertz"
+            },
+            "localized": {
+              "name": "85GwnXC9r_EF487siIiku",
+              "description": "qdlxt-MZwG7lJrkaL3xJL"
+            }
+          },
+          "RmLRFrhA5Yf_PXo1yLuXG": {
+            "codexId": "physical/reset",
+            "dataType": "number",
+            "unit": {
+              "name": "none"
+            },
+            "localized": {
+              "name": "6snBeDq8wypPGXILsg3Xg",
+              "description": "Hg94IrRhFqRuuN7_-tTac"
+            }
+          },
+          "D2p1wq9DQHQD87tHU2s8l": {
+            "codexId": "gobo/select/index",
+            "dataType": "number",
+            "unit": {
+              "name": "none"
+            },
+            "localized": {
+              "name": "7SUDXSiOdouPcXzrel56p",
+              "description": "XyVcuwP0tjrl17Sd9RlFp"
+            }
+          },
+          "_lFa8NgHxBSbHhAo3KIhF": {
+            "codexId": "shape/frame/angle",
+            "dataType": "number",
+            "unit": {
+              "name": "degree"
+            },
+            "localized": {
+              "name": "2fuAd43TC9x6-AwcY3fup",
+              "description": "5-6Qso8kSD_Ro8LtdC6w-"
+            }
+          },
+          "DA32KSnRu-iMIt8ZwlV2M": {
+            "codexId": "lamp/emulation",
+            "dataType": "number",
+            "unit": {
+              "name": "none"
+            },
+            "localized": {
+              "name": "TLlCNmTG56Zntl6cUjnyX",
+              "description": "o6U1GgpdAkQv4e9FZzwS1"
+            }
+          },
+          "1dhbf2givJqrqXh4d5-v6": {
+            "codexId": "gobo/rotate/offset",
+            "dataType": "number",
+            "unit": {
+              "name": "degree"
+            },
+            "localized": {
+              "name": "eAlps4ApOr9M9KoTOuZCy",
+              "description": "JT43wA09REIDu85Ksn57M"
+            }
+          },
+          "Tf5M66e7NptFUxMPvgcNv": {
+            "codexId": "gobo/rotate/shake-rate",
+            "dataType": "number",
+            "unit": {
+              "name": "hertz"
+            },
+            "localized": {
+              "name": "XRY2G4GwTo-TLeqSbmW1-",
+              "description": "HoZarQ2xSGuUbw5QKwrZ6"
+            }
+          },
+          "O3_qRjoicp9ksoYScitH8": {
+            "codexId": "effects/frost/insert",
+            "dataType": "number",
+            "unit": {
+              "name": "ratio"
+            },
+            "localized": {
+              "name": "HoEb_zgPLpEcJ3877df7o",
+              "description": "wjkwd-fYMw3e3SSPd2PYp"
+            }
+          },
+          "oqAYwcmvgBotct0xiD6Q_": {
+            "codexId": "shape/zoom/field-angle",
+            "dataType": "number",
+            "unit": {
+              "name": "degree"
+            },
+            "localized": {
+              "name": "nwctGjj5rVkmzrXq5G-JR",
+              "description": "GCIlv8yvUSA1GLAaUEIkM"
+            }
+          },
+          "fq-JGjyCDGrM4VY9jM7ff": {
+            "codexId": "lamp/dim-curve",
+            "dataType": "number",
+            "unit": {
+              "name": "none"
+            },
+            "localized": {
+              "name": "umtTEm06x3a_l_Oimgpo6",
+              "description": "4qpm-jtHsPoPfQ4lWkmWz"
+            }
+          },
+          "n-p1487ro-H7vckS_AuG1": {
+            "codexId": "display/brightness",
+            "dataType": "number",
+            "unit": {
+              "name": "none"
+            },
+            "localized": {
+              "name": "zPQT-r9jnVMEmduFSa7YO",
+              "description": "8MbQpZwqjv0yJPb6QXKPF"
+            }
+          },
+          "c9R2rGkjRthjl4s1lzyLn": {
+            "codexId": "effects/animation/rotate/spin",
+            "dataType": "number",
+            "unit": {
+              "name": "rpm"
+            },
+            "localized": {
+              "name": "O5sZX64ywQXitfdnEWUGo",
+              "description": "hWD5HjKO3hhayF-x_iQvK"
+            }
+          },
+          "hcaNT10EYIpsWCRMRNfFl": {
+            "codexId": "macro/program",
+            "dataType": "number",
+            "unit": {
+              "name": "none"
+            },
+            "localized": {
+              "name": "qOJxGYGFybeKx9JvTW9DF",
+              "description": "uR9-8PZafeYyOHvwnkW0q"
+            }
+          },
+          "wWWYqnMJY-lIIbpOiLxok": {
+            "codexId": "shape/zoom/focal-distance",
+            "dataType": "number",
+            "unit": {
+              "name": "ratio"
+            },
+            "localized": {
+              "name": "L7oE9TBHC7PbcF86Neab8",
+              "description": "HoqOPhQbJ00gzTQqEegmQ"
+            }
+          },
+          "5ORY91nAWN6W5AiafN1-E": {
+            "codexId": "shape/frame/insert",
+            "dataType": "number",
+            "unit": {
+              "name": "ratio"
+            },
+            "localized": {
+              "name": "HoEb_zgPLpEcJ3877df7o",
+              "description": "POjr4p8cwZ2oWt9mM91-x"
+            }
+          }
+        },
+        "structureClasses": {},
+        "serializerClasses": {},
+        "resourceClasses": {
+          "efBOjGo-55HhwQQBPymHp": {
+            "codexId": "animation-image",
+            "mediaType": [
+              "image/jpeg",
+              "image/png"
+            ],
+            "localized": {
+              "name": "9zKOaxDnQJh7LCdnINEEo",
+              "description": "iSxcINTV9uPhN6pFYERvJ"
+            }
+          },
+          "kUrQOiYwPjoOLSxPEa8WO": {
+            "codexId": "gobo-image",
+            "mediaType": [
+              "image/jpeg",
+              "image/png"
+            ],
+            "localized": {
+              "name": "hlwkmf1HtT9oA0-dzDLOG",
+              "description": "z5M2fHp6oXoUd22T4sEkD"
+            }
+          }
+        },
+        "commandClasses": {},
+        "parameterEditors": [
+          "egelI_fiQgZwjNHxeG1rd",
+          "ByeohZ58ryYJdUsri6XEJ",
+          "bSVDTyKjO0nJ4GRqtR_o2",
+          "VeMq5UWdLoRcu3X2oS_wv",
+          "2e3vzDUowrW2_AP-oMO8h",
+          "2iLmVhU10iDOXeZrgWhyP",
+          "T7FcIJzPuKVwtnkGZbtXY",
+          "lWLr0xv8ZfYIq8H8Iv00l",
+          "35KXOW-67BlVYBk4Mp5nm",
+          "-rcWLBHgeMZwn2zFx95G8",
+          "FEtI0TtbgrFFABRiIUiA2",
+          "hBM95XEhatZdEGzXw-BsF",
+          "iyi4VneXT6xs_Nf7Gx5Q8",
+          "dMvHtsgh6apGmgDqdiNwj",
+          "QfYASPyJMIlo6zYg0u13u",
+          "sVLdwHS---YCOfo7HRlog",
+          "DQ4_KIUDbi_5EaK_emJGX",
+          "XgW_zaqxBsibcAlSf_Tmd",
+          "fjTfnr2512dxPxQ-X51gh",
+          "G-FxjsZR1JVXGcqvIkFnk",
+          "MOBcGEpOuBRCHNKqz9opU",
+          "u0jpWYwsDzNZbiR2g6xKM",
+          "9P3449NjlEi2fYRhWGmVx",
+          "556nTfPvnxZ8aiQUebruB",
+          "MIly2VUUMuBIzneWHhIEL",
+          "OI4GpudcnzQeiExwgh32h",
+          "5vUoJ2at9E-hqZovXkzrM",
+          "WbbBEhPGQv-UsvymtIQaO",
+          "0jqwkzo-MIYpsqwRfF4kO",
+          "ns2mdWDfFU2IuRk0IHeoe",
+          "PZo_2SwiN2aSpTVCeIqei",
+          "eqP9iYy5RkxG0WhnUa3XN",
+          "pTlehvdVvyLoOHhj-2grB",
+          "BxDtzVcMJb6LQM7519o7m",
+          "5QaenGK6ClJ4hEAQui0li",
+          "5e8NzYMu6yYawqVMpUsGP",
+          "u75XxvXUZL6dcXfGwc9zt",
+          "zA3dnHtmwv3LzwpahDzrW",
+          "Om2Th_5W9-y4cP4wmrwfN"
+        ],
+        "parameters": {
+          "egelI_fiQgZwjNHxeG1rd": {
+            "codexId": "macro-program",
+            "class": {
+              "type": "local",
+              "id": "hcaNT10EYIpsWCRMRNfFl"
+            },
+            "count": {
+              "type": "fixed",
+              "value": 2
+            },
+            "access": [
+              "readTarget",
+              "write"
+            ],
+            "lifetime": "runtime",
+            "minimum": 0,
+            "maximum": 255,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "ByeohZ58ryYJdUsri6XEJ": {
+            "codexId": "pan",
+            "class": {
+              "type": "imported",
+              "library": "org.esta.lib.motion",
+              "codexId": "motion/rotate/offset"
+            },
+            "access": [
+              "write",
+              "readTarget"
+            ],
+            "lifetime": "runtime",
+            "minimum": -270,
+            "maximum": 270,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "bSVDTyKjO0nJ4GRqtR_o2": {
+            "codexId": "color-select-spin",
+            "class": {
+              "type": "imported",
+              "library": "org.esta.lib.intensity-color",
+              "codexId": "color/select/cycle-fixed"
+            },
+            "access": [
+              "readTarget",
+              "write"
+            ],
+            "lifetime": "runtime",
+            "minimum": -300,
+            "maximum": 300,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "VeMq5UWdLoRcu3X2oS_wv": {
+            "codexId": "tungsten-emulation",
+            "class": {
+              "type": "local",
+              "id": "DA32KSnRu-iMIt8ZwlV2M"
+            },
+            "access": [
+              "readTarget",
+              "write"
+            ],
+            "lifetime": "runtime",
+            "minimum": 0,
+            "maximum": 1,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "2e3vzDUowrW2_AP-oMO8h": {
+            "codexId": "shutter",
+            "class": {
+              "type": "imported",
+              "library": "org.esta.lib.intensity-color",
+              "codexId": "intensity/shutter"
+            },
+            "access": [
+              "write",
+              "readTarget"
+            ],
+            "lifetime": "runtime",
+            "default": {
+              "type": "bool",
+              "value": true
+            },
+            "localized": {}
+          },
+          "2iLmVhU10iDOXeZrgWhyP": {
+            "codexId": "macro-offset",
+            "class": {
+              "type": "local",
+              "id": "WzEni6pmDLJN_omAEoHFI"
+            },
+            "access": [
+              "write",
+              "readTarget"
+            ],
+            "lifetime": "runtime",
+            "minimum": 10,
+            "maximum": 350,
+            "default": {
+              "type": "numeric",
+              "value": 10
+            },
+            "localized": {}
+          },
+          "T7FcIJzPuKVwtnkGZbtXY": {
+            "codexId": "zoom",
+            "class": {
+              "type": "local",
+              "id": "oqAYwcmvgBotct0xiD6Q_"
+            },
+            "access": [
+              "readTarget",
+              "write"
+            ],
+            "lifetime": "runtime",
+            "minimum": 12,
+            "maximum": 48,
+            "default": {
+              "type": "numeric",
+              "value": 36
+            },
+            "localized": {}
+          },
+          "lWLr0xv8ZfYIq8H8Iv00l": {
+            "codexId": "color-select-index",
+            "class": {
+              "type": "imported",
+              "library": "org.esta.lib.intensity-color",
+              "codexId": "color/select/index"
+            },
+            "access": [
+              "write",
+              "readTarget"
+            ],
+            "lifetime": "runtime",
+            "minimum": 0,
+            "maximum": 7,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "wrapping": true,
+            "localized": {}
+          },
+          "35KXOW-67BlVYBk4Mp5nm": {
+            "codexId": "tilt",
+            "class": {
+              "type": "imported",
+              "library": "org.esta.lib.motion",
+              "codexId": "motion/rotate/offset"
+            },
+            "access": [
+              "write",
+              "readTarget"
+            ],
+            "lifetime": "runtime",
+            "minimum": -128.5,
+            "maximum": 129.5,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "-rcWLBHgeMZwn2zFx95G8": {
+            "codexId": "display-brightness",
+            "class": {
+              "type": "local",
+              "id": "n-p1487ro-H7vckS_AuG1"
+            },
+            "access": [
+              "write",
+              "readTarget"
+            ],
+            "lifetime": "runtime",
+            "minimum": 0,
+            "maximum": 1,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "FEtI0TtbgrFFABRiIUiA2": {
+            "codexId": "intensity",
+            "class": {
+              "type": "imported",
+              "library": "org.esta.lib.intensity-color",
+              "codexId": "intensity/dimmer"
+            },
+            "access": [
+              "readTarget",
+              "write"
+            ],
+            "lifetime": "runtime",
+            "minimum": 0,
+            "maximum": 1,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "hBM95XEhatZdEGzXw-BsF": {
+            "codexId": "macro-sync",
+            "class": {
+              "type": "local",
+              "id": "hcaNT10EYIpsWCRMRNfFl"
+            },
+            "access": [
+              "readTarget",
+              "write"
+            ],
+            "lifetime": "runtime",
+            "minimum": 0,
+            "maximum": 4,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "iyi4VneXT6xs_Nf7Gx5Q8": {
+            "codexId": "gobo-rotator-spin",
+            "class": {
+              "type": "local",
+              "id": "XNNENp6_XFl9FhTt7Oc2A"
+            },
+            "access": [
+              "write",
+              "readTarget"
+            ],
+            "lifetime": "runtime",
+            "minimum": -300,
+            "maximum": 300,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "dMvHtsgh6apGmgDqdiNwj": {
+            "codexId": "animation-offset",
+            "class": {
+              "type": "local",
+              "id": "ZUTtNTq0QK6Ery6HxHuZ3"
+            },
+            "access": [
+              "readTarget",
+              "write"
+            ],
+            "lifetime": "runtime",
+            "minimum": -180,
+            "maximum": 180,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "QfYASPyJMIlo6zYg0u13u": {
+            "codexId": "strobe-waveform",
+            "class": {
+              "type": "imported",
+              "library": "org.esta.lib.intensity-color",
+              "codexId": "intensity/strobe/waveform"
+            },
+            "access": [
+              "readTarget",
+              "write"
+            ],
+            "lifetime": "runtime",
+            "localized": {}
+          },
+          "sVLdwHS---YCOfo7HRlog": {
+            "codexId": "ctc",
+            "class": {
+              "type": "local",
+              "id": "qQPj9-jypxU-dH0McPNAK"
+            },
+            "access": [
+              "readTarget",
+              "write"
+            ],
+            "lifetime": "runtime",
+            "minimum": 0,
+            "maximum": 1,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "DQ4_KIUDbi_5EaK_emJGX": {
+            "codexId": "fan-mode",
+            "class": {
+              "type": "local",
+              "id": "0xE4nPckGvauzx-9h8wDN"
+            },
+            "access": [
+              "readTarget",
+              "write"
+            ],
+            "lifetime": "runtime",
+            "minimum": 0,
+            "maximum": 4,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "XgW_zaqxBsibcAlSf_Tmd": {
+            "codexId": "edge",
+            "class": {
+              "type": "local",
+              "id": "wWWYqnMJY-lIIbpOiLxok"
+            },
+            "access": [
+              "write",
+              "readTarget"
+            ],
+            "lifetime": "runtime",
+            "minimum": 0,
+            "maximum": 1,
+            "default": {
+              "type": "numeric",
+              "value": 0.5
+            },
+            "localized": {}
+          },
+          "fjTfnr2512dxPxQ-X51gh": {
+            "codexId": "color-effect-program",
+            "class": {
+              "type": "imported",
+              "library": "org.esta.lib.intensity-color",
+              "codexId": "color/macro/program"
+            },
+            "access": [
+              "write",
+              "readTarget"
+            ],
+            "lifetime": "runtime",
+            "localized": {}
+          },
+          "G-FxjsZR1JVXGcqvIkFnk": {
+            "codexId": "dimmer-curve",
+            "class": {
+              "type": "local",
+              "id": "fq-JGjyCDGrM4VY9jM7ff"
+            },
+            "access": [
+              "write",
+              "readTarget"
+            ],
+            "lifetime": "runtime",
+            "minimum": 0,
+            "maximum": 3,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "MOBcGEpOuBRCHNKqz9opU": {
+            "codexId": "cyan",
+            "class": {
+              "type": "imported",
+              "library": "org.esta.lib.intensity-color",
+              "codexId": "color/subtractive/filter"
+            },
+            "access": [
+              "readTarget",
+              "write"
+            ],
+            "lifetime": "runtime",
+            "minimum": 0,
+            "maximum": 1,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "u0jpWYwsDzNZbiR2g6xKM": {
+            "codexId": "color-effect-rate",
+            "class": {
+              "type": "imported",
+              "library": "org.esta.lib.intensity-color",
+              "codexId": "color/macro/rate"
+            },
+            "access": [
+              "write",
+              "readTarget"
+            ],
+            "lifetime": "runtime",
+            "minimum": 0.5,
+            "maximum": 5,
+            "default": {
+              "type": "numeric",
+              "value": 5
+            },
+            "localized": {}
+          },
+          "9P3449NjlEi2fYRhWGmVx": {
+            "codexId": "frame-angle",
+            "class": {
+              "type": "local",
+              "id": "_lFa8NgHxBSbHhAo3KIhF"
+            },
+            "count": {
+              "type": "fixed",
+              "value": 4
+            },
+            "access": [
+              "readTarget",
+              "write"
+            ],
+            "lifetime": "runtime",
+            "minimum": -45,
+            "maximum": 45,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "556nTfPvnxZ8aiQUebruB": {
+            "codexId": "iris",
+            "class": {
+              "type": "local",
+              "id": "yN8yG2svGN3HoJuqy3gPf"
+            },
+            "access": [
+              "write",
+              "readTarget"
+            ],
+            "lifetime": "runtime",
+            "minimum": 0,
+            "maximum": 1,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "MIly2VUUMuBIzneWHhIEL": {
+            "codexId": "animation-incline",
+            "class": {
+              "type": "local",
+              "id": "SSLUOVUiCSbiTwK0TLbBt"
+            },
+            "access": [
+              "write",
+              "readTarget"
+            ],
+            "lifetime": "runtime",
+            "minimum": 0,
+            "maximum": 90,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "OI4GpudcnzQeiExwgh32h": {
+            "codexId": "strobe-rate",
+            "class": {
+              "type": "imported",
+              "library": "org.esta.lib.intensity-color",
+              "codexId": "intensity/strobe/rate-fixed"
+            },
+            "access": [
+              "readTarget",
+              "write"
+            ],
+            "lifetime": "runtime",
+            "minimum": 0.1,
+            "maximum": 10,
+            "default": {
+              "type": "numeric",
+              "value": 0.1
+            },
+            "localized": {}
+          },
+          "5vUoJ2at9E-hqZovXkzrM": {
+            "codexId": "gobo-rotator-rotation",
+            "class": {
+              "type": "local",
+              "id": "1dhbf2givJqrqXh4d5-v6"
+            },
+            "access": [
+              "readTarget",
+              "write"
+            ],
+            "lifetime": "runtime",
+            "minimum": -180,
+            "maximum": 180,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "WbbBEhPGQv-UsvymtIQaO": {
+            "codexId": "magenta",
+            "class": {
+              "type": "imported",
+              "library": "org.esta.lib.intensity-color",
+              "codexId": "color/subtractive/filter"
+            },
+            "access": [
+              "write",
+              "readTarget"
+            ],
+            "lifetime": "runtime",
+            "minimum": 0,
+            "maximum": 1,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "0jqwkzo-MIYpsqwRfF4kO": {
+            "codexId": "gobo-select-index",
+            "class": {
+              "type": "local",
+              "id": "D2p1wq9DQHQD87tHU2s8l"
+            },
+            "access": [
+              "write",
+              "readTarget"
+            ],
+            "lifetime": "runtime",
+            "minimum": 0,
+            "maximum": 6,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "wrapping": true,
+            "localized": {}
+          },
+          "ns2mdWDfFU2IuRk0IHeoe": {
+            "codexId": "run-mode",
+            "class": {
+              "type": "local",
+              "id": "RmLRFrhA5Yf_PXo1yLuXG"
+            },
+            "access": [
+              "readTarget",
+              "write"
+            ],
+            "lifetime": "runtime",
+            "minimum": 0,
+            "maximum": 4,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "PZo_2SwiN2aSpTVCeIqei": {
+            "codexId": "macro-rate",
+            "class": {
+              "type": "local",
+              "id": "7Ta8izPBXG81aJyy9_2EW"
+            },
+            "count": {
+              "type": "fixed",
+              "value": 2
+            },
+            "access": [
+              "readTarget",
+              "write"
+            ],
+            "lifetime": "runtime",
+            "minimum": -10,
+            "maximum": 10,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "eqP9iYy5RkxG0WhnUa3XN": {
+            "codexId": "color-select-continuous",
+            "class": {
+              "type": "imported",
+              "library": "org.esta.lib.intensity-color",
+              "codexId": "color/select/index"
+            },
+            "access": [
+              "readTarget",
+              "write"
+            ],
+            "lifetime": "runtime",
+            "minimum": 0,
+            "maximum": 160,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "pTlehvdVvyLoOHhj-2grB": {
+            "codexId": "gate-angle",
+            "class": {
+              "type": "local",
+              "id": "mCMjEA3OmItf8BZDlpYOT"
+            },
+            "access": [
+              "write",
+              "readTarget"
+            ],
+            "lifetime": "runtime",
+            "minimum": -180,
+            "maximum": 180,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "BxDtzVcMJb6LQM7519o7m": {
+            "codexId": "frost",
+            "class": {
+              "type": "local",
+              "id": "O3_qRjoicp9ksoYScitH8"
+            },
+            "access": [
+              "write",
+              "readTarget"
+            ],
+            "lifetime": "runtime",
+            "minimum": 0,
+            "maximum": 1,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "5QaenGK6ClJ4hEAQui0li": {
+            "codexId": "gobo-rotator-shake",
+            "class": {
+              "type": "local",
+              "id": "Tf5M66e7NptFUxMPvgcNv"
+            },
+            "access": [
+              "write",
+              "readTarget"
+            ],
+            "lifetime": "runtime",
+            "minimum": 0.1,
+            "maximum": 10,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "5e8NzYMu6yYawqVMpUsGP": {
+            "codexId": "animation-spin",
+            "class": {
+              "type": "local",
+              "id": "c9R2rGkjRthjl4s1lzyLn"
+            },
+            "access": [
+              "write",
+              "readTarget"
+            ],
+            "lifetime": "runtime",
+            "minimum": -300,
+            "maximum": 300,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "u75XxvXUZL6dcXfGwc9zt": {
+            "codexId": "yellow",
+            "class": {
+              "type": "imported",
+              "library": "org.esta.lib.intensity-color",
+              "codexId": "color/subtractive/filter"
+            },
+            "access": [
+              "readTarget",
+              "write"
+            ],
+            "lifetime": "runtime",
+            "minimum": 0,
+            "maximum": 1,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "zA3dnHtmwv3LzwpahDzrW": {
+            "codexId": "gobo-select-spin",
+            "class": {
+              "type": "local",
+              "id": "ps4Py1eVRKddlX_gB6X6o"
+            },
+            "access": [
+              "readTarget",
+              "write"
+            ],
+            "lifetime": "runtime",
+            "minimum": -300,
+            "maximum": 300,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "Om2Th_5W9-y4cP4wmrwfN": {
+            "codexId": "frame-insert",
+            "class": {
+              "type": "local",
+              "id": "5ORY91nAWN6W5AiafN1-E"
+            },
+            "count": {
+              "type": "fixed",
+              "value": 4
+            },
+            "access": [
+              "write",
+              "readTarget"
+            ],
+            "lifetime": "runtime",
+            "minimum": 0,
+            "maximum": 1,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          }
+        },
+        "resourceEditors": [
+          "iKsb8jsXXbpSUcvx1bX4E",
+          "JTS5SOFn-I5fk3aPMHdiw",
+          "s1qmeHRwN-VVfUHJDmo1n",
+          "f-U_ggG42L1j4RuBx_PD6",
+          "ULRNqZXXLN9D8j9FmCER2",
+          "9LZZAGfMrWozdxW5ZMkZC",
+          "yMFEZRKPGmVz5bKD3m3tt",
+          "z6DCQ0RFWtjHnIaKy5pvF",
+          "EqbZYg6b6Lmcp16ksN3Jh"
+        ],
+        "resources": {
+          "iKsb8jsXXbpSUcvx1bX4E": {
+            "codexId": "gobo-1",
+            "class": {
+              "type": "local",
+              "id": "kUrQOiYwPjoOLSxPEa8WO"
+            },
+            "access": [
+              "read"
+            ],
+            "lifetime": "static",
+            "assetId": "55f34864-8093-47b9-a7d6-5adf5d36937c"
+          },
+          "JTS5SOFn-I5fk3aPMHdiw": {
+            "codexId": "gobo-4",
+            "class": {
+              "type": "local",
+              "id": "kUrQOiYwPjoOLSxPEa8WO"
+            },
+            "access": [
+              "read"
+            ],
+            "lifetime": "static",
+            "assetId": "67afd75e-d571-46b4-8c58-147076389ca0"
+          },
+          "s1qmeHRwN-VVfUHJDmo1n": {
+            "codexId": "gobo-2",
+            "class": {
+              "type": "local",
+              "id": "kUrQOiYwPjoOLSxPEa8WO"
+            },
+            "access": [
+              "read"
+            ],
+            "lifetime": "static",
+            "assetId": "3f65ab0f-a03a-48eb-9164-f969cb578ed0"
+          },
+          "f-U_ggG42L1j4RuBx_PD6": {
+            "codexId": "gobo-5",
+            "class": {
+              "type": "local",
+              "id": "kUrQOiYwPjoOLSxPEa8WO"
+            },
+            "access": [
+              "read"
+            ],
+            "lifetime": "static",
+            "assetId": "8fd3855e-0c0d-4993-b7dc-89c00d9177fb"
+          },
+          "ULRNqZXXLN9D8j9FmCER2": {
+            "codexId": "model-low",
+            "class": {
+              "type": "imported",
+              "library": "org.esta.lib.motion",
+              "codexId": "3d-model"
+            },
+            "access": [
+              "read"
+            ],
+            "lifetime": "static",
+            "assetId": "776d97af-e08d-4550-b6a9-f65cd8fea313"
+          },
+          "9LZZAGfMrWozdxW5ZMkZC": {
+            "codexId": "model-med",
+            "class": {
+              "type": "imported",
+              "library": "org.esta.lib.motion",
+              "codexId": "3d-model"
+            },
+            "access": [
+              "read"
+            ],
+            "lifetime": "static",
+            "assetId": "2b84d817-1e1e-496b-b75b-052100935579"
+          },
+          "yMFEZRKPGmVz5bKD3m3tt": {
+            "codexId": "gobo-3",
+            "class": {
+              "type": "local",
+              "id": "kUrQOiYwPjoOLSxPEa8WO"
+            },
+            "access": [
+              "read"
+            ],
+            "lifetime": "static",
+            "assetId": "cf97101b-5f2d-46b3-bbc9-9bf78cc97440"
+          },
+          "z6DCQ0RFWtjHnIaKy5pvF": {
+            "codexId": "model-high",
+            "class": {
+              "type": "imported",
+              "library": "org.esta.lib.motion",
+              "codexId": "3d-model"
+            },
+            "access": [
+              "read"
+            ],
+            "lifetime": "static",
+            "assetId": "4fcfc0d1-4d9b-4e98-b27a-1b360165c02b"
+          },
+          "EqbZYg6b6Lmcp16ksN3Jh": {
+            "codexId": "animation",
+            "class": {
+              "type": "local",
+              "id": "efBOjGo-55HhwQQBPymHp"
+            },
+            "access": [
+              "read"
+            ],
+            "lifetime": "static",
+            "assetId": "8fb11032-e3bd-42c5-b575-c1d1c13a8b18"
+          }
+        },
+        "resourceAssets": {},
+        "commandEditors": [],
+        "commands": {},
+        "commandClassArguments": {},
+        "commandClassReturnValues": {},
+        "enumChoices": {},
+        "dmxSerializers": {
+          "UcJQVuWhfcOuqU-GUYNNg": {
+            "codexId": "dmx",
+            "access": [
+              "read"
+            ],
+            "lifetime": "static",
+            "chunks": {
+              "MN9H5Jv7O-Ne0cVGtYnd3": {
+                "offsets": [
+                  15,
+                  16
+                ]
+              },
+              "kBcJr5GCQWwoGUbVwee85": {
+                "offsets": [
+                  28,
+                  29
+                ]
+              },
+              "xjBUdjC7L-mg5a0WEOmAi": {
+                "offsets": [
+                  27
+                ]
+              },
+              "NHuMSEqwzvhuBFZZ3ESQ8": {
+                "offsets": [
+                  8
+                ]
+              },
+              "_0Jm-Fp8XXQlkFu6gvg5Y": {
+                "offsets": [
+                  24
+                ]
+              },
+              "eCPZjK-tvQ-p-8vWt3OPy": {
+                "offsets": [
+                  20
+                ]
+              },
+              "aBqaQ7Io1gktRfDL3Ugod": {
+                "offsets": [
+                  6
+                ]
+              },
+              "sJoUrrjdARQMd0b0cXe9q": {
+                "offsets": [
+                  12
+                ]
+              },
+              "1LFeQ80BifUtMzYvnnQi2": {
+                "offsets": [
+                  21
+                ]
+              },
+              "eWlGJvaJ5tvtvyIZXmzde": {
+                "offsets": [
+                  23
+                ]
+              },
+              "GAUj6uqFFiZvSM7RLz3kd": {
+                "offsets": [
+                  11
+                ]
+              },
+              "zDCFVrX26gVp1khUWtb-W": {
+                "offsets": [
+                  4
+                ]
+              },
+              "0s7R3XOaSabsOdLEXowoQ": {
+                "offsets": [
+                  37
+                ]
+              },
+              "DkFM0jQd5rgw6wYzOyfSR": {
+                "offsets": [
+                  32
+                ]
+              },
+              "YeRNZB7PwK-jvRFFCNzwg": {
+                "offsets": [
+                  33
+                ]
+              },
+              "kgHvcLictvF3o7riwc7cd": {
+                "offsets": [
+                  19
+                ]
+              },
+              "xHp3RUP7jXySX7J_AT2Wk": {
+                "offsets": [
+                  30,
+                  31
+                ]
+              },
+              "n3ev6CpKdq91WtsRfuAH6": {
+                "offsets": [
+                  36
+                ]
+              },
+              "X9Gp3-5OoR4IzIIoMu9nZ": {
+                "offsets": [
+                  5
+                ]
+              },
+              "Ja5ve8PJFvwcujzD8kKZX": {
+                "offsets": [
+                  13
+                ]
+              },
+              "0z1HXsK5BivDwgKlxBfve": {
+                "offsets": [
+                  9,
+                  10
+                ]
+              },
+              "LcYQxBFdW1J2uCC5gWbDd": {
+                "offsets": [
+                  26
+                ]
+              },
+              "QjI2GtBLuwfYfnQ0Bp-TM": {
+                "offsets": [
+                  22
+                ]
+              },
+              "Nf9H2dxdVmwwkosrXRW1k": {
+                "offsets": [
+                  7
+                ]
+              },
+              "OBbPEzCrtNotvu4NfParT": {
+                "offsets": [
+                  17,
+                  18
+                ]
+              },
+              "4QIrNTzKw6-GKJoLTyi-a": {
+                "offsets": [
+                  25
+                ]
+              },
+              "glee4z1Y1SWC2hr76EAPG": {
+                "offsets": [
+                  0
+                ]
+              },
+              "yuUi2tenq3nQVGL7l0FXu": {
+                "offsets": [
+                  3
+                ]
+              },
+              "hi1oocfNODsB3LstGmdB_": {
+                "offsets": [
+                  1,
+                  2
+                ]
+              },
+              "58kVZboaeCujrh3zRO1Re": {
+                "offsets": [
+                  14
+                ]
+              },
+              "MuKuPkjEj5C_B8q18oMXH": {
+                "offsets": [
+                  35
+                ]
+              },
+              "oe26iI-sYx-85I7Z6IfnJ": {
+                "offsets": [
+                  34
+                ]
+              }
+            },
+            "mappingGroups": {
+              "5A4GpvieLeIXY6_NQuK5Y": {
+                "chunkId": "MN9H5Jv7O-Ne0cVGtYnd3",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "T7FcIJzPuKVwtnkGZbtXY"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 12,
+                          "end": 48
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 65535
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "jRq3bJ1bE9Pd36sYFqTOf": {
+                "chunkId": "kBcJr5GCQWwoGUbVwee85",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "ByeohZ58ryYJdUsri6XEJ"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": -270,
+                          "end": 270
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 65535,
+                          "chunkEnd": 0
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "5mxtAV35uv2gY3BwKcq-T": {
+                "chunkId": "xjBUdjC7L-mg5a0WEOmAi",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "pTlehvdVvyLoOHhj-2grB"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": -180,
+                          "end": 180
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 255
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "UmAXhZmq3eig9smKMDbtI": {
+                "chunkId": "NHuMSEqwzvhuBFZZ3ESQ8",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "0jqwkzo-MIYpsqwRfF4kO"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 9
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 1
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 10,
+                          "chunkEnd": 14
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 2
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 15,
+                          "chunkEnd": 19
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 3
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 20,
+                          "chunkEnd": 24
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 4
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 25,
+                          "chunkEnd": 29
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 5
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 30,
+                          "chunkEnd": 34
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 1
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 35,
+                          "chunkEnd": 39
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 2
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 40,
+                          "chunkEnd": 44
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 3
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 45,
+                          "chunkEnd": 49
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 4
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 50,
+                          "chunkEnd": 54
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 5
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 55,
+                          "chunkEnd": 59
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "mappedParam": {
+                      "id": "5QaenGK6ClJ4hEAQui0li"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0.1,
+                          "end": 10
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 60,
+                          "chunkEnd": 89
+                        }
+                      }
+                    ],
+                    "unmappedParams": [
+                      {
+                        "parameter": {
+                          "id": "0jqwkzo-MIYpsqwRfF4kO"
+                        },
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 1
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "mappedParam": {
+                      "id": "5QaenGK6ClJ4hEAQui0li"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0.1,
+                          "end": 10
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 90,
+                          "chunkEnd": 119
+                        }
+                      }
+                    ],
+                    "unmappedParams": [
+                      {
+                        "parameter": {
+                          "id": "0jqwkzo-MIYpsqwRfF4kO"
+                        },
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 2
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "mappedParam": {
+                      "id": "5QaenGK6ClJ4hEAQui0li"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0.1,
+                          "end": 10
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 120,
+                          "chunkEnd": 149
+                        }
+                      }
+                    ],
+                    "unmappedParams": [
+                      {
+                        "parameter": {
+                          "id": "0jqwkzo-MIYpsqwRfF4kO"
+                        },
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 3
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "mappedParam": {
+                      "id": "5QaenGK6ClJ4hEAQui0li"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0.1,
+                          "end": 10
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 150,
+                          "chunkEnd": 179
+                        }
+                      }
+                    ],
+                    "unmappedParams": [
+                      {
+                        "parameter": {
+                          "id": "0jqwkzo-MIYpsqwRfF4kO"
+                        },
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 4
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "mappedParam": {
+                      "id": "5QaenGK6ClJ4hEAQui0li"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0.1,
+                          "end": 10
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 180,
+                          "chunkEnd": 209
+                        }
+                      }
+                    ],
+                    "unmappedParams": [
+                      {
+                        "parameter": {
+                          "id": "0jqwkzo-MIYpsqwRfF4kO"
+                        },
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 5
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "mappedParam": {
+                      "id": "zA3dnHtmwv3LzwpahDzrW"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": -300,
+                          "end": 300
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 255,
+                          "chunkEnd": 210
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "Lwdq8ks7DRaU0QWddEdlc": {
+                "chunkId": "_0Jm-Fp8XXQlkFu6gvg5Y",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "9P3449NjlEi2fYRhWGmVx",
+                      "index": 2
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": -45,
+                          "end": 45
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 255
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "-Xnte-3422Q2XV5Kc8d3v": {
+                "chunkId": "eCPZjK-tvQ-p-8vWt3OPy",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "9P3449NjlEi2fYRhWGmVx",
+                      "index": 0
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": -45,
+                          "end": 45
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 255
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "4DghiMrnEP_DtgBa4iMeC": {
+                "chunkId": "aBqaQ7Io1gktRfDL3Ugod",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "sVLdwHS---YCOfo7HRlog"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0,
+                          "end": 1
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 255
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "iJxgFjXoIumA3IUXZJ3pe": {
+                "chunkId": "sJoUrrjdARQMd0b0cXe9q",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "dMvHtsgh6apGmgDqdiNwj"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": -180,
+                          "end": 180
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 255
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "nnEG1fLjrM_e3Jdo85QyK": {
+                "chunkId": "sJoUrrjdARQMd0b0cXe9q",
+                "index": 1,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "dMvHtsgh6apGmgDqdiNwj"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 2
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 90
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 254,
+                          "chunkEnd": 255
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "mappedParam": {
+                      "id": "5e8NzYMu6yYawqVMpUsGP"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": -300,
+                          "end": 300
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 253,
+                          "chunkEnd": 3
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "Dv6HuEcby6HQKH3rg7E0C": {
+                "chunkId": "1LFeQ80BifUtMzYvnnQi2",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "Om2Th_5W9-y4cP4wmrwfN",
+                      "index": 1
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0,
+                          "end": 1
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 255
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "VFlu-AnnHi3_jPniO5y_Q": {
+                "chunkId": "eWlGJvaJ5tvtvyIZXmzde",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "Om2Th_5W9-y4cP4wmrwfN",
+                      "index": 2
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0,
+                          "end": 1
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 255
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "-pEt16_JOWeATeN8830wz": {
+                "chunkId": "GAUj6uqFFiZvSM7RLz3kd",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "MIly2VUUMuBIzneWHhIEL"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "null"
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 5
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 6,
+                          "chunkEnd": 10
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 11,
+                          "chunkEnd": 15
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 90
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 16,
+                          "chunkEnd": 20
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 90
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 21,
+                          "chunkEnd": 25
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0,
+                          "end": 90
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 26,
+                          "chunkEnd": 110
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 45,
+                          "end": 90
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 195,
+                          "chunkEnd": 111
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0,
+                          "end": 45
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 255,
+                          "chunkEnd": 196
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "RpOqFnudJJknRaB8F53b6": {
+                "chunkId": "zDCFVrX26gVp1khUWtb-W",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "WbbBEhPGQv-UsvymtIQaO"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0,
+                          "end": 1
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 255
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "dTTcBpFwtzpEYKaBUjMW-": {
+                "chunkId": "0s7R3XOaSabsOdLEXowoQ",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "hBM95XEhatZdEGzXw-BsF"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 0
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 2
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 36,
+                          "chunkEnd": 36
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 3
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 101,
+                          "chunkEnd": 120
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 4
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 121,
+                          "chunkEnd": 140
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "mappedParam": {
+                      "id": "2iLmVhU10iDOXeZrgWhyP"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 10,
+                          "end": 350
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 1,
+                          "chunkEnd": 35
+                        }
+                      }
+                    ],
+                    "unmappedParams": [
+                      {
+                        "parameter": {
+                          "id": "hBM95XEhatZdEGzXw-BsF"
+                        },
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 1
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "dWB2owfOxEXeVEJvuArl4": {
+                "chunkId": "DkFM0jQd5rgw6wYzOyfSR",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "ns2mdWDfFU2IuRk0IHeoe"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 9
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 1
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 10,
+                          "chunkEnd": 14
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 2,
+                          "end": 4
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 16,
+                          "chunkEnd": 18
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "mappedParam": {
+                      "id": "G-FxjsZR1JVXGcqvIkFnk"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0,
+                          "end": 3
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 23,
+                          "chunkEnd": 26
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "mappedParam": {
+                      "id": "-rcWLBHgeMZwn2zFx95G8"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0,
+                          "end": 1
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 53,
+                          "chunkEnd": 52
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "mappedParam": {
+                      "id": "DQ4_KIUDbi_5EaK_emJGX"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0,
+                          "end": 4
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 54,
+                          "chunkEnd": 58
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "mappedParam": {
+                      "id": "VeMq5UWdLoRcu3X2oS_wv"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0,
+                          "end": 1
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 72,
+                          "chunkEnd": 73
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "47Q1MZwJr-xKHiZ4VOxq9": {
+                "chunkId": "YeRNZB7PwK-jvRFFCNzwg",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "egelI_fiQgZwjNHxeG1rd",
+                      "index": 0
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0,
+                          "end": 255
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 255
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "REw8-w99t1VHCzCRkYq-x": {
+                "chunkId": "kgHvcLictvF3o7riwc7cd",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "Om2Th_5W9-y4cP4wmrwfN",
+                      "index": 0
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0,
+                          "end": 1
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 255
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "nP1jMKaBvKapu3jwnWcjM": {
+                "chunkId": "xHp3RUP7jXySX7J_AT2Wk",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "35KXOW-67BlVYBk4Mp5nm"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": -128.5,
+                          "end": 0
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 32639
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0,
+                          "end": 129.5
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 32640,
+                          "chunkEnd": 65535
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "QEyDDgTJQ3nhAIhOIoLmU": {
+                "chunkId": "n3ev6CpKdq91WtsRfuAH6",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "PZo_2SwiN2aSpTVCeIqei",
+                      "index": 1
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": -10,
+                          "end": 10
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 255
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "YD8Xv7DV-d6ZvObTiFUlZ": {
+                "chunkId": "X9Gp3-5OoR4IzIIoMu9nZ",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "u75XxvXUZL6dcXfGwc9zt"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0,
+                          "end": 1
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 255
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "gbUB309G10mCSDhKSch89": {
+                "chunkId": "Ja5ve8PJFvwcujzD8kKZX",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "BxDtzVcMJb6LQM7519o7m"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0,
+                          "end": 1
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 255
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "jv_vHcWGhIutIIDPzwUkF": {
+                "chunkId": "0z1HXsK5BivDwgKlxBfve",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "5vUoJ2at9E-hqZovXkzrM"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": -180,
+                          "end": 180
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 65535,
+                          "chunkEnd": 0
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "wJUfDxAlou_qARVWvtiWa": {
+                "chunkId": "0z1HXsK5BivDwgKlxBfve",
+                "index": 1,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "5vUoJ2at9E-hqZovXkzrM"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 600
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 90
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 64516,
+                          "chunkEnd": 65535
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "mappedParam": {
+                      "id": "iyi4VneXT6xs_Nf7Gx5Q8"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": -300,
+                          "end": 300
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 64515,
+                          "chunkEnd": 601
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "e57N8Y9iyKfu2k4LWFhKV": {
+                "chunkId": "LcYQxBFdW1J2uCC5gWbDd",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "9P3449NjlEi2fYRhWGmVx",
+                      "index": 3
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": -45,
+                          "end": 45
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 255
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "lAL7iEXrS-37qLibKIMSz": {
+                "chunkId": "QjI2GtBLuwfYfnQ0Bp-TM",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "9P3449NjlEi2fYRhWGmVx",
+                      "index": 1
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": -45,
+                          "end": 45
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 255
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "BvFGiDFMXHpMmzjqkuuyg": {
+                "chunkId": "Nf9H2dxdVmwwkosrXRW1k",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "eqP9iYy5RkxG0WhnUa3XN"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 0
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 1,
+                          "end": 13
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 1,
+                          "chunkEnd": 13
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 14
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 14,
+                          "chunkEnd": 14
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 15,
+                          "end": 27
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 15,
+                          "chunkEnd": 27
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 28
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 28,
+                          "chunkEnd": 28
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 29,
+                          "end": 41
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 29,
+                          "chunkEnd": 41
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 42
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 42,
+                          "chunkEnd": 42
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 43,
+                          "end": 55
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 43,
+                          "chunkEnd": 55
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 56
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 56,
+                          "chunkEnd": 56
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 57,
+                          "end": 69
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 57,
+                          "chunkEnd": 69
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 70
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 70,
+                          "chunkEnd": 70
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 71,
+                          "end": 83
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 71,
+                          "chunkEnd": 83
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 84
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 84,
+                          "chunkEnd": 84
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 85,
+                          "end": 97
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 85,
+                          "chunkEnd": 97
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 98,
+                          "end": 160
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 98,
+                          "chunkEnd": 160
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "mappedParam": {
+                      "id": "lWLr0xv8ZfYIq8H8Iv00l"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 1
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 161,
+                          "chunkEnd": 163
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 2
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 164,
+                          "chunkEnd": 166
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 3
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 167,
+                          "chunkEnd": 169
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 4
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 170,
+                          "chunkEnd": 172
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 5
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 173,
+                          "chunkEnd": 175
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 6
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 176,
+                          "chunkEnd": 178
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 179,
+                          "chunkEnd": 192
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "mappedParam": {
+                      "id": "bSVDTyKjO0nJ4GRqtR_o2"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": -300,
+                          "end": 300
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 243,
+                          "chunkEnd": 193
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "mappedParam": {
+                      "id": "u0jpWYwsDzNZbiR2g6xKM"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 5
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 244,
+                          "chunkEnd": 247
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 1
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 248,
+                          "chunkEnd": 251
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0.5
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 252,
+                          "chunkEnd": 255
+                        }
+                      }
+                    ],
+                    "unmappedParams": [
+                      {
+                        "parameter": {
+                          "id": "fjTfnr2512dxPxQ-X51gh"
+                        },
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "BMD8cTiLSUMz5f8XXSr93": {
+                "chunkId": "OBbPEzCrtNotvu4NfParT",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "XgW_zaqxBsibcAlSf_Tmd"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0,
+                          "end": 1
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 65535
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "TZU8D0NUB7q-xyUhMPX7V": {
+                "chunkId": "4QIrNTzKw6-GKJoLTyi-a",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "Om2Th_5W9-y4cP4wmrwfN",
+                      "index": 3
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0,
+                          "end": 1
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 255
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "NGoLjSge6WSrXvYlzqSM2": {
+                "chunkId": "glee4z1Y1SWC2hr76EAPG",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "2e3vzDUowrW2_AP-oMO8h"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "bool",
+                          "start": false
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 19
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "bool",
+                          "start": true
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 20,
+                          "chunkEnd": 49
+                        }
+                      },
+                      {
+                        "bounds": {
+                          "type": "bool",
+                          "start": true
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 201,
+                          "chunkEnd": 210
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "mappedParam": {
+                      "id": "OI4GpudcnzQeiExwgh32h"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0.1,
+                          "end": 10
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 50,
+                          "chunkEnd": 200
+                        }
+                      }
+                    ],
+                    "unmappedParams": [
+                      {
+                        "parameter": {
+                          "id": "QfYASPyJMIlo6zYg0u13u"
+                        },
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "mappedParam": {
+                      "id": "OI4GpudcnzQeiExwgh32h"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0.1,
+                          "end": 10
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 211,
+                          "chunkEnd": 255
+                        }
+                      }
+                    ],
+                    "unmappedParams": [
+                      {
+                        "parameter": {
+                          "id": "QfYASPyJMIlo6zYg0u13u"
+                        },
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 1
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "rKswLWnwWTcgwUN7Zla3V": {
+                "chunkId": "yuUi2tenq3nQVGL7l0FXu",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "MOBcGEpOuBRCHNKqz9opU"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0,
+                          "end": 1
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 255
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "hnUjfBic8mIf4oiRQkBic": {
+                "chunkId": "hi1oocfNODsB3LstGmdB_",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "FEtI0TtbgrFFABRiIUiA2"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0,
+                          "end": 1
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 65535
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "Cqqy1DYJJnV0NiMMzQSGk": {
+                "chunkId": "58kVZboaeCujrh3zRO1Re",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "556nTfPvnxZ8aiQUebruB"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0,
+                          "end": 1
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 255
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "_vH4yuzG6salU985hgh9f": {
+                "chunkId": "MuKuPkjEj5C_B8q18oMXH",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "egelI_fiQgZwjNHxeG1rd",
+                      "index": 1
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": 0,
+                          "end": 255
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 255
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "oqwpSvdXcHSIUo8KDrkRi": {
+                "chunkId": "oe26iI-sYx-85I7Z6IfnJ",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "PZo_2SwiN2aSpTVCeIqei",
+                      "index": 0
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": -10,
+                          "end": 10
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 255
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              }
+            },
+            "conditions": {
+              "cZYDipzTfPraHjOqPSbeG": {
+                "conditionType": "group",
+                "parent": {
+                  "type": "mappingGroup",
+                  "id": "iJxgFjXoIumA3IUXZJ3pe"
+                },
+                "match": "any"
+              },
+              "vjHDek8Qg4Xo5smLwMHID": {
+                "conditionType": "chunkRef",
+                "parent": {
+                  "type": "condition",
+                  "id": "cZYDipzTfPraHjOqPSbeG"
+                },
+                "chunkId": "GAUj6uqFFiZvSM7RLz3kd",
+                "chunkStart": 6,
+                "chunkEnd": 10
+              },
+              "IjD3BMt50AHx7cL7g-Nxt": {
+                "conditionType": "chunkRef",
+                "parent": {
+                  "type": "condition",
+                  "id": "cZYDipzTfPraHjOqPSbeG"
+                },
+                "chunkId": "GAUj6uqFFiZvSM7RLz3kd",
+                "chunkStart": 21,
+                "chunkEnd": 25
+              },
+              "6wi-X36iTWgRYRwzsRfOf": {
+                "conditionType": "chunkRef",
+                "parent": {
+                  "type": "condition",
+                  "id": "cZYDipzTfPraHjOqPSbeG"
+                },
+                "chunkId": "GAUj6uqFFiZvSM7RLz3kd",
+                "chunkStart": 111,
+                "chunkEnd": 255
+              },
+              "5YeKD1m1FlbEUybO_fPbh": {
+                "conditionType": "group",
+                "parent": {
+                  "type": "mappingGroup",
+                  "id": "nnEG1fLjrM_e3Jdo85QyK"
+                },
+                "match": "any"
+              },
+              "AR43MZwPlgJ-F54aV0AFs": {
+                "conditionType": "chunkRef",
+                "parent": {
+                  "type": "condition",
+                  "id": "5YeKD1m1FlbEUybO_fPbh"
+                },
+                "chunkId": "GAUj6uqFFiZvSM7RLz3kd",
+                "chunkStart": 11,
+                "chunkEnd": 20
+              },
+              "yrJq262K3qH3tCowD1X90": {
+                "conditionType": "chunkRef",
+                "parent": {
+                  "type": "condition",
+                  "id": "5YeKD1m1FlbEUybO_fPbh"
+                },
+                "chunkId": "GAUj6uqFFiZvSM7RLz3kd",
+                "chunkStart": 26,
+                "chunkEnd": 110
+              },
+              "WQ_RzOLeZ5WJaFUBhFeSC": {
+                "conditionType": "group",
+                "parent": {
+                  "type": "mappingGroup",
+                  "id": "jv_vHcWGhIutIIDPzwUkF"
+                },
+                "match": "any"
+              },
+              "VAw9UYCs0nXh5p1MWtn1p": {
+                "conditionType": "chunkRef",
+                "parent": {
+                  "type": "condition",
+                  "id": "WQ_RzOLeZ5WJaFUBhFeSC"
+                },
+                "chunkId": "NHuMSEqwzvhuBFZZ3ESQ8",
+                "chunkStart": 0,
+                "chunkEnd": 34
+              },
+              "7FQGUyt9FeKdNk3cd-z7n": {
+                "conditionType": "chunkRef",
+                "parent": {
+                  "type": "condition",
+                  "id": "WQ_RzOLeZ5WJaFUBhFeSC"
+                },
+                "chunkId": "NHuMSEqwzvhuBFZZ3ESQ8",
+                "chunkStart": 60,
+                "chunkEnd": 209
+              },
+              "-_rIKj8hNzaOq7RMW_UDy": {
+                "conditionType": "group",
+                "parent": {
+                  "type": "mappingGroup",
+                  "id": "wJUfDxAlou_qARVWvtiWa"
+                },
+                "match": "any"
+              },
+              "mMitM-GpmEZ_cK9NyjMyF": {
+                "conditionType": "chunkRef",
+                "parent": {
+                  "type": "condition",
+                  "id": "-_rIKj8hNzaOq7RMW_UDy"
+                },
+                "chunkId": "NHuMSEqwzvhuBFZZ3ESQ8",
+                "chunkStart": 35,
+                "chunkEnd": 59
+              },
+              "iZ7jMbSnjs_EJAQt8mGWX": {
+                "conditionType": "chunkRef",
+                "parent": {
+                  "type": "condition",
+                  "id": "-_rIKj8hNzaOq7RMW_UDy"
+                },
+                "chunkId": "NHuMSEqwzvhuBFZZ3ESQ8",
+                "chunkStart": 210,
+                "chunkEnd": 255
+              }
+            }
+          }
+        },
+        "structure3DNodes": {
+          "YD8I_OvhK7poWpUEgMDJR": {
+            "codexId": "base",
+            "children": [
+              "Wb1CMJ_rpngNa0jc9yaKZ"
+            ],
+            "transform": {
+              "type": "trs",
+              "translate": [
+                0,
+                0,
+                0.049
+              ]
+            },
+            "controls": [],
+            "visual": {
+              "quality": "high",
+              "resource": "z6DCQ0RFWtjHnIaKy5pvF",
+              "nodeOrSceneName": "base"
+            },
+            "localized": {}
+          },
+          "Wb1CMJ_rpngNa0jc9yaKZ": {
+            "codexId": "pan",
+            "parent": "YD8I_OvhK7poWpUEgMDJR",
+            "children": [
+              "-YLOdaz2hBf06w5PGpVvm"
+            ],
+            "transform": {
+              "type": "trs",
+              "translate": [
+                0,
+                0,
+                0.2785
+              ]
+            },
+            "controls": [
+              {
+                "type": "rotate",
+                "axis": "z",
+                "commonAxis": "pan",
+                "target": {
+                  "type": "parameter",
+                  "parameter": {
+                    "id": "ByeohZ58ryYJdUsri6XEJ"
+                  }
+                }
+              }
+            ],
+            "visual": {
+              "quality": "high",
+              "resource": "z6DCQ0RFWtjHnIaKy5pvF",
+              "nodeOrSceneName": "yoke"
+            },
+            "localized": {}
+          },
+          "-YLOdaz2hBf06w5PGpVvm": {
+            "codexId": "tilt",
+            "parent": "Wb1CMJ_rpngNa0jc9yaKZ",
+            "children": [],
+            "transform": {
+              "type": "trs",
+              "translate": [
+                0,
+                0,
+                0.1065
+              ]
+            },
+            "controls": [
+              {
+                "type": "rotate",
+                "axis": "x",
+                "commonAxis": "tilt",
+                "target": {
+                  "type": "parameter",
+                  "parameter": {
+                    "id": "35KXOW-67BlVYBk4Mp5nm"
+                  }
+                }
+              }
+            ],
+            "visual": {
+              "quality": "high",
+              "resource": "z6DCQ0RFWtjHnIaKy5pvF",
+              "nodeOrSceneName": "head"
+            },
+            "localized": {}
+          }
+        },
+        "localizations": {
+          "HPZLGDsMdY5lb7zPVmvnk": {
+            "strings": {
+              "en-GB": "Colour Wheel Random Split Step",
+              "en-US": "Color Wheel Random Split Step"
+            },
+            "exportKey": "color_wheel_random_split_step"
+          },
+          "_QkG-vzmV4HRxNnhIG5_5": {
+            "strings": {
+              "en-GB": "Random Colour Wave",
+              "en-US": "Random Color Wave"
+            },
+            "exportKey": "random_color_wave"
+          },
+          "D89fIIAxUaFrLH4p8EpaP": {
+            "strings": {
+              "en-GB": "Synchronised: all fixtures start FX cycles at same time",
+              "en-US": "Synchronized: all fixtures start FX cycles at same time"
+            },
+            "exportKey": "macro_sync_long"
+          },
+          "k6yLke6ku_bv6TYw5VJIW": {
+            "strings": {
+              "en-GB": "Colour Wheel Shaker",
+              "en-US": "Color Wheel Shaker"
+            },
+            "exportKey": "color_wheel_shaker"
+          },
+          "ki2JFvNtViF8RoNCf-LTN": {
+            "strings": {
+              "en-GB": "The percentage insertion of the colour temperature control flags",
+              "en-US": "The percentage insertion of the color temperature control flags"
+            },
+            "exportKey": "color_ctc_description"
+          },
+          "GD03Cw-R-N1_UCl-k8kU-": {
+            "strings": {
+              "en-GB": "Random Colours",
+              "en-US": "Random Colors"
+            },
+            "exportKey": "random_colors"
+          },
+          "ByDvFoHwrWBmrFdK3-lEI": {
+            "strings": {
+              "en-GB": "Synchronised",
+              "en-US": "Synchronized"
+            },
+            "exportKey": "macro_sync"
+          },
+          "89r9rfjqfzAnDaS0QH5Fp": {
+            "strings": {
+              "en-GB": "Random Colour Step",
+              "en-US": "Random Color Step"
+            },
+            "exportKey": "random_color_step"
+          },
+          "ekWbteO8iU3mCcL73cls8": {
+            "strings": {
+              "en-GB": "Colour Temperature Control",
+              "en-US": "Color Temperature Control"
+            },
+            "exportKey": "color_ctc_name"
+          },
+          "JuxMoVSp17iRZZI3snwvn": {
+            "strings": {
+              "en-GB": "Reset colour only",
+              "en-US": "Reset color only"
+            },
+            "exportKey": "reset_color_long"
+          },
+          "q7gO-aYWv_ABykxVpaFi2": {
+            "strings": {
+              "en-GB": "Colour Wheel Split Step",
+              "en-US": "Color Wheel Split Step"
+            },
+            "exportKey": "color_wheel_split_step"
+          },
+          "utse98vImMT6q5rA6gd6s": {
+            "strings": {
+              "en-GB": "Colour Wheel All Step",
+              "en-US": "Color Wheel All Step"
+            },
+            "exportKey": "color_wheel_all_step"
+          },
+          "n6-pI7JIABCJw5djElC14": {
+            "strings": {
+              "en-GB": "Reset Colour",
+              "en-US": "Reset Color"
+            },
+            "exportKey": "reset_color"
+          },
+          "Sek8dB-HnDRVU9ewm4yi2": {
+            "strings": {
+              "en-GB": "Colour Wheel Full Step",
+              "en-US": "Color Wheel Full Step"
+            },
+            "exportKey": "color_wheel_full_step"
+          },
+          "uaQ_Pxm6PAjK05lEsxnoV": {
+            "strings": {
+              "en-US": "Rate"
+            },
+            "exportKey": "macro_rate_name"
+          },
+          "UciaPa-eBTjnP_2dkAsmZ": {
+            "strings": {
+              "en-US": "Linear"
+            },
+            "exportKey": "linear_curve"
+          },
+          "qdlxt-MZwG7lJrkaL3xJL": {
+            "strings": {
+              "en-US": "The rate of change from one full gobo to the next over a sequential series of gobos."
+            },
+            "exportKey": "gobo_select_cycle_fixed_description"
+          },
+          "ndfGv58zRKeIPr1lZzPRg": {
+            "strings": {
+              "en-US": "Gobo X-fade"
+            },
+            "exportKey": "gobo_x-fade"
+          },
+          "7i6X04Mb8F9NIz79PXisU": {
+            "strings": {
+              "en-US": "Fan Mode"
+            },
+            "exportKey": "physical_fan_mode_name"
+          },
+          "jei_EBMtGiAC45YYY_ctp": {
+            "strings": {
+              "en-US": "Grass Lines"
+            },
+            "exportKey": "grass_lines"
+          },
+          "7fp_ZFDXitmP1GbVyV3Pn": {
+            "strings": {
+              "en-US": "Inv Sq Law"
+            },
+            "exportKey": "inv_sq_law_curve"
+          },
+          "zIXICRueOakO-H_tTyBh0": {
+            "strings": {
+              "en-US": "Movie Flicker"
+            },
+            "exportKey": "movie_flicker"
+          },
+          "JT43wA09REIDu85Ksn57M": {
+            "strings": {
+              "en-US": "The rotational offset of a gobo around a single axis."
+            },
+            "exportKey": "gobo_rotate_offset_description"
+          },
+          "z2eUmdT0czGv53mh6_NRP": {
+            "strings": {
+              "en-US": "Tungsten Emulation Off"
+            },
+            "exportKey": "tungsten_emulation_off_long"
+          },
+          "85GwnXC9r_EF487siIiku": {
+            "strings": {
+              "en-US": "Cycle Fixed"
+            },
+            "exportKey": "gobo_select_cycle_fixed_name"
+          },
+          "2YqKZ-YxcKZ2Uxhg4MVcQ": {
+            "strings": {
+              "en-US": "Fire"
+            },
+            "exportKey": "fire"
+          },
+          "iSxcINTV9uPhN6pFYERvJ": {
+            "strings": {
+              "en-US": "An image representing an animation wheel."
+            },
+            "exportKey": "animation_image_description"
+          },
+          "znnFWzc4v1BU5d2IlRDGI": {
+            "strings": {
+              "en-US": "RGB Step"
+            },
+            "exportKey": "rgb_step"
+          },
+          "XRY2G4GwTo-TLeqSbmW1-": {
+            "strings": {
+              "en-US": "Shake Rate"
+            },
+            "exportKey": "gobo_rotate_shake_rate_name"
+          },
+          "fxOybqScOEHpPMDmEnV3r": {
+            "strings": {
+              "en-US": "S"
+            },
+            "exportKey": "s_curve"
+          },
+          "bPxJED5EIVgLzCxp3DiJz": {
+            "strings": {
+              "en-US": "Triple Strobe"
+            },
+            "exportKey": "triple_strobe"
+          },
+          "JX-bJm5qfIHrrgSnM0jc4": {
+            "strings": {
+              "en-US": "Intensity Pulse"
+            },
+            "exportKey": "intensity_pulse"
+          },
+          "FDze9yMUKj06eKoOyqt42": {
+            "strings": {
+              "en-US": "Limbo/Crystal in holder 62325152"
+            },
+            "exportKey": "limbo_crystal_extended"
+          },
+          "O5UO0TkdN-tPKjZ3eRRg1": {
+            "strings": {
+              "en-US": "Higgs 5090916"
+            },
+            "exportKey": "higgs_extended"
+          },
+          "TLh4dG8sm2V0GRRdBPMsj": {
+            "strings": {
+              "en-US": "Mix To White Wave"
+            },
+            "exportKey": "mix_to_white_wave"
+          },
+          "Kt7kTBxXHtvQjkUUl7S2d": {
+            "strings": {
+              "en-US": "Random Level"
+            },
+            "exportKey": "random_level"
+          },
+          "Hg94IrRhFqRuuN7_-tTac": {
+            "strings": {
+              "en-US": "The operating mode of a device."
+            },
+            "exportKey": "physical_reset_description"
+          },
+          "n0MnUAk2oHW4YUZ-5BMxS": {
+            "strings": {
+              "en-US": "Random Bold"
+            },
+            "exportKey": "random_bold"
+          },
+          "Xppi-39qTI9yotfPuTRHj": {
+            "strings": {
+              "en-US": "Med Fan/Reg Intens"
+            },
+            "exportKey": "med_fan_regulated_intensity"
+          },
+          "H1iOV4xwc4Qrs6tSPSyjQ": {
+            "strings": {
+              "en-US": "No function (disables calibration)"
+            },
+            "exportKey": "no_function_long"
+          },
+          "S9DaS0YnPS8ddMPDU0Kfu": {
+            "strings": {
+              "en-US": "Rainbow Step"
+            },
+            "exportKey": "rainbow_step"
+          },
+          "hWD5HjKO3hhayF-x_iQvK": {
+            "strings": {
+              "en-US": "The continous rotation of an animation wheel around a single axis."
+            },
+            "exportKey": "effects_animation_rotate_spin_description"
+          },
+          "Zm6EoGAl9b1zFx37-Ac3c": {
+            "strings": {
+              "en-US": "Blue"
+            },
+            "exportKey": "blue"
+          },
+          "z5M2fHp6oXoUd22T4sEkD": {
+            "strings": {
+              "en-US": "An image representing a gobo/template."
+            },
+            "exportKey": "gobo_image_description"
+          },
+          "4qpm-jtHsPoPfQ4lWkmWz": {
+            "strings": {
+              "en-US": "The mapping of input to power output."
+            },
+            "exportKey": "lamp_dim_curve_description"
+          },
+          "o6U1GgpdAkQv4e9FZzwS1": {
+            "strings": {
+              "en-US": "The mimicking of another type of light source."
+            },
+            "exportKey": "lamp_emulation_description"
+          },
+          "m2dbVyIHeEiZBXS3UtgF-": {
+            "strings": {
+              "en-US": "Limbo/Crystal in holder"
+            },
+            "exportKey": "limbo_crystal"
+          },
+          "Qp5AW9q7nYUXstjfaXwDn": {
+            "strings": {
+              "en-US": "Reg Fan/Fixed Intens"
+            },
+            "exportKey": "regulated_fan_fixed_intensity"
+          },
+          "REUcafv0YTknjAUixF-jM": {
+            "strings": {
+              "en-US": "Inverse square law dimming curve"
+            },
+            "exportKey": "inv_sq_law_curve_long"
+          },
+          "5oAvHlxyEiCWx1DTFROOY": {
+            "strings": {
+              "en-US": "Animotion"
+            },
+            "exportKey": "animotion"
+          },
+          "PDP8R6PLggE292zDzkuL5": {
+            "strings": {
+              "en-US": "Iris Ramp"
+            },
+            "exportKey": "iris_ramp"
+          },
+          "oOEUKT8pzZcdlaWrp9V5K": {
+            "strings": {
+              "en-US": "Display On"
+            },
+            "exportKey": "display_on"
+          },
+          "Zc7FDXYr-gXPvSEKv84sS": {
+            "strings": {
+              "en-US": "Rainbow Pulse"
+            },
+            "exportKey": "rainbow_pulse"
+          },
+          "ucEbrhymb-D08uATJ6Fv1": {
+            "strings": {
+              "en-US": "Gobo Twist"
+            },
+            "exportKey": "gobo_twist"
+          },
+          "u4rnCYnxxg8FOHFsDvumQ": {
+            "strings": {
+              "en-US": "The angle at which the animation crosses a source of light."
+            },
+            "exportKey": "effects_animation_incline_angle_description"
+          },
+          "L7oE9TBHC7PbcF86Neab8": {
+            "strings": {
+              "en-US": "Focal Distance"
+            },
+            "exportKey": "shape_zoom_focal_distance_name"
+          },
+          "OTWhTBtoBQUetDRDYcNjT": {
+            "strings": {
+              "en-US": "Congo/Red"
+            },
+            "exportKey": "congo_red"
+          },
+          "FowJTkIcUe4QWU23D8hFL": {
+            "strings": {
+              "en-US": "Random start (FX 1 adjust controls overall speed)"
+            },
+            "exportKey": "macro_random_start_long"
+          },
+          "UhBxJqzcfoHpBw6vcTW37": {
+            "strings": {
+              "en-US": "Green"
+            },
+            "exportKey": "green"
+          },
+          "pGX840Qu_LYWtre2o-NPU": {
+            "strings": {
+              "en-US": "Tungsten Emulation On"
+            },
+            "exportKey": "tungsten_emulation_on_long"
+          },
+          "HoqOPhQbJ00gzTQqEegmQ": {
+            "strings": {
+              "en-US": "The focal distance of a source of light."
+            },
+            "exportKey": "shape_zoom_focal_distance_description"
+          },
+          "x_lTU6YhX9CbhkzuBvEIz": {
+            "strings": {
+              "en-US": "Hot And Cold"
+            },
+            "exportKey": "hot_and_cold"
+          },
+          "BhpnolscYnggyjDPUfdmY": {
+            "strings": {
+              "en-US": "The phase offset between devices executing the macro."
+            },
+            "exportKey": "macro_offset_description"
+          },
+          "5_fwWBZNUiLhBhQoPr6CS": {
+            "strings": {
+              "en-US": "Magenta"
+            },
+            "exportKey": "magenta"
+          },
+          "Cd3Q0QgSQ1qxJ1acJyFsV": {
+            "strings": {
+              "en-US": "Display Off"
+            },
+            "exportKey": "display_off"
+          },
+          "i_ue0kUSfZxhGRoJwz76s": {
+            "strings": {
+              "en-US": "Mix To White Step"
+            },
+            "exportKey": "mix_to_white_step"
+          },
+          "i9e1MUHRJqY28zfDhm-_V": {
+            "strings": {
+              "en-US": "Zoom Ramp"
+            },
+            "exportKey": "zoom_ramp"
+          },
+          "9zKOaxDnQJh7LCdnINEEo": {
+            "strings": {
+              "en-US": "Animation Image"
+            },
+            "exportKey": "animation_image"
+          },
+          "Bn5Uravv90OwFS-raIbZ7": {
+            "strings": {
+              "en-US": "Ice"
+            },
+            "exportKey": "ice"
+          },
+          "PLvJjAuj5BwghgG4cX56r": {
+            "strings": {
+              "en-US": "Iris Step"
+            },
+            "exportKey": "iris_step"
+          },
+          "LWAoR91FYsFlEg5UGeuOQ": {
+            "strings": {
+              "en-US": "Linear dimming curve"
+            },
+            "exportKey": "linear_curve_long"
+          },
+          "eBH3Hz4nr7mpFBPOp_6ag": {
+            "strings": {
+              "en-US": "Orange/Magenta"
+            },
+            "exportKey": "orange_magenta"
+          },
+          "W_mdJ724aiFcUngU-fznz": {
+            "strings": {
+              "en-US": "RGB Wave"
+            },
+            "exportKey": "rgb_wave"
+          },
+          "3xCM7YeboWsDWaf7_4c2D": {
+            "strings": {
+              "en-US": "Shakey Dimmers"
+            },
+            "exportKey": "shakey_dimmers"
+          },
+          "eevTOMkmA05TFAJWMWouV": {
+            "strings": {
+              "en-US": "Select Fixed Gobo 3"
+            },
+            "exportKey": "select_fixed_gobo_3"
+          },
+          "tN2Tr3TXgIVgezuAO1GM9": {
+            "strings": {
+              "en-US": "Reset beam only"
+            },
+            "exportKey": "reset_beam_long"
+          },
+          "SUjdSpRC1MqOXlityT1tr": {
+            "strings": {
+              "en-US": "Zoom Wave"
+            },
+            "exportKey": "zoom_wave"
+          },
+          "f5KCX4l4mWaw3WBLqSKtk": {
+            "strings": {
+              "en-US": "Negative Pulse"
+            },
+            "exportKey": "negative_pulse"
+          },
+          "l2H4-cRA_GICPLAEJkze4": {
+            "strings": {
+              "en-US": "No Sync"
+            },
+            "exportKey": "no_sync"
+          },
+          "_qRpbtIvQJNOqu7vDDyNK": {
+            "strings": {
+              "en-US": "Reset Beam"
+            },
+            "exportKey": "reset_beam"
+          },
+          "dcRo8YyTKWSXYG0vb-XhY": {
+            "strings": {
+              "en-US": "Magenta/Congo"
+            },
+            "exportKey": "magenta_congo"
+          },
+          "O5sZX64ywQXitfdnEWUGo": {
+            "strings": {
+              "en-US": "Spin"
+            },
+            "exportKey": "spin"
+          },
+          "lxrHalhUUcRtn3_FI74y2": {
+            "strings": {
+              "en-US": "Low fan speed, regulated light output intensity"
+            },
+            "exportKey": "low_fan_regulated_intensity_long"
+          },
+          "YpQiYNMv88RLUWwZZzVzF": {
+            "strings": {
+              "en-US": "Random Subtle"
+            },
+            "exportKey": "random_subtle"
+          },
+          "bpVtD56mAXlNgYcSsqyTj": {
+            "strings": {
+              "en-US": "Thunderstorm"
+            },
+            "exportKey": "thunderstorm"
+          },
+          "UmDrtX6aa-v_gIRXiLJjM": {
+            "strings": {
+              "en-US": "Patch It 509091"
+            },
+            "exportKey": "patch_it_extended"
+          },
+          "5IpWlMq1opcr3tFInwhxR": {
+            "strings": {
+              "en-US": "Turn off control panel display"
+            },
+            "exportKey": "display_off_long"
+          },
+          "2fuAd43TC9x6-AwcY3fup": {
+            "strings": {
+              "en-US": "Angle"
+            },
+            "exportKey": "angle"
+          },
+          "PEOIji0dEVez7mLOpUqKX": {
+            "strings": {
+              "en-US": "Regulated fan speed, fixed light output intensity"
+            },
+            "exportKey": "regulated_fan_fixed_intensity_long"
+          },
+          "qUft_U0RAvEgFiwlTbqw6": {
+            "strings": {
+              "en-US": "Low Fan/Reg Intens"
+            },
+            "exportKey": "low_fan_regulated_intensity"
+          },
+          "R3eVOz9krQJqw3Cd-OCPg": {
+            "strings": {
+              "en-US": "Red/Open"
+            },
+            "exportKey": "red_open"
+          },
+          "a8KdZOYZbn9_z0gPFYNlf": {
+            "strings": {
+              "en-US": "CMY Wave"
+            },
+            "exportKey": "cmy_wave"
+          },
+          "-BlnjDnyKOKLa4vZ3IlM-": {
+            "strings": {
+              "en-US": "CMY Step"
+            },
+            "exportKey": "cmy_step"
+          },
+          "O6PEu_6FQdOrbPqBMFZi1": {
+            "strings": {
+              "en-US": "Pounce"
+            },
+            "exportKey": "pounce"
+          },
+          "By5Um0KeTNKvQkDRZzcdv": {
+            "strings": {
+              "en-US": "Random Dimmers"
+            },
+            "exportKey": "random_dimmers"
+          },
+          "HoZarQ2xSGuUbw5QKwrZ6": {
+            "strings": {
+              "en-US": "The rate of oscillation of a selected gobo around a single axis."
+            },
+            "exportKey": "gobo_rotate_shake_rate_description"
+          },
+          "eO39hvqUkumLVDufdzGFz": {
+            "strings": {
+              "en-US": "Red White Blue Wave"
+            },
+            "exportKey": "red_white_blue_wave"
+          },
+          "yQVCdxNF2HroXuscqjC8f": {
+            "strings": {
+              "en-US": "Zoom Step"
+            },
+            "exportKey": "zoom_step"
+          },
+          "umtTEm06x3a_l_Oimgpo6": {
+            "strings": {
+              "en-US": "Dim Curve"
+            },
+            "exportKey": "lamp_dim_curve_name"
+          },
+          "hZ2l4WUfTxPmeX-PZXL2D": {
+            "strings": {
+              "en-US": "Grass Lines 5090919"
+            },
+            "exportKey": "grass_lines_extended"
+          },
+          "f7OXzYi2y7ZMVR5pBcax_": {
+            "strings": {
+              "en-US": "Broken Marble"
+            },
+            "exportKey": "broken_marble"
+          },
+          "bR5SeuC8nogWaPmcxZD7X": {
+            "strings": {
+              "en-US": "Patch It"
+            },
+            "exportKey": "patch_it"
+          },
+          "hAMFhWeISz1ke8Yd0lFEw": {
+            "strings": {
+              "en-US": "RGB Pulse"
+            },
+            "exportKey": "rgb_pulse"
+          },
+          "xWzrkCVe4YR8mjobjJxuW": {
+            "strings": {
+              "en-US": "Medium fan speed, regulated light output intensity"
+            },
+            "exportKey": "med_fan_regulated_intensity_long"
+          },
+          "JAVXgKLj334EdMnD5bTsT": {
+            "strings": {
+              "en-US": "Red White Blue Step"
+            },
+            "exportKey": "red_white_blue_step"
+          },
+          "bx7xzCmBbNpOcGHLpFZi5": {
+            "strings": {
+              "en-US": "Ultra-low fan speed, regulated light output intensity"
+            },
+            "exportKey": "ultra_low_fan_regulated_intensity_long"
+          },
+          "Idm3G_eI9oBP7ZxMZHXuq": {
+            "strings": {
+              "en-US": "Water Gobo"
+            },
+            "exportKey": "water_gobo"
+          },
+          "Lq7Nxk2PIjTHlunr1KPhv": {
+            "strings": {
+              "en-US": "Select Fixed Gobo 1"
+            },
+            "exportKey": "select_fixed_gobo_1"
+          },
+          "bPPw4n4Yniq4DBxVqORqc": {
+            "strings": {
+              "en-US": "Select Fixed Gobo 7"
+            },
+            "exportKey": "select_fixed_gobo_7"
+          },
+          "Vq7CZYq-XAF956hBGzuDa": {
+            "strings": {
+              "en-US": "Random Mix Pulse"
+            },
+            "exportKey": "random_mix_pulse"
+          },
+          "3_0Ewry9H4qU5MCNXzuWv": {
+            "strings": {
+              "en-US": "The rotational offset of an animation wheel around a single axis."
+            },
+            "exportKey": "effects_animation_rotate_offset_description"
+          },
+          "5-6Qso8kSD_Ro8LtdC6w-": {
+            "strings": {
+              "en-US": "The angle of the frame relative to its default plane of insertion."
+            },
+            "exportKey": "shape_frame_angle_description"
+          },
+          "lw-Q0fu7kjKTOCCv-WdAv": {
+            "strings": {
+              "en-US": "The rotational offset of a framing module around a single axis."
+            },
+            "exportKey": "shape_frame_rotate_offset_description"
+          },
+          "hlwkmf1HtT9oA0-dzDLOG": {
+            "strings": {
+              "en-US": "Gobo Image"
+            },
+            "exportKey": "gobo_image"
+          },
+          "M3hYas1NIGkYyCTPJ1ZF3": {
+            "strings": {
+              "en-US": "Broken Marble 5090918"
+            },
+            "exportKey": "broken_marble_extended"
+          },
+          "RwiqsTV10k8LS2LIGYERR": {
+            "strings": {
+              "en-US": "Pin To Flood"
+            },
+            "exportKey": "pin_to_flood"
+          },
+          "wjkwd-fYMw3e3SSPd2PYp": {
+            "strings": {
+              "en-US": "The proportion of the diameter of the beam which is covered by the frost."
+            },
+            "exportKey": "effects_frost_insert_description"
+          },
+          "DTsYbIQyirItd4YshfumB": {
+            "strings": {
+              "en-US": "The operating mode of a device fan."
+            },
+            "exportKey": "physical_fan_mode_description"
+          },
+          "oG5oJbvzlSDDc2XfTTLCH": {
+            "strings": {
+              "en-US": "Turn on control panel display"
+            },
+            "exportKey": "display_on_long"
+          },
+          "nUAD-NLQcmwrpkXz_R-c8": {
+            "strings": {
+              "en-US": "MAC Encore Performance CLD"
+            },
+            "exportKey": "device_description"
+          },
+          "jnLfF0zeHhhPEeu4DUqvl": {
+            "strings": {
+              "en-US": "No Func"
+            },
+            "exportKey": "no_function"
+          },
+          "qnoyYQYt1ImlWIrFNifnF": {
+            "strings": {
+              "en-US": "Electric Arc"
+            },
+            "exportKey": "electric_arc"
+          },
+          "9d9kpGNVa4B7OWjgTqeYh": {
+            "strings": {
+              "en-US": "S-curve dimming curve"
+            },
+            "exportKey": "s_curve_long"
+          },
+          "chjeOT_dOuPN2aadRQ0Lq": {
+            "strings": {
+              "en-US": "Cross Chase"
+            },
+            "exportKey": "cross_chase"
+          },
+          "fYOaaLTeZ9q3Mopjaq63r": {
+            "strings": {
+              "en-US": "Intensity Step"
+            },
+            "exportKey": "intensity_step"
+          },
+          "HCC6nuz57prIToQmOFvym": {
+            "strings": {
+              "en-US": "Fire Gobo"
+            },
+            "exportKey": "fire_gobo"
+          },
+          "5-4qgQkLjoNQZ77cpVREc": {
+            "strings": {
+              "en-US": "The continuous rotation of a gobo around a single axis."
+            },
+            "exportKey": "gobo_rotate_spin_description"
+          },
+          "-i3v4uTJIbp3asZJMC9Gk": {
+            "strings": {
+              "en-US": "Open/Blue"
+            },
+            "exportKey": "open_blue"
+          },
+          "8kNfWZFBtVbW1XcSjn-6x": {
+            "strings": {
+              "en-US": "Sq Law"
+            },
+            "exportKey": "sq_law_curve"
+          },
+          "Be99hT72tHkdv6-XEDXXC": {
+            "strings": {
+              "en-US": "Blue/Green"
+            },
+            "exportKey": "blue_green"
+          },
+          "sgn6FUVJLy0IAaEx0-ld4": {
+            "strings": {
+              "en-US": "No Fx"
+            },
+            "exportKey": "no_fx"
+          },
+          "dLdCs9t2Q5b0fu7AxZsfG": {
+            "strings": {
+              "en-US": "Milling Around"
+            },
+            "exportKey": "milling_around"
+          },
+          "avkOHx1KhioSQFG2pIROd": {
+            "strings": {
+              "en-US": "Select Fixed Gobo 2"
+            },
+            "exportKey": "select_fixed_gobo_2"
+          },
+          "LTCFvtuN6I-FDTtSmAUFH": {
+            "strings": {
+              "en-US": "Fade Spin Gobo Zoom"
+            },
+            "exportKey": "fade_spin_gobo_zoom"
+          },
+          "i2DNfp626L_ywbgerOXxp": {
+            "strings": {
+              "en-US": "The frequency of execution of the macro."
+            },
+            "exportKey": "macro_rate_description"
+          },
+          "bqGpclOuvXYTwPLVvtyiA": {
+            "strings": {
+              "en-US": "Red"
+            },
+            "exportKey": "red"
+          },
+          "6h4ixBMN0JEad_miKZvLP": {
+            "strings": {
+              "en-US": "Green/Orange"
+            },
+            "exportKey": "green_orange"
+          },
+          "IYSGPruCZZ0nHBrpKr8ht": {
+            "strings": {
+              "en-US": "Mix To White Pulse"
+            },
+            "exportKey": "mix_to_white_pulse"
+          },
+          "zRgK5bZMZP6vgd5u67JXk": {
+            "strings": {
+              "en-US": "Reset P/T"
+            },
+            "exportKey": "reset_pan_tilt"
+          },
+          "0YPG8UbZlzg79zMkwUhVX": {
+            "strings": {
+              "en-US": "Irish Pulse"
+            },
+            "exportKey": "irish_pulse"
+          },
+          "uR9-8PZafeYyOHvwnkW0q": {
+            "strings": {
+              "en-US": "The selection of a pre-programed sequence."
+            },
+            "exportKey": "macro_program_description"
+          },
+          "esjGT0D65nAVCrZgETp73": {
+            "strings": {
+              "en-US": "Congo"
+            },
+            "exportKey": "congo"
+          },
+          "eAlps4ApOr9M9KoTOuZCy": {
+            "strings": {
+              "en-US": "Offset"
+            },
+            "exportKey": "offset"
+          },
+          "POjr4p8cwZ2oWt9mM91-x": {
+            "strings": {
+              "en-US": "The proportion of the diameter of the beam which is covered by the frame."
+            },
+            "exportKey": "shape_frame_insert_description"
+          },
+          "9yt97-X3e90geNOYz7BJe": {
+            "strings": {
+              "en-US": "Tick Tock"
+            },
+            "exportKey": "tick_tock"
+          },
+          "H2Icm1e8WL9b9QNnHbme7": {
+            "strings": {
+              "en-US": "Intensity Sine Wave"
+            },
+            "exportKey": "intensity_sine_wave"
+          },
+          "UsHPzFPCK3_4ds8H9fh4F": {
+            "strings": {
+              "en-US": "Up Flash"
+            },
+            "exportKey": "up_flash"
+          },
+          "w2mjnTkZH0AJkFTLRgwX0": {
+            "strings": {
+              "en-US": "Double Strobe"
+            },
+            "exportKey": "double_strobe"
+          },
+          "1sr3GOF3CNxmZ1o06Ll0r": {
+            "strings": {
+              "en-US": "Positive Pulse"
+            },
+            "exportKey": "positive_pulse"
+          },
+          "E4p30KP9tHXIKWwv_TspX": {
+            "strings": {
+              "en-US": "Random Size Step"
+            },
+            "exportKey": "random_size_step"
+          },
+          "yzVUNryvtbwMC0o5pnIJK": {
+            "strings": {
+              "en-US": "Zoom Fades"
+            },
+            "exportKey": "zoom_fades"
+          },
+          "XyVcuwP0tjrl17Sd9RlFp": {
+            "strings": {
+              "en-US": "The position within a series of gobos."
+            },
+            "exportKey": "gobo_select_index_description"
+          },
+          "GCIlv8yvUSA1GLAaUEIkM": {
+            "strings": {
+              "en-US": "The field angle of a source of light."
+            },
+            "exportKey": "shape_zoom_field_angle_description"
+          },
+          "LSP7vwN2aaiNg-iT3ir76": {
+            "strings": {
+              "en-US": "Select Fixed Gobo 4"
+            },
+            "exportKey": "select_fixed_gobo_4"
+          },
+          "2BUf8jIhtvoNa8FmvrtYC": {
+            "strings": {
+              "en-US": "Expand Twist"
+            },
+            "exportKey": "expand_twist"
+          },
+          "M3rN4SQMUkD-N_yHtxGIz": {
+            "strings": {
+              "en-US": "Reset pan and tilt only"
+            },
+            "exportKey": "reset_pan_tilt_long"
+          },
+          "7SUDXSiOdouPcXzrel56p": {
+            "strings": {
+              "en-US": "Index"
+            },
+            "exportKey": "gobo_select_index_name"
+          },
+          "XxwCspAnL2tdspnHh-LUO": {
+            "strings": {
+              "en-US": "Full Fan/Reg Intens"
+            },
+            "exportKey": "full_fan_regulated_intensity"
+          },
+          "nDOty9beEvueMqVmu481T": {
+            "strings": {
+              "en-US": "Full fan speed, regulated light output intensity"
+            },
+            "exportKey": "full_fan_regulated_intensity_long"
+          },
+          "6snBeDq8wypPGXILsg3Xg": {
+            "strings": {
+              "en-US": "Reset"
+            },
+            "exportKey": "reset"
+          },
+          "dSE3wcKqNQj4FiJues5Pj": {
+            "strings": {
+              "en-US": "Reset entire fixture"
+            },
+            "exportKey": "reset_fixture_long"
+          },
+          "5r3ky_zcXwgqbUZB3tVw0": {
+            "strings": {
+              "en-US": "Center Out Chase"
+            },
+            "exportKey": "center_out_chase"
+          },
+          "ojg_PtmNEcSrRvYJRtvHR": {
+            "strings": {
+              "en-US": "Random Size Wave"
+            },
+            "exportKey": "random_size_wave"
+          },
+          "-6mTHxB5mXZdFB9YxTG3d": {
+            "strings": {
+              "en-US": "Select Fixed Gobo 5"
+            },
+            "exportKey": "select_fixed_gobo_5"
+          },
+          "V8cSNbzet8GSquTlfrzfz": {
+            "strings": {
+              "en-US": "XLow Fan/Reg Intens"
+            },
+            "exportKey": "ultra_low_fan_regulated_intensity"
+          },
+          "ztjLb3fcaKV8UzJ6c4LJG": {
+            "strings": {
+              "en-US": "Rings In Out"
+            },
+            "exportKey": "rings_in_out"
+          },
+          "Ukv_Mv89wElW93TYbxLwD": {
+            "strings": {
+              "en-US": "Welding"
+            },
+            "exportKey": "welding"
+          },
+          "hy6eFpMkLeyYr3dBgU8YW": {
+            "strings": {
+              "en-US": "Select Fixed Gobo 6"
+            },
+            "exportKey": "select_fixed_gobo_6"
+          },
+          "xnXZYPN4hL2Tyg0nNnLGe": {
+            "strings": {
+              "en-US": "Expand Twist Fade"
+            },
+            "exportKey": "expand_twist_fade"
+          },
+          "hBEUt2y605W-bvQAeQ2FU": {
+            "strings": {
+              "en-US": "CMY Pulse"
+            },
+            "exportKey": "cmy_pulse"
+          },
+          "dvSB4cu222DG09SRUJLV4": {
+            "strings": {
+              "en-US": "Tungst Emul On"
+            },
+            "exportKey": "tungsten_emulation_on"
+          },
+          "tXH8kwms-CO3yQgjAl2m6": {
+            "strings": {
+              "en-US": "Higgs"
+            },
+            "exportKey": "higgs"
+          },
+          "q9YEy9O4AkA4hhgdy4JsD": {
+            "strings": {
+              "en-US": "Rainbow Wave"
+            },
+            "exportKey": "rainbow_wave"
+          },
+          "L4XKHsVpqXT3eZIqarHXD": {
+            "strings": {
+              "en-US": "Open"
+            },
+            "exportKey": "open"
+          },
+          "K2Uc8lGaraYLWwpjKMWYr": {
+            "strings": {
+              "en-US": "Random Mix Step"
+            },
+            "exportKey": "random_mix_step"
+          },
+          "szymgQv6z57Nnbs5YGgH8": {
+            "strings": {
+              "en-US": "Splash"
+            },
+            "exportKey": "splash"
+          },
+          "QCRx2EJQHjn-RZS880Wb6": {
+            "strings": {
+              "en-US": "Thunderstorm Atomic"
+            },
+            "exportKey": "thunderstorm_atomic"
+          },
+          "NPkupAg6g3hPWp8i-xowQ": {
+            "strings": {
+              "en-US": "Random Start"
+            },
+            "exportKey": "macro_random_start"
+          },
+          "HoEb_zgPLpEcJ3877df7o": {
+            "strings": {
+              "en-US": "Insert"
+            },
+            "exportKey": "insert"
+          },
+          "isoUmcpzhT1N_aL3UDGDM": {
+            "strings": {
+              "en-US": "The proportion of the radius of the beam which is covered by the iris."
+            },
+            "exportKey": "shape_iris_insert_description"
+          },
+          "CeFpHbPO1blh5SlOanQh6": {
+            "strings": {
+              "en-US": "Warm And Fuzzy"
+            },
+            "exportKey": "warm_and_fuzzy"
+          },
+          "xzEwDfxMvwCmR3I9q2Xsp": {
+            "strings": {
+              "en-US": "Square law dimming curve"
+            },
+            "exportKey": "sq_law_curve_long"
+          },
+          "qOJxGYGFybeKx9JvTW9DF": {
+            "strings": {
+              "en-US": "Program"
+            },
+            "exportKey": "macro_program_name"
+          },
+          "KqOHRJ8cZRBFLLDSJTezI": {
+            "strings": {
+              "en-US": "Random Duration"
+            },
+            "exportKey": "random_duration"
+          },
+          "p9zB7dA_rYsbBJ11DmoT3": {
+            "strings": {
+              "en-US": "Orange"
+            },
+            "exportKey": "orange"
+          },
+          "n21_Domcowr64tSK82IqM": {
+            "strings": {
+              "en-US": "Water"
+            },
+            "exportKey": "water"
+          },
+          "nwctGjj5rVkmzrXq5G-JR": {
+            "strings": {
+              "en-US": "Field Angle"
+            },
+            "exportKey": "shape_zoom_field_angle_name"
+          },
+          "TLlCNmTG56Zntl6cUjnyX": {
+            "strings": {
+              "en-US": "Emulation"
+            },
+            "exportKey": "lamp_emulation_name"
+          },
+          "bUE-UqPiaPFGNw8L3jkgw": {
+            "strings": {
+              "en-US": "Tungst Emul Off"
+            },
+            "exportKey": "tungsten_emulation_off"
+          },
+          "8MbQpZwqjv0yJPb6QXKPF": {
+            "strings": {
+              "en-US": "The brightness of an integrated configuration display of a device."
+            },
+            "exportKey": "display_brightness_description"
+          },
+          "ER4qyDX-xTx8DykgPs5tG": {
+            "strings": {
+              "en-US": "Up Flash Down Flash"
+            },
+            "exportKey": "up_flash_down_flash"
+          },
+          "zPQT-r9jnVMEmduFSa7YO": {
+            "strings": {
+              "en-US": "Brightness"
+            },
+            "exportKey": "display_brightness_name"
+          }
+        },
+        "sourceLocale": "en-US",
+        "structure3D": {
+          "codexId": "structure-3d",
+          "access": [
+            "read"
+          ],
+          "lifetime": "static",
+          "rootNodes": [
+            "YD8I_OvhK7poWpUEgMDJR"
+          ]
+        }
+      },
+      "fHcL9QZluu-xcgj9xJ9qm": {
+        "type": "deviceClass",
+        "orgId": {
+          "type": "org",
+          "id": "com.example"
+        },
+        "deviceClassId": "movable",
+        "deviceClassVersion": "1.0.0",
+        "basicData": {
+          "publishDate": "2023-08-12T16:00:00Z",
+          "author": "ESTA E1.73 Task Group",
+          "history": {
+            "2023-08-12T16:00:00Z": "Initial release"
+          },
+          "manufacturerName": "ESTA",
+          "manufacturerUrl": "https://www.esta.org",
+          "manufacturerEstaId": "0",
+          "modelName": "Movable",
+          "modelCategory": "other",
+          "modelSubcategory": "other",
+          "localized": {
+            "description": "qSpPcsOZYIDyAt3rj9TzM"
+          }
+        },
+        "libraries": {
+          "org.esta.lib.core": "1.0.0",
+          "org.esta.lib.motion": "1.0.0"
+        },
+        "parameterClasses": {},
+        "structureClasses": {},
+        "serializerClasses": {},
+        "resourceClasses": {},
+        "commandClasses": {},
+        "parameterEditors": [
+          "QXgDyjIJ5RLriMzcWSYwm",
+          "gMm6yNuihlOj6P7Z7ljJw",
+          "HUDa_tZOgMp3av4uJML5c",
+          "aHPSz7OGvFtqFqHl1G-5i",
+          "68QKjfqUz1rwFzT2RyIdl",
+          "0MwlSaoeZhM3oz2E7NCEN",
+          "kJHmZZAVIah0n5zF97XyP",
+          "P6Pd5uSyuyeTDWTmjuiWb",
+          "cZ3lJTAtLvdTGxy8TV56B"
+        ],
+        "parameters": {
+          "QXgDyjIJ5RLriMzcWSYwm": {
+            "codexId": "xRot",
+            "class": {
+              "type": "imported",
+              "library": "org.esta.lib.motion",
+              "codexId": "motion/rotate/offset"
+            },
+            "access": [
+              "write",
+              "readTarget"
+            ],
+            "lifetime": "runtime",
+            "minimum": -180,
+            "maximum": 180,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "gMm6yNuihlOj6P7Z7ljJw": {
+            "codexId": "zPos",
+            "class": {
+              "type": "imported",
+              "library": "org.esta.lib.motion",
+              "codexId": "motion/linear/position"
+            },
+            "access": [
+              "write",
+              "readTarget"
+            ],
+            "lifetime": "runtime",
+            "minimum": -300,
+            "maximum": 300,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "HUDa_tZOgMp3av4uJML5c": {
+            "codexId": "zRot",
+            "class": {
+              "type": "imported",
+              "library": "org.esta.lib.motion",
+              "codexId": "motion/rotate/offset"
+            },
+            "access": [
+              "write",
+              "readTarget"
+            ],
+            "lifetime": "runtime",
+            "minimum": -180,
+            "maximum": 180,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "aHPSz7OGvFtqFqHl1G-5i": {
+            "codexId": "yPos",
+            "class": {
+              "type": "imported",
+              "library": "org.esta.lib.motion",
+              "codexId": "motion/linear/position"
+            },
+            "access": [
+              "write",
+              "readTarget"
+            ],
+            "lifetime": "runtime",
+            "minimum": -300,
+            "maximum": 300,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "68QKjfqUz1rwFzT2RyIdl": {
+            "codexId": "ySpin",
+            "class": {
+              "type": "imported",
+              "library": "org.esta.lib.motion",
+              "codexId": "motion/rotate/spin"
+            },
+            "access": [
+              "readTarget",
+              "write"
+            ],
+            "lifetime": "runtime",
+            "minimum": -120,
+            "maximum": 120,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "0MwlSaoeZhM3oz2E7NCEN": {
+            "codexId": "xSpin",
+            "class": {
+              "type": "imported",
+              "library": "org.esta.lib.motion",
+              "codexId": "motion/rotate/spin"
+            },
+            "access": [
+              "write",
+              "readTarget"
+            ],
+            "lifetime": "runtime",
+            "minimum": -120,
+            "maximum": 120,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "kJHmZZAVIah0n5zF97XyP": {
+            "codexId": "yRot",
+            "class": {
+              "type": "imported",
+              "library": "org.esta.lib.motion",
+              "codexId": "motion/rotate/offset"
+            },
+            "access": [
+              "readTarget",
+              "write"
+            ],
+            "lifetime": "runtime",
+            "minimum": -180,
+            "maximum": 180,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "P6Pd5uSyuyeTDWTmjuiWb": {
+            "codexId": "zSpin",
+            "class": {
+              "type": "imported",
+              "library": "org.esta.lib.motion",
+              "codexId": "motion/rotate/spin"
+            },
+            "access": [
+              "write",
+              "readTarget"
+            ],
+            "lifetime": "runtime",
+            "minimum": -120,
+            "maximum": 120,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          },
+          "cZ3lJTAtLvdTGxy8TV56B": {
+            "codexId": "xPos",
+            "class": {
+              "type": "imported",
+              "library": "org.esta.lib.motion",
+              "codexId": "motion/linear/position"
+            },
+            "access": [
+              "readTarget",
+              "write"
+            ],
+            "lifetime": "runtime",
+            "minimum": -300,
+            "maximum": 300,
+            "default": {
+              "type": "numeric",
+              "value": 0
+            },
+            "localized": {}
+          }
+        },
+        "resourceEditors": [],
+        "resources": {},
+        "resourceAssets": {},
+        "commandEditors": [],
+        "commands": {},
+        "commandClassArguments": {},
+        "commandClassReturnValues": {},
+        "enumChoices": {},
+        "dmxSerializers": {
+          "SF9lx9N6PkWQYTh4Bonfe": {
+            "codexId": "dmx",
+            "access": [
+              "read"
+            ],
+            "lifetime": "persistent",
+            "chunks": {
+              "RnRd4Uyo75gvKoV_iuuTi": {
+                "offsets": [
+                  13
+                ]
+              },
+              "lUn6nfwkajiatGNh7Ua_D": {
+                "offsets": [
+                  12
+                ]
+              },
+              "fn8kargTEyCJosMOZLyOy": {
+                "offsets": [
+                  2,
+                  3
+                ]
+              },
+              "-lkXb4Dgk0QeA76qnLpzZ": {
+                "offsets": [
+                  4,
+                  5
+                ]
+              },
+              "Ak1gJg7V3kWdOvyMj_UNR": {
+                "offsets": [
+                  6,
+                  7
+                ]
+              },
+              "wP_6uPIYt4MQtMf8hceAy": {
+                "offsets": [
+                  14
+                ]
+              },
+              "MBBckFwh8IYgQYozOv7XV": {
+                "offsets": [
+                  8,
+                  9
+                ]
+              },
+              "DpsJ5PUDOkmyZNp25TR2E": {
+                "offsets": [
+                  10,
+                  11
+                ]
+              },
+              "vrTGU_iJMurDc7IFze544": {
+                "offsets": [
+                  0,
+                  1
+                ]
+              }
+            },
+            "mappingGroups": {
+              "x53NoOrEFiZi-3JXodyaX": {
+                "chunkId": "RnRd4Uyo75gvKoV_iuuTi",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "68QKjfqUz1rwFzT2RyIdl"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": -120,
+                          "end": 120
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 240
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "DXffODjPnfPusE5H7ClOz": {
+                "chunkId": "lUn6nfwkajiatGNh7Ua_D",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "0MwlSaoeZhM3oz2E7NCEN"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": -120,
+                          "end": 120
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 240
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "hQLqcgywtN_StaRZhC5Ir": {
+                "chunkId": "fn8kargTEyCJosMOZLyOy",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "aHPSz7OGvFtqFqHl1G-5i"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": -300,
+                          "end": 300
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 60000
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "pG7fhhIKFmyHWZuyRhhrU": {
+                "chunkId": "-lkXb4Dgk0QeA76qnLpzZ",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "gMm6yNuihlOj6P7Z7ljJw"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": -300,
+                          "end": 300
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 60000
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "zBcFe8_bdvQ-niulLBre8": {
+                "chunkId": "Ak1gJg7V3kWdOvyMj_UNR",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "QXgDyjIJ5RLriMzcWSYwm"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": -180,
+                          "end": 180
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 36000
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "ewf4TPRhFc0QXfUqdZN2v": {
+                "chunkId": "wP_6uPIYt4MQtMf8hceAy",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "P6Pd5uSyuyeTDWTmjuiWb"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": -120,
+                          "end": 120
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 240
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "R8DHBDAh2loYPn0qhIZMh": {
+                "chunkId": "MBBckFwh8IYgQYozOv7XV",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "kJHmZZAVIah0n5zF97XyP"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": -180,
+                          "end": 180
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 36000
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "u6b4K18IdSLBl07ehJwMZ": {
+                "chunkId": "DpsJ5PUDOkmyZNp25TR2E",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "HUDa_tZOgMp3av4uJML5c"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": -180,
+                          "end": 180
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 36000
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              },
+              "ImZzmi7q_MZS2qLuiFeM6": {
+                "chunkId": "vrTGU_iJMurDc7IFze544",
+                "index": 0,
+                "mappings": [
+                  {
+                    "mappedParam": {
+                      "id": "cZ3lJTAtLvdTGxy8TV56B"
+                    },
+                    "ranges": [
+                      {
+                        "bounds": {
+                          "type": "numeric",
+                          "start": -300,
+                          "end": 300
+                        },
+                        "chunkValues": {
+                          "type": "range",
+                          "chunkStart": 0,
+                          "chunkEnd": 60000
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "triggers": []
+              }
+            },
+            "conditions": {}
+          }
+        },
+        "structure3DNodes": {
+          "5Nf3ZFQkhKpEJvZ1dx0LX": {
+            "codexId": "node",
+            "children": [],
+            "transform": {
+              "type": "trs"
+            },
+            "controls": [
+              {
+                "type": "linear",
+                "axis": "x",
+                "commonAxis": "x",
+                "target": {
+                  "type": "parameter",
+                  "parameter": {
+                    "id": "cZ3lJTAtLvdTGxy8TV56B"
+                  }
+                }
+              },
+              {
+                "type": "rotate",
+                "axis": "x",
+                "commonAxis": "x",
+                "target": {
+                  "type": "parameter",
+                  "parameter": {
+                    "id": "QXgDyjIJ5RLriMzcWSYwm"
+                  }
+                }
+              },
+              {
+                "type": "linear",
+                "axis": "y",
+                "commonAxis": "y",
+                "target": {
+                  "type": "parameter",
+                  "parameter": {
+                    "id": "aHPSz7OGvFtqFqHl1G-5i"
+                  }
+                }
+              },
+              {
+                "type": "rotate",
+                "axis": "y",
+                "commonAxis": "y",
+                "target": {
+                  "type": "parameter",
+                  "parameter": {
+                    "id": "kJHmZZAVIah0n5zF97XyP"
+                  }
+                }
+              },
+              {
+                "type": "linear",
+                "axis": "z",
+                "commonAxis": "z",
+                "target": {
+                  "type": "parameter",
+                  "parameter": {
+                    "id": "gMm6yNuihlOj6P7Z7ljJw"
+                  }
+                }
+              },
+              {
+                "type": "rotate",
+                "axis": "z",
+                "commonAxis": "z",
+                "target": {
+                  "type": "parameter",
+                  "parameter": {
+                    "id": "HUDa_tZOgMp3av4uJML5c"
+                  }
+                }
+              }
+            ],
+            "localized": {}
+          }
+        },
+        "localizations": {
+          "qSpPcsOZYIDyAt3rj9TzM": {
+            "strings": {
+              "en-US": "Movement control for visualization and other virtual environments."
+            },
+            "exportKey": "movable_description"
+          }
+        },
+        "sourceLocale": "en-US",
+        "structure3D": {
+          "codexId": "structure",
+          "access": [
+            "read"
+          ],
+          "lifetime": "static",
+          "rootNodes": [
+            "5Nf3ZFQkhKpEJvZ1dx0LX"
+          ]
+        }
+      }
+    }
+  }
+}

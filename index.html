@@ -11,7 +11,7 @@
        * Loading screen. It paints before any JS runs, so the app's .dark class
        * and theme tokens don't apply yet. Colors are literals matching
        * --background and --primary in src/index.css, and the theme follows the
-       * OS instead of the saved theme setting.
+       * OS.
        */
       .app-loading {
         position: fixed;
@@ -31,7 +31,7 @@
       .app-loading-head {
         stroke: oklch(0.52 0.27 293);
       }
-      .app-loading-orbit path {
+      .app-loading-orbit {
         animation: app-loading-orbit 1.6s linear infinite;
       }
       /* The hex path runs counterclockwise, so a growing offset moves the comet clockwise. */
@@ -68,8 +68,6 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root">
-      <!-- React replaces this on first render. The paths are copies of
-           src/components/icons/AppLogoMark.svg. -->
       <div class="app-loading" role="status">
         <svg
           viewBox="0 0 24 24"
@@ -82,6 +80,11 @@
           aria-label="Loading Fluxite Foundry"
         >
           <defs>
+            <path
+              id="app-loading-hex"
+              pathLength="100"
+              d="M20.5 15.8V8.2a1.91 1.91 0 0 0-.944-1.645l-6.612-3.8a1.88 1.88 0 0 0-1.888 0l-6.612 3.8A1.9 1.9 0 0 0 3.5 8.2v7.602a1.91 1.91 0 0 0 .944 1.644l6.612 3.8a1.88 1.88 0 0 0 1.888 0l6.612-3.8A1.9 1.9 0 0 0 20.5 15.8"
+            />
             <filter
               id="app-loading-glow"
               x="-30%"
@@ -97,49 +100,40 @@
               </feMerge>
             </filter>
           </defs>
-          <path
-            class="app-loading-ring"
-            d="M20.5 15.8V8.2a1.91 1.91 0 0 0-.944-1.645l-6.612-3.8a1.88 1.88 0 0 0-1.888 0l-6.612 3.8A1.9 1.9 0 0 0 3.5 8.2v7.602a1.91 1.91 0 0 0 .944 1.644l6.612 3.8a1.88 1.88 0 0 0 1.888 0l6.612-3.8A1.9 1.9 0 0 0 20.5 15.8"
-          />
+          <use href="#app-loading-hex" class="app-loading-ring" />
           <!-- The comet is several dashes sharing a leading edge, each longer and
                fainter than the last. Lengths are percent of the ring. -->
           <g class="app-loading-orbit" filter="url(#app-loading-glow)">
-            <path
-              pathLength="100"
+            <use
+              href="#app-loading-hex"
               stroke-dasharray="36 64"
               opacity="0.07"
-              d="M20.5 15.8V8.2a1.91 1.91 0 0 0-.944-1.645l-6.612-3.8a1.88 1.88 0 0 0-1.888 0l-6.612 3.8A1.9 1.9 0 0 0 3.5 8.2v7.602a1.91 1.91 0 0 0 .944 1.644l6.612 3.8a1.88 1.88 0 0 0 1.888 0l6.612-3.8A1.9 1.9 0 0 0 20.5 15.8"
             />
-            <path
-              pathLength="100"
+            <use
+              href="#app-loading-hex"
               stroke-dasharray="26 74"
               opacity="0.12"
-              d="M20.5 15.8V8.2a1.91 1.91 0 0 0-.944-1.645l-6.612-3.8a1.88 1.88 0 0 0-1.888 0l-6.612 3.8A1.9 1.9 0 0 0 3.5 8.2v7.602a1.91 1.91 0 0 0 .944 1.644l6.612 3.8a1.88 1.88 0 0 0 1.888 0l6.612-3.8A1.9 1.9 0 0 0 20.5 15.8"
             />
-            <path
-              pathLength="100"
+            <use
+              href="#app-loading-hex"
               stroke-dasharray="18 82"
               opacity="0.2"
-              d="M20.5 15.8V8.2a1.91 1.91 0 0 0-.944-1.645l-6.612-3.8a1.88 1.88 0 0 0-1.888 0l-6.612 3.8A1.9 1.9 0 0 0 3.5 8.2v7.602a1.91 1.91 0 0 0 .944 1.644l6.612 3.8a1.88 1.88 0 0 0 1.888 0l6.612-3.8A1.9 1.9 0 0 0 20.5 15.8"
             />
-            <path
-              pathLength="100"
+            <use
+              href="#app-loading-hex"
               stroke-dasharray="12 88"
               opacity="0.32"
-              d="M20.5 15.8V8.2a1.91 1.91 0 0 0-.944-1.645l-6.612-3.8a1.88 1.88 0 0 0-1.888 0l-6.612 3.8A1.9 1.9 0 0 0 3.5 8.2v7.602a1.91 1.91 0 0 0 .944 1.644l6.612 3.8a1.88 1.88 0 0 0 1.888 0l6.612-3.8A1.9 1.9 0 0 0 20.5 15.8"
             />
-            <path
-              pathLength="100"
+            <use
+              href="#app-loading-hex"
               stroke-dasharray="7 93"
               opacity="0.5"
-              d="M20.5 15.8V8.2a1.91 1.91 0 0 0-.944-1.645l-6.612-3.8a1.88 1.88 0 0 0-1.888 0l-6.612 3.8A1.9 1.9 0 0 0 3.5 8.2v7.602a1.91 1.91 0 0 0 .944 1.644l6.612 3.8a1.88 1.88 0 0 0 1.888 0l6.612-3.8A1.9 1.9 0 0 0 20.5 15.8"
             />
-            <path
+            <use
+              href="#app-loading-hex"
               class="app-loading-head"
-              pathLength="100"
               stroke-width="1.9"
               stroke-dasharray="3 97"
-              d="M20.5 15.8V8.2a1.91 1.91 0 0 0-.944-1.645l-6.612-3.8a1.88 1.88 0 0 0-1.888 0l-6.612 3.8A1.9 1.9 0 0 0 3.5 8.2v7.602a1.91 1.91 0 0 0 .944 1.644l6.612 3.8a1.88 1.88 0 0 0 1.888 0l6.612-3.8A1.9 1.9 0 0 0 20.5 15.8"
             />
           </g>
           <path d="M14 12a2 2 0 1 1-4 0m4 0a2 2 0 1 0-4 0m4 0h3m-7 0H7" />
