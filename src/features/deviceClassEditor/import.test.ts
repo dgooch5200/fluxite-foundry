@@ -1,6 +1,11 @@
 import { describe, test, expect } from "vitest";
 import { getImportedDeviceClassEditor } from "./import";
-import { CodexId, DeviceClassDocument, EntityId } from "app/persistentState";
+import {
+  CodexId,
+  DeviceClassDocument,
+  DmxSerializer,
+  EntityId,
+} from "app/persistentState";
 import type {
   DeviceClass,
   ParameterClass,
@@ -15,6 +20,7 @@ import type {
   Chunk,
   MappingGroup,
   Mapping,
+  MappingBounds,
   MappingRange,
   Trigger,
   Condition,
@@ -30,6 +36,7 @@ function createMinimalDeviceClass(): DeviceClass {
     "@description": "test.description",
     publishDate: "2024-01-01T00:00:00.000Z",
     author: "Test Author",
+    locale: "de-DE",
     info: {
       manufacturer: {
         name: "Test Manufacturer",
@@ -292,11 +299,10 @@ function createMapping(
 function createRangeMapping(
   chunkStart: number,
   chunkEnd: number,
-  opts?: { start?: number | boolean; end?: number | boolean },
+  bounds: MappingBounds = { type: "null" },
 ): MappingRange {
   return {
-    start: opts?.start,
-    end: opts?.end,
+    bounds,
     chunkValues: { type: "range", value: { start: chunkStart, end: chunkEnd } },
   };
 }
@@ -307,11 +313,10 @@ function createSequenceMapping(
     chunkEnd: number;
     hold: { milliseconds: number } | "indefinite";
   }>,
-  opts?: { start?: number | boolean; end?: number | boolean },
+  bounds: MappingBounds = { type: "null" },
 ): MappingRange {
   return {
-    start: opts?.start,
-    end: opts?.end,
+    bounds,
     chunkValues: { type: "sequence", value: steps },
   };
 }
@@ -323,16 +328,26 @@ function createTrigger(
   return { command, mappings };
 }
 
-function addDmxSerializer(dc: DeviceClass, estaDmx: EstaDmx): void {
+function addDmxSerializer(
+  dc: DeviceClass,
+  estaDmx: EstaDmx | undefined,
+  id = "dmx",
+): void {
   dc.serializers ??= {};
-  dc.serializers["dmx"] = {
+  dc.serializers[id] = {
     type: "EstaDmx",
     value: {
       access: ["read"],
       lifetime: "static",
-      default: estaDmx,
+      ...(estaDmx ? { default: estaDmx } : {}),
     },
   };
+}
+
+function onlyDmxSerializer(editor: DeviceClassDocument): DmxSerializer {
+  const serializers = Object.values(editor.dmxSerializers);
+  expect(serializers).toHaveLength(1);
+  return serializers[0];
 }
 
 const TEST_ORG = { type: "org" as const, id: "test-org" };
@@ -350,13 +365,13 @@ describe("getImportedDeviceClassEditor", () => {
         "test-id",
         "1.0.0",
         dc,
-        "en-US",
       );
 
       expect(editor.deviceClassId).toBe("test-id");
       expect(editor.deviceClassVersion).toBe("1.0.0");
       expect(editor.basicData.publishDate).toBe("2024-01-01T00:00:00.000Z");
       expect(editor.basicData.author).toBe("Test Author");
+      expect(editor.sourceLocale).toBe("de-DE");
       expect(editor.basicData.manufacturerName).toBe("Test Manufacturer");
       expect(editor.basicData.manufacturerUrl).toBe("https://example.com");
       expect(editor.basicData.manufacturerEstaId).toBe("1234");
@@ -377,7 +392,6 @@ describe("getImportedDeviceClassEditor", () => {
         "test-id",
         "1.0.0",
         dc,
-        "en-US",
       );
 
       expect(editor.basicData.history).toEqual({
@@ -394,7 +408,6 @@ describe("getImportedDeviceClassEditor", () => {
         "test-id",
         "1.0.0",
         dc,
-        "en-US",
       );
 
       expect(editor.libraries).toEqual({
@@ -416,7 +429,6 @@ describe("getImportedDeviceClassEditor", () => {
         "test-id",
         "1.0.0",
         dc,
-        "en-US",
       );
 
       // Reconstruct a map keyed by the import/export key, not the internal
@@ -442,7 +454,6 @@ describe("getImportedDeviceClassEditor", () => {
         "test-id",
         "1.0.0",
         dc,
-        "en-US",
       );
 
       expect(Object.keys(editor.localizations)).not.toContain("test.key");
@@ -455,7 +466,6 @@ describe("getImportedDeviceClassEditor", () => {
         "test-id",
         "1.0.0",
         dc,
-        "en-US",
       );
 
       expect(Object.keys(editor.localizations)).toHaveLength(0);
@@ -477,7 +487,6 @@ describe("getImportedDeviceClassEditor", () => {
         "test-id",
         "1.0.0",
         dc,
-        "en-US",
       );
 
       const paramClasses = Object.values(editor.parameterClasses);
@@ -504,7 +513,6 @@ describe("getImportedDeviceClassEditor", () => {
         "test-id",
         "1.0.0",
         dc,
-        "en-US",
       );
 
       const enumChoices = Object.values(editor.enumChoices);
@@ -526,7 +534,6 @@ describe("getImportedDeviceClassEditor", () => {
         "test-id",
         "1.0.0",
         dc,
-        "en-US",
       );
 
       expect(Object.values(editor.parameterClasses)).toHaveLength(3);
@@ -547,7 +554,6 @@ describe("getImportedDeviceClassEditor", () => {
         "test-id",
         "1.0.0",
         dc,
-        "en-US",
       );
 
       const structClasses = Object.values(editor.structureClasses);
@@ -571,7 +577,6 @@ describe("getImportedDeviceClassEditor", () => {
         "test-id",
         "1.0.0",
         dc,
-        "en-US",
       );
 
       const serClasses = Object.values(editor.serializerClasses);
@@ -595,7 +600,6 @@ describe("getImportedDeviceClassEditor", () => {
         "test-id",
         "1.0.0",
         dc,
-        "en-US",
       );
 
       const resClasses = Object.values(editor.resourceClasses);
@@ -619,7 +623,6 @@ describe("getImportedDeviceClassEditor", () => {
         "test-id",
         "1.0.0",
         dc,
-        "en-US",
       );
 
       const cmdClasses = Object.values(editor.commandClasses);
@@ -652,7 +655,6 @@ describe("getImportedDeviceClassEditor", () => {
         "test-id",
         "1.0.0",
         dc,
-        "en-US",
       );
 
       const args = Object.values(editor.commandClassArguments);
@@ -682,7 +684,6 @@ describe("getImportedDeviceClassEditor", () => {
         "test-id",
         "1.0.0",
         dc,
-        "en-US",
       );
 
       const returns = Object.values(editor.commandClassReturnValues);
@@ -713,7 +714,6 @@ describe("getImportedDeviceClassEditor", () => {
         "test-id",
         "1.0.0",
         dc,
-        "en-US",
       );
 
       const enumChoices = Object.values(editor.enumChoices);
@@ -737,7 +737,6 @@ describe("getImportedDeviceClassEditor", () => {
         "test-id",
         "1.0.0",
         dc,
-        "en-US",
       );
 
       const params = Object.values(editor.parameters);
@@ -766,7 +765,6 @@ describe("getImportedDeviceClassEditor", () => {
         "test-id",
         "1.0.0",
         dc,
-        "en-US",
       );
 
       const params = Object.values(editor.parameters);
@@ -789,7 +787,6 @@ describe("getImportedDeviceClassEditor", () => {
         "test-id",
         "1.0.0",
         dc,
-        "en-US",
       );
 
       const params = Object.values(editor.parameters);
@@ -808,7 +805,6 @@ describe("getImportedDeviceClassEditor", () => {
         "test-id",
         "1.0.0",
         dc,
-        "en-US",
       );
 
       const params = Object.values(editor.parameters);
@@ -824,7 +820,7 @@ describe("getImportedDeviceClassEditor", () => {
         maximum: 100,
         minimumModifier: "minMod",
         maximumModifier: "maxMod",
-        default: 50,
+        default: { type: "numeric", value: 50 },
         looping: true,
         friendlyName: "Friendly Value",
       });
@@ -834,7 +830,6 @@ describe("getImportedDeviceClassEditor", () => {
         "test-id",
         "1.0.0",
         dc,
-        "en-US",
       );
 
       const param = Object.values(editor.parameters)[0];
@@ -843,9 +838,31 @@ describe("getImportedDeviceClassEditor", () => {
       expect(param.maximum).toBe(100);
       expect(param.minimumModifier).toBe("minMod");
       expect(param.maximumModifier).toBe("maxMod");
-      expect(param.default).toBe(50);
+      expect(param.default).toEqual({ type: "numeric", value: 50 });
       expect(param.wrapping).toBe(true);
       expect(param.localized.friendlyName).toBe("Friendly Value");
+    });
+
+    test("imports an inactive default", () => {
+      const dc = createMinimalDeviceClass();
+      addParamClass(dc, "test.param");
+      addParam(dc, "inactive", "test.param", {
+        default: { type: "inactive" },
+      });
+      addParam(dc, "unset", "test.param");
+
+      const editor = getImportedDeviceClassEditor(
+        TEST_ORG,
+        "test-id",
+        "1.0.0",
+        dc,
+      );
+
+      const params = Object.values(editor.parameters);
+      const inactive = params.find((p) => p.codexId === "inactive")!;
+      const unset = params.find((p) => p.codexId === "unset")!;
+      expect(inactive.default).toEqual({ type: "inactive" });
+      expect(unset.default).toBeUndefined();
     });
 
     test("imports parameter with enum exclusions", () => {
@@ -866,7 +883,6 @@ describe("getImportedDeviceClassEditor", () => {
         "test-id",
         "1.0.0",
         dc,
-        "en-US",
       );
 
       const param = Object.values(editor.parameters)[0];
@@ -894,7 +910,6 @@ describe("getImportedDeviceClassEditor", () => {
         "test-id",
         "1.0.0",
         dc,
-        "en-US",
       );
 
       const additionalChoices = Object.values(editor.enumChoices).filter(
@@ -914,7 +929,6 @@ describe("getImportedDeviceClassEditor", () => {
         "test-id",
         "1.0.0",
         dc,
-        "en-US",
       );
 
       expect(editor.parameterEditors).toHaveLength(2);
@@ -935,7 +949,6 @@ describe("getImportedDeviceClassEditor", () => {
         "test-id",
         "1.0.0",
         dc,
-        "en-US",
       );
 
       const resources = Object.values(editor.resources);
@@ -957,7 +970,6 @@ describe("getImportedDeviceClassEditor", () => {
         "test-id",
         "1.0.0",
         dc,
-        "en-US",
       );
 
       expect(editor.resourceEditors).toHaveLength(2);
@@ -978,7 +990,6 @@ describe("getImportedDeviceClassEditor", () => {
         "test-id",
         "1.0.0",
         dc,
-        "en-US",
       );
 
       const commands = Object.values(editor.commands);
@@ -1015,7 +1026,6 @@ describe("getImportedDeviceClassEditor", () => {
         "test-id",
         "1.0.0",
         dc,
-        "en-US",
       );
 
       const cmd = Object.values(editor.commands)[0];
@@ -1044,7 +1054,6 @@ describe("getImportedDeviceClassEditor", () => {
         "test-id",
         "1.0.0",
         dc,
-        "en-US",
       );
 
       expect(editor.commandEditors).toHaveLength(2);
@@ -1070,12 +1079,12 @@ describe("DMX serializer import", () => {
       "test-id",
       "1.0.0",
       dc,
-      "en-US",
     );
 
-    expect(editor.dmxSerializer).toBeDefined();
-    expect(Object.keys(editor.dmxSerializer!.chunks)).toHaveLength(1);
-    expect(Object.keys(editor.dmxSerializer!.mappingGroups)).toHaveLength(1);
+    expect(Object.keys(onlyDmxSerializer(editor).chunks)).toHaveLength(1);
+    expect(Object.keys(onlyDmxSerializer(editor).mappingGroups)).toHaveLength(
+      1,
+    );
   });
 
   test("imports chunk offsets correctly", () => {
@@ -1090,10 +1099,9 @@ describe("DMX serializer import", () => {
       "test-id",
       "1.0.0",
       dc,
-      "en-US",
     );
 
-    const chunks = Object.values(editor.dmxSerializer!.chunks);
+    const chunks = Object.values(onlyDmxSerializer(editor).chunks);
     expect(chunks[0].offsets).toEqual([0, 1, 2]);
   });
 
@@ -1120,10 +1128,9 @@ describe("DMX serializer import", () => {
       "test-id",
       "1.0.0",
       dc,
-      "en-US",
     );
 
-    const mapping = Object.values(editor.dmxSerializer!.mappingGroups)[0]
+    const mapping = Object.values(onlyDmxSerializer(editor).mappingGroups)[0]
       .mappings[0];
     const panId = Object.entries(editor.parameters).find(
       ([, p]) => p.codexId === "pan",
@@ -1140,7 +1147,10 @@ describe("DMX serializer import", () => {
       createMappingGroup({
         mappings: [
           createMapping("intensity", [
-            createRangeMapping(0, 255, { start: 0, end: 100 }),
+            createRangeMapping(0, 255, {
+              type: "numeric",
+              value: { start: 0, end: 100 },
+            }),
           ]),
         ],
       }),
@@ -1153,13 +1163,11 @@ describe("DMX serializer import", () => {
       "test-id",
       "1.0.0",
       dc,
-      "en-US",
     );
 
-    const range = Object.values(editor.dmxSerializer!.mappingGroups)[0]
+    const range = Object.values(onlyDmxSerializer(editor).mappingGroups)[0]
       .mappings[0].ranges[0];
-    expect(range.start).toBe(0);
-    expect(range.end).toBe(100);
+    expect(range.bounds).toEqual({ type: "numeric", start: 0, end: 100 });
     expect(range.chunkValues).toEqual({
       type: "range",
       chunkStart: 0,
@@ -1180,7 +1188,7 @@ describe("DMX serializer import", () => {
                 { chunkStart: 0, chunkEnd: 127, hold: { milliseconds: 100 } },
                 { chunkStart: 128, chunkEnd: 255, hold: "indefinite" },
               ],
-              { start: 0, end: 1 },
+              { type: "numeric", value: { start: 0, end: 1 } },
             ),
           ]),
         ],
@@ -1194,10 +1202,9 @@ describe("DMX serializer import", () => {
       "test-id",
       "1.0.0",
       dc,
-      "en-US",
     );
 
-    const range = Object.values(editor.dmxSerializer!.mappingGroups)[0]
+    const range = Object.values(onlyDmxSerializer(editor).mappingGroups)[0]
       .mappings[0].ranges[0];
     expect(range.chunkValues.type).toBe("sequence");
     if (range.chunkValues.type === "sequence") {
@@ -1228,7 +1235,10 @@ describe("DMX serializer import", () => {
         mappings: [
           createMapping("intensity", [createRangeMapping(0, 255)], {
             unmappedParams: [
-              { parameter: { id: "pan", index: 1 }, start: 0, end: 180 },
+              {
+                parameter: { id: "pan", index: 1 },
+                bounds: { type: "numeric", value: { start: 0, end: 180 } },
+              },
             ],
           }),
         ],
@@ -1242,10 +1252,9 @@ describe("DMX serializer import", () => {
       "test-id",
       "1.0.0",
       dc,
-      "en-US",
     );
 
-    const unmapped = Object.values(editor.dmxSerializer!.mappingGroups)[0]
+    const unmapped = Object.values(onlyDmxSerializer(editor).mappingGroups)[0]
       .mappings[0].unmappedParams;
     expect(unmapped).toHaveLength(1);
     const panId = Object.entries(editor.parameters).find(
@@ -1253,8 +1262,11 @@ describe("DMX serializer import", () => {
     )![0];
     expect(unmapped![0].parameter.id).toBe(panId);
     expect(unmapped![0].parameter.index).toBe(1);
-    expect(unmapped![0].start).toBe(0);
-    expect(unmapped![0].end).toBe(180);
+    expect(unmapped![0].bounds).toEqual({
+      type: "numeric",
+      start: 0,
+      end: 180,
+    });
   });
 
   test("imports triggers", () => {
@@ -1285,10 +1297,9 @@ describe("DMX serializer import", () => {
       "test-id",
       "1.0.0",
       dc,
-      "en-US",
     );
 
-    const triggers = Object.values(editor.dmxSerializer!.mappingGroups)[0]
+    const triggers = Object.values(onlyDmxSerializer(editor).mappingGroups)[0]
       .triggers;
     expect(triggers).toHaveLength(1);
     // The minimal device class defines no "reset" command, so the reference
@@ -1331,10 +1342,9 @@ describe("DMX serializer import", () => {
       "test-id",
       "1.0.0",
       dc,
-      "en-US",
     );
 
-    const conditions = Object.values(editor.dmxSerializer!.conditions);
+    const conditions = Object.values(onlyDmxSerializer(editor).conditions);
     expect(conditions).toHaveLength(1);
     expect(conditions[0].conditionType).toBe("chunkRef");
     if (conditions[0].conditionType === "chunkRef") {
@@ -1383,10 +1393,9 @@ describe("DMX serializer import", () => {
       "test-id",
       "1.0.0",
       dc,
-      "en-US",
     );
 
-    const conditions = Object.values(editor.dmxSerializer!.conditions);
+    const conditions = Object.values(onlyDmxSerializer(editor).conditions);
     expect(conditions).toHaveLength(3); // 1 group + 2 chunk refs
 
     const groupCond = conditions.find((c) => c.conditionType === "group");
@@ -1425,27 +1434,27 @@ describe("DMX serializer import", () => {
       "test-id",
       "1.0.0",
       dc,
-      "en-US",
     );
 
-    const mappingGroups = Object.values(editor.dmxSerializer!.mappingGroups);
+    const mappingGroups = Object.values(
+      onlyDmxSerializer(editor).mappingGroups,
+    );
     expect(mappingGroups).toHaveLength(3);
 
     const indices = mappingGroups.map((mg) => mg.index).sort();
     expect(indices).toEqual([0, 1, 2]);
   });
 
-  test("handles undefined dmxSerializer", () => {
+  test("imports no DMX serializers when the device class has none", () => {
     const dc = createMinimalDeviceClass();
     const editor = getImportedDeviceClassEditor(
       TEST_ORG,
       "test-id",
       "1.0.0",
       dc,
-      "en-US",
     );
 
-    expect(editor.dmxSerializer).toBeUndefined();
+    expect(editor.dmxSerializers).toEqual({});
   });
 
   test("imports multiple chunks with their respective mapping groups", () => {
@@ -1475,15 +1484,101 @@ describe("DMX serializer import", () => {
       "test-id",
       "1.0.0",
       dc,
-      "en-US",
     );
 
-    expect(Object.keys(editor.dmxSerializer!.chunks)).toHaveLength(2);
-    expect(Object.keys(editor.dmxSerializer!.mappingGroups)).toHaveLength(2);
+    expect(Object.keys(onlyDmxSerializer(editor).chunks)).toHaveLength(2);
+    expect(Object.keys(onlyDmxSerializer(editor).mappingGroups)).toHaveLength(
+      2,
+    );
 
     // Verify mapping groups reference correct chunks
-    const mappingGroups = Object.values(editor.dmxSerializer!.mappingGroups);
+    const mappingGroups = Object.values(
+      onlyDmxSerializer(editor).mappingGroups,
+    );
     const chunkIds = new Set(mappingGroups.map((mg) => mg.chunkId));
     expect(chunkIds.size).toBe(2);
+  });
+
+  test("imports every DMX serializer with its ID, access and lifetime", () => {
+    const dc = createMinimalDeviceClass();
+    const basic = createEstaDmx();
+    basic.chunks["0"] = createChunk([0]);
+    const extended = createEstaDmx();
+    extended.chunks["0"] = createChunk([0]);
+    extended.chunks["1"] = createChunk([1]);
+    addDmxSerializer(dc, basic, "basic");
+    dc.serializers!["extended"] = {
+      type: "EstaDmx",
+      value: {
+        access: ["read", "write"],
+        lifetime: "persistent",
+        default: extended,
+      },
+    };
+
+    const editor = getImportedDeviceClassEditor(
+      TEST_ORG,
+      "test-id",
+      "1.0.0",
+      dc,
+    );
+
+    const serializers = Object.values(editor.dmxSerializers);
+    expect(
+      serializers.map(({ codexId, access, lifetime, chunks }) => ({
+        codexId,
+        access,
+        lifetime,
+        chunkCount: Object.keys(chunks).length,
+      })),
+    ).toEqual([
+      { codexId: "basic", access: ["read"], lifetime: "static", chunkCount: 1 },
+      {
+        codexId: "extended",
+        access: ["read", "write"],
+        lifetime: "persistent",
+        chunkCount: 2,
+      },
+    ]);
+  });
+
+  test("imports a DMX serializer without a default value as an empty one", () => {
+    const dc = createMinimalDeviceClass();
+    addDmxSerializer(dc, undefined);
+
+    const editor = getImportedDeviceClassEditor(
+      TEST_ORG,
+      "test-id",
+      "1.0.0",
+      dc,
+    );
+
+    expect(onlyDmxSerializer(editor)).toEqual({
+      codexId: "dmx",
+      access: ["read"],
+      lifetime: "static",
+      chunks: {},
+      mappingGroups: {},
+      conditions: {},
+    });
+  });
+
+  test("does not import serializers that are not DMX serializers", () => {
+    const dc = createMinimalDeviceClass();
+    dc.serializers = {
+      custom: {
+        type: "Other",
+        value: { class: "custom", access: ["read"], lifetime: "static" },
+      },
+    };
+
+    const editor = getImportedDeviceClassEditor(
+      TEST_ORG,
+      "test-id",
+      "1.0.0",
+      dc,
+    );
+
+    expect(editor.dmxSerializers).toEqual({});
   });
 });

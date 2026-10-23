@@ -9,6 +9,7 @@ import {
   DeviceClass,
   EstaDmx,
   Lifetime,
+  MappingBounds,
   Parameter,
   ParameterAccess,
   ParameterClass,
@@ -26,8 +27,9 @@ import {
   DeviceClassDocument,
   DmxChunkRefCondition,
   DmxConditionGroup,
+  DmxMappingBounds,
   DmxMappingChunkValuesSchema,
-  DmxSerializerState,
+  DmxSerializer,
   DmxTrigger,
   EntityId,
   LocalizationKey,
@@ -130,6 +132,20 @@ function convertChunkValues(
   };
 }
 
+function convertMappingBounds(bounds: DmxMappingBounds): MappingBounds {
+  switch (bounds.type) {
+    case "null":
+      return bounds;
+    case "numeric":
+      return {
+        type: "numeric",
+        value: { start: bounds.start, end: bounds.end },
+      };
+    case "bool":
+      return { type: "bool", value: { start: bounds.start, end: bounds.end } };
+  }
+}
+
 export function exportDeviceClass(editor: DeviceClassDocument): DeviceClass {
   // Build a translation from the internal opaque localization keys to the ones
   // used in the exported format.
@@ -139,6 +155,7 @@ export function exportDeviceClass(editor: DeviceClassDocument): DeviceClass {
     "@description": keys.of(editor.basicData.localized.description),
     publishDate: editor.basicData.publishDate,
     author: editor.basicData.author,
+    locale: editor.sourceLocale,
     history: editor.basicData.history,
     info: {
       manufacturer: {
@@ -167,7 +184,7 @@ export function exportDeviceClass(editor: DeviceClassDocument): DeviceClass {
   exportParameters(editor, codexClass, keys);
   exportResources(editor, codexClass);
   exportCommands(editor, codexClass, keys);
-  exportDmxSerializer(editor, codexClass);
+  exportDmxSerializers(editor, codexClass);
 
   return codexClass;
 }
@@ -723,24 +740,20 @@ function exportCommands(
   }
 }
 
-function exportDmxSerializer(
+function exportDmxSerializers(
   editor: DeviceClassDocument,
   codexClass: DeviceClass,
 ) {
-  if (!editor.dmxSerializer) {
-    return;
-  }
+  for (const dmx of Object.values(editor.dmxSerializers)) {
+    const estaDmx = convertDmxSerializerToEstaDmx(editor, dmx);
 
-  const estaDmx = convertDmxSerializerToEstaDmx(editor, editor.dmxSerializer);
-
-  if (Object.keys(estaDmx.chunks).length > 0) {
-    codexClass.serializers = codexClass.serializers || {};
-    codexClass.serializers.dmx = {
+    codexClass.serializers ??= {};
+    codexClass.serializers[dmx.codexId] = {
       type: "EstaDmx",
       value: {
-        access: ["read"],
-        lifetime: "static",
-        default: estaDmx,
+        access: dmx.access,
+        lifetime: dmx.lifetime,
+        ...(Object.keys(estaDmx.chunks).length > 0 ? { default: estaDmx } : {}),
       },
     };
   }
@@ -748,7 +761,7 @@ function exportDmxSerializer(
 
 function convertDmxSerializerToEstaDmx(
   editor: DeviceClassDocument,
-  dmx: DmxSerializerState,
+  dmx: DmxSerializer,
 ): EstaDmx {
   const result: EstaDmx = {
     chunks: {},
@@ -782,16 +795,14 @@ function convertDmxSerializerToEstaDmx(
           mappings: mg.mappings.map((m) => ({
             mappedParam: convertParamReference(editor, m.mappedParam),
             ranges: m.ranges.map((r) => ({
-              start: r.start,
-              end: r.end,
+              bounds: convertMappingBounds(r.bounds),
               chunkValues: convertChunkValues(r.chunkValues),
             })),
             ...(m.unmappedParams
               ? {
                   unmappedParams: m.unmappedParams.map((up) => ({
                     parameter: convertParamReference(editor, up.parameter),
-                    start: up.start,
-                    end: up.end,
+                    bounds: convertMappingBounds(up.bounds),
                   })),
                 }
               : {}),
@@ -813,7 +824,7 @@ function convertDmxSerializerToEstaDmx(
 }
 
 function convertConditionsToNested(
-  dmx: DmxSerializerState,
+  dmx: DmxSerializer,
   mappingGroupId: EntityId,
   chunkIdMap: Map<EntityId, string>,
 ): Condition[] {
@@ -832,7 +843,7 @@ function convertConditionsToNested(
 }
 
 function convertConditionToNested(
-  dmx: DmxSerializerState,
+  dmx: DmxSerializer,
   conditionId: EntityId,
   chunkIdMap: Map<EntityId, string>,
 ): Condition {

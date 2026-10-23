@@ -4,6 +4,7 @@ import {
   DeviceClass,
   E173Archive,
   EstaDmx,
+  MappingBounds,
   MappingRange,
   Trigger,
   UnmappedParam,
@@ -30,6 +31,7 @@ import {
   toEditorParameterReference,
 } from "./referenceResolution";
 import {
+  Access,
   LocalOrImportedId,
   ClassReference,
   CodexId,
@@ -40,12 +42,14 @@ import {
   DmxConditionGroup,
   DmxConditionParent,
   DmxMapping,
+  DmxMappingBounds,
   DmxMappingRange,
-  DmxSerializerState,
+  DmxSerializer,
   DmxTrigger,
   DmxUnmappedParam,
   Command,
   EntityId,
+  Lifetime,
   LocalizationKey,
   Resource,
   ParameterCount,
@@ -64,7 +68,6 @@ export async function importDeviceClassEditor(
   id: string,
   version: string,
   deviceClass: DeviceClass,
-  sourceLocale: string,
   archive?: ArchiveToImport,
 ) {
   const newDeviceClass = archive
@@ -73,16 +76,9 @@ export async function importDeviceClassEditor(
         id,
         version,
         deviceClass,
-        sourceLocale,
         archive,
       )
-    : getImportedDeviceClassEditor(
-        orgId,
-        id,
-        version,
-        deviceClass,
-        sourceLocale,
-      );
+    : getImportedDeviceClassEditor(orgId, id, version, deviceClass);
 
   updateAppPersistentState((state) => {
     const newId = newEntityId();
@@ -105,8 +101,7 @@ export function getNewDeviceClassEditor(
     orgId,
     deviceClassId,
     "1.0.0",
-    getDefaultDeviceClass(deviceClassId),
-    sourceLocale,
+    getDefaultDeviceClass(deviceClassId, sourceLocale),
   );
 }
 
@@ -115,23 +110,12 @@ export function getImportedDeviceClassEditor(
   id: string,
   version: string,
   codexClass: DeviceClass,
-  sourceLocale: string,
 ): DeviceClassDocument {
   const localizations: Record<LocalizationKey, Localization> = {};
   const locKeys = importDocumentLocalizations(
     codexClass.localizations,
     localizations,
   );
-
-  let dmx: EstaDmx | undefined = undefined;
-
-  // TODO: support multiple DMX serializers
-  if (codexClass.serializers) {
-    for (const value of Object.values(codexClass.serializers ?? {})) {
-      if (value.type === "EstaDmx" && value.value.default)
-        dmx = value.value.default;
-    }
-  }
 
   const editor: DeviceClassDocument = {
     type: documentTypes.DEVICE_CLASS,
@@ -170,8 +154,9 @@ export function getImportedDeviceClassEditor(
     commandClassArguments: {},
     commandClassReturnValues: {},
     enumChoices: {},
+    dmxSerializers: {},
     localizations,
-    sourceLocale,
+    sourceLocale: codexClass.locale,
   };
 
   // This is used only temporarily for the purpose of importing items that
@@ -189,9 +174,7 @@ export function getImportedDeviceClassEditor(
   importResources(codexClass, editor, deviceLibraryIndex);
   importCommands(codexClass, editor, deviceLibraryIndex, locKeys);
 
-  if (dmx) {
-    editor.dmxSerializer = convertEstaDmxToEditorState(editor, dmx);
-  }
+  importDmxSerializers(codexClass, editor);
 
   return editor;
 }
@@ -458,16 +441,9 @@ async function getImportedDeviceClassEditorWithAssets(
   id: string,
   version: string,
   deviceClass: DeviceClass,
-  sourceLocale: string,
   archive: ArchiveToImport,
 ) {
-  const editor = getImportedDeviceClassEditor(
-    orgId,
-    id,
-    version,
-    deviceClass,
-    sourceLocale,
-  );
+  const editor = getImportedDeviceClassEditor(orgId, id, version, deviceClass);
 
   const qualifiedId = buildQualifiedId(EntityType.Dev, orgId, id);
   editor.resourceAssets = await loadResourceAssets(
@@ -531,11 +507,39 @@ async function loadResourceAssets(
 // DMX Conversion
 // ---------------------------------------------------------------------------
 
+function importDmxSerializers(
+  imported: DeviceClass,
+  editor: DeviceClassDocument,
+) {
+  for (const [codexId, serializer] of Object.entries(
+    imported.serializers ?? {},
+  )) {
+    if (serializer.type !== "EstaDmx") {
+      continue;
+    }
+
+    const { access, lifetime, default: estaDmx } = serializer.value;
+    editor.dmxSerializers[newEntityId()] = convertEstaDmxToEditorState(
+      editor,
+      CodexId(codexId),
+      access,
+      lifetime,
+      estaDmx ?? { chunks: {} },
+    );
+  }
+}
+
 function convertEstaDmxToEditorState(
   editor: DeviceClassDocument,
+  codexId: CodexId,
+  access: Access[],
+  lifetime: Lifetime,
   estaDmx: EstaDmx,
-): DmxSerializerState {
-  const result: DmxSerializerState = {
+): DmxSerializer {
+  const result: DmxSerializer = {
+    codexId,
+    access,
+    lifetime,
     chunks: {},
     mappingGroups: {},
     conditions: {},
@@ -591,7 +595,7 @@ function convertConditionsToNormalized(
   conditions: Condition[],
   parent: DmxConditionParent,
   chunkIdMap: Record<string, EntityId>,
-  result: DmxSerializerState,
+  result: DmxSerializer,
 ) {
   for (const condition of conditions) {
     if (condition.type === "group") {
@@ -655,10 +659,20 @@ function convertMapping(
   };
 }
 
+function convertMappingBounds(bounds: MappingBounds): DmxMappingBounds {
+  switch (bounds.type) {
+    case "null":
+      return bounds;
+    case "numeric":
+      return { type: "numeric", ...bounds.value };
+    case "bool":
+      return { type: "bool", ...bounds.value };
+  }
+}
+
 function convertMappingRange(r: MappingRange): DmxMappingRange {
   return {
-    start: r.start,
-    end: r.end,
+    bounds: convertMappingBounds(r.bounds),
     chunkValues:
       r.chunkValues.type === "range"
         ? {
@@ -687,8 +701,7 @@ function convertUnmappedParam(
       CodexId(up.parameter.id),
       up.parameter.index,
     ),
-    start: up.start,
-    end: up.end,
+    bounds: convertMappingBounds(up.bounds),
   };
 }
 
