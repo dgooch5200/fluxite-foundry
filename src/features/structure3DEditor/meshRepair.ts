@@ -95,7 +95,6 @@ export function repairNormals(object: Object3D): NormalsRepairSummary {
     const turned = flips.get(geometry)?.slice();
     if (!turned) return undefined;
     const position = geometry.getAttribute("position");
-    // A file may have no normals.
     const stored = geometry.getAttribute("normal") as Attribute | undefined;
 
     const index = triangleCorners(geometry);
@@ -264,7 +263,7 @@ function gatherTriangles(object: Object3D) {
       points.push(...v.fromBufferAttribute(position, i).applyMatrix4(matrix));
       const valid = stored && isNormal(v.fromBufferAttribute(stored, i));
       normals.push(
-        ...(valid ? v.applyMatrix3(normalMatrix).normalize() : [NaN, NaN, NaN]),
+        ...(valid ? v.applyNormalMatrix(normalMatrix) : [NaN, NaN, NaN]),
       );
     }
     const start = corners.length / 3;
@@ -379,8 +378,7 @@ function trianglesToFlip(object: Object3D): Map<BufferGeometry, Uint8Array> {
         );
       }),
     );
-    // Only a closed part's volume says which side is out; an open one's
-    // concave side may be its front, like a reflector's.
+    // Only a closed part's volume says which side is out.
     const outward = closed ? facing(position, corners, part, flip) : 0;
     let turn = outward < 0;
     if (!outward) {
@@ -481,7 +479,6 @@ function fixNormals(stored: Attribute, position: Attribute, index: number[]) {
         n.copy(face);
         fixed++;
       } else if (n.dot(face) < -SIDEWAYS * n.length()) {
-        // Keeps the file's smoothing.
         n.negate();
         fixed++;
       }

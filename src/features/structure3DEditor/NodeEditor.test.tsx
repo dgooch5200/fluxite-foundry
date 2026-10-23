@@ -4,6 +4,7 @@ import { Group, Matrix4 } from "three";
 import { act, render, screen } from "test/render";
 import {
   createEmptyDeviceClassEditor,
+  currentEditor,
   resetAllStores,
   TEST_EDITOR_ID,
 } from "test/utils";
@@ -17,7 +18,6 @@ import { MODEL_RESOURCE_CLASS } from "./validation";
 import {
   addStructureWithRoot,
   control,
-  currentEditor,
   ROOT,
   showModelAtRoot,
 } from "./testFixtures";
@@ -177,6 +177,9 @@ describe("NodeEditor transform", () => {
       translate: [2, 0, 0],
       rotate: [0, 0, 270],
     });
+    expect(screen.getByRole("textbox", { name: "Rotate Z" })).toHaveValue(
+      "270",
+    );
 
     await user.click(screen.getByRole("radio", { name: "Matrix" }));
     expect(transform()).toEqual({

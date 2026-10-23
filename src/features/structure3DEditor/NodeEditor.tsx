@@ -151,6 +151,8 @@ interface Props {
   issues: Structure3DIssue[];
 }
 
+type Modify = (recipe: (draft: Draft<Structure3DNode>) => void) => void;
+
 export const NodeEditor = ({ id, issues }: Props) => {
   const node = useStructure3DNode(id);
   const friendlyName = useStructure3DNodeFriendlyName(id);
@@ -162,8 +164,7 @@ export const NodeEditor = ({ id, issues }: Props) => {
     return <RenderError />;
   }
 
-  const modify = (recipe: (draft: Draft<Structure3DNode>) => void) =>
-    modifyStructure3DNode(id, recipe);
+  const modify: Modify = (recipe) => modifyStructure3DNode(id, recipe);
 
   const issuesFor = (field: Structure3DIssueField) =>
     issues.filter((issue) => issue.field === field);
@@ -239,8 +240,6 @@ export const NodeEditor = ({ id, issues }: Props) => {
     </div>
   );
 };
-
-type Modify = (recipe: (draft: Draft<Structure3DNode>) => void) => void;
 
 interface TransformFieldsProps {
   transform: Structure3DTransform;
@@ -854,12 +853,13 @@ const ModelFields = ({ id, visual, issues, modify }: ModelFieldsProps) => {
     });
   }
 
+  const modifyVisual = (recipe: (draft: Draft<Structure3DVisual>) => void) =>
+    modify((draft) => draft.visual && recipe(draft.visual));
+
   const setNodeOrSceneName = (newValue: string) =>
-    modify((draft) => {
-      if (draft.visual) {
-        assignOrDelete(draft.visual, "nodeOrSceneName", newValue || undefined);
-      }
-    });
+    modifyVisual((visual) =>
+      assignOrDelete(visual, "nodeOrSceneName", newValue || undefined),
+    );
 
   const importModel = () =>
     importGltfModel(id).catch((error: unknown) =>
@@ -926,11 +926,8 @@ const ModelFields = ({ id, visual, issues, modify }: ModelFieldsProps) => {
                   )}
                   selectedValue={visual.quality}
                   onSelectionChanged={(value) =>
-                    modify((draft) => {
-                      if (draft.visual) {
-                        draft.visual.quality =
-                          value as Structure3DVisual["quality"];
-                      }
+                    modifyVisual((visual) => {
+                      visual.quality = value as Structure3DVisual["quality"];
                     })
                   }
                 />

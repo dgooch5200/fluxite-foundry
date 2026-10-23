@@ -886,8 +886,10 @@ const ResizeHandle = ({ height, onResize, onResizeEnd }: ResizeHandleProps) => {
 
   const clamp = (newHeight: number) =>
     Math.round(MathUtils.clamp(newHeight, MIN_HEIGHT, window.innerHeight));
-  const draggedTo = (clientY: number) =>
-    drag.current && clamp(drag.current.height + clientY - drag.current.y);
+  const dragTo = (clientY: number, resize: (height: number) => void) => {
+    if (drag.current)
+      resize(clamp(drag.current.height + clientY - drag.current.y));
+  };
 
   return (
     <div
@@ -903,14 +905,8 @@ const ResizeHandle = ({ height, onResize, onResizeEnd }: ResizeHandleProps) => {
         event.currentTarget.setPointerCapture(event.pointerId);
         drag.current = { y: event.clientY, height };
       }}
-      onPointerMove={(event) => {
-        const newHeight = draggedTo(event.clientY);
-        if (newHeight !== null) onResize(newHeight);
-      }}
-      onPointerUp={(event) => {
-        const newHeight = draggedTo(event.clientY);
-        if (newHeight !== null) onResizeEnd(newHeight);
-      }}
+      onPointerMove={(event) => dragTo(event.clientY, onResize)}
+      onPointerUp={(event) => dragTo(event.clientY, onResizeEnd)}
       // Also ends a drag the browser cancels
       onLostPointerCapture={() => {
         drag.current = null;

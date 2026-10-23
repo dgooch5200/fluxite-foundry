@@ -10,16 +10,7 @@ import {
   Vector3,
 } from "three";
 import { repairMesh, repairNormals } from "./meshRepair";
-
-function makeGeometry(positions: number[][], index?: number[]) {
-  const geometry = new BufferGeometry();
-  geometry.setAttribute(
-    "position",
-    new Float32BufferAttribute(positions.flat(), 3),
-  );
-  if (index) geometry.setIndex(index);
-  return geometry;
-}
+import { makeGeometry } from "./testFixtures";
 
 const vertex = (geometry: BufferGeometry, i: number) =>
   geometry.index ? geometry.index.getX(i) : i;

@@ -3,8 +3,10 @@ import { vi } from "vitest";
 import { MessageDescriptor } from "@lingui/core";
 import type { DeviceClass } from "@cpwg-community/delver";
 import { useAppPersistentStore, useAppRuntimeStore } from "app/store";
+import { getCurrentDocumentOfType } from "app/documents";
 import {
   AppPersistentState,
+  DeviceClassDocument,
   documentTypes,
   EntityId,
   getDefaultState,
@@ -154,6 +156,17 @@ export function createEmptyDeviceClassEditor() {
   state.session.selectedDocumentId = editorId;
 
   useAppPersistentStore.setState(state, true);
+}
+
+export function currentEditor(): DeviceClassDocument {
+  const editor = getCurrentDocumentOfType(
+    useAppPersistentStore.getState(),
+    documentTypes.DEVICE_CLASS,
+  );
+  if (!editor) {
+    throw new Error("The open document is not a device class");
+  }
+  return editor;
 }
 
 function defaultLibraryVersions(): Record<string, string> {

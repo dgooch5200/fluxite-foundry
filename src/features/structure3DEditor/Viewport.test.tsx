@@ -6,6 +6,7 @@ import { Toaster } from "sonner";
 import { act, render, screen } from "test/render";
 import {
   createEmptyDeviceClassEditor,
+  currentEditor,
   resetAllStores,
   TEST_EDITOR_ID,
 } from "test/utils";
@@ -19,7 +20,6 @@ import { parseGltfAsset } from "./useGltf";
 import {
   addMotionParameters,
   addStructureWithRoot,
-  currentEditor,
   MODEL,
   PAN,
   ROOT,

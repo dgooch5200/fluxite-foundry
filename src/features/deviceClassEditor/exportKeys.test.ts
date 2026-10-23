@@ -7,23 +7,15 @@ import {
 } from "app/persistentState";
 import {
   createEmptyDeviceClassEditor,
+  currentEditor,
   resetAllStores,
   testUndoLabel,
 } from "test/utils";
-import { getCurrentEditor, updateCurrentEditor } from "./state";
-import { useAppPersistentStore } from "app/store";
+import { updateCurrentEditor } from "./state";
 import { buildExportKeys } from "./exportKeys";
 
-function document() {
-  const editor = getCurrentEditor(useAppPersistentStore.getState());
-  if (!editor) {
-    throw new Error("no device class document is open");
-  }
-  return editor;
-}
-
 function nameOf(key: LocalizationKey | undefined): string | undefined {
-  return buildExportKeys(document()).of(key);
+  return buildExportKeys(currentEditor()).of(key);
 }
 
 // Adds a string with no exportKey, as a string created in the app has.
@@ -45,7 +37,7 @@ describe("export keys", () => {
 
   describe("derives a readable name from what refers to the string", () => {
     test("for the device class description", () => {
-      expect(nameOf(document().basicData.localized.description)).toBe(
+      expect(nameOf(currentEditor().basicData.localized.description)).toBe(
         "devClass_description",
       );
     });
@@ -176,7 +168,7 @@ describe("export keys", () => {
       };
     });
 
-    const keys = buildExportKeys(document());
+    const keys = buildExportKeys(currentEditor());
     expect(keys.of(first)).not.toBe(keys.of(second));
   });
 

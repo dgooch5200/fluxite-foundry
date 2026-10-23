@@ -21,7 +21,7 @@ export type GltfState =
 
 const LOADING: GltfState = { status: "loading" };
 
-// By asset ID. Stored assets never change, so entries never go stale.
+// Stored assets never change, so entries never go stale.
 // TODO: entries are never dropped, so models no longer used stay in memory.
 const cache = new Map<string, GltfState>();
 const listeners = new Set<() => void>();

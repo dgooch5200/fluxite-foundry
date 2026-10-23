@@ -5,6 +5,7 @@ import {
   BufferGeometry,
   Float32BufferAttribute,
   Group,
+  MathUtils,
   Matrix4,
   Mesh,
   MeshStandardMaterial,
@@ -15,12 +16,7 @@ import {
 } from "three";
 import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter.js";
 import { GLTFLoader } from "three-stdlib";
-import {
-  CodexId,
-  EntityId,
-  Structure3DControl,
-  Structure3DNode,
-} from "app/persistentState";
+import { EntityId, Structure3DControl } from "app/persistentState";
 import {
   addMissingNormals,
   buildStructureObject,
@@ -29,17 +25,7 @@ import {
   gltfObjectNames,
   shadeSmooth,
 } from "./sceneGraph";
-
-function makeNode(fields: Partial<Structure3DNode> = {}): Structure3DNode {
-  return {
-    codexId: CodexId("node"),
-    children: [],
-    transform: { type: "trs" },
-    controls: [],
-    localized: {},
-    ...fields,
-  };
-}
+import { makeGeometry, makeNode } from "./testFixtures";
 
 function control(
   type: Structure3DControl["type"],
@@ -239,14 +225,16 @@ describe("gltfObjectNames", () => {
 describe("addMissingNormals", () => {
   test("gives a mesh without normals flat ones, one per face", () => {
     // Two faces folded along a shared edge: one in the XY plane, one in YZ.
-    const geometry = new BufferGeometry();
-    geometry.setAttribute(
-      "position",
-      new Float32BufferAttribute([0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1], 3),
-    );
-    geometry.setIndex([0, 1, 2, 0, 2, 3]);
     const folded = new Mesh(
-      geometry,
+      makeGeometry(
+        [
+          [0, 0, 0],
+          [1, 0, 0],
+          [0, 1, 0],
+          [0, 0, 1],
+        ],
+        [0, 1, 2, 0, 2, 3],
+      ),
       new MeshStandardMaterial({ flatShading: true }),
     );
     const withNormals = new Mesh(new BufferGeometry());
@@ -259,7 +247,6 @@ describe("addMissingNormals", () => {
     addMissingNormals(new Group().add(folded, withNormals));
 
     const normal = (i: number) => normalAt(folded, i);
-    // Shared vertices would have averaged the two faces' normals.
     expect([0, 1, 2].map(normal)).toEqual([
       [0, 0, 1],
       [0, 0, 1],
@@ -279,18 +266,15 @@ describe("addMissingNormals", () => {
 describe("shadeSmooth", () => {
   // Two triangles sharing the edge (0, 0, 0)-(0, 1, 0), folded by `degrees`.
   function foldedMesh(degrees: number) {
-    const angle = (degrees * Math.PI) / 180;
-    const geometry = new BufferGeometry();
-    geometry.setAttribute(
-      "position",
-      new Float32BufferAttribute(
-        [
-          ...[0, 0, 0, 1, 0, 0, 0, 1, 0],
-          ...[0, 0, 0, 0, 1, 0, -Math.cos(angle), 0, Math.sin(angle)],
-        ],
-        3,
-      ),
-    );
+    const angle = MathUtils.degToRad(degrees);
+    const geometry = makeGeometry([
+      [0, 0, 0],
+      [1, 0, 0],
+      [0, 1, 0],
+      [0, 0, 0],
+      [0, 1, 0],
+      [-Math.cos(angle), 0, Math.sin(angle)],
+    ]);
     geometry.computeVertexNormals();
     return new Mesh(geometry);
   }

@@ -80,7 +80,6 @@ export function buildStructureObject(
 
   const build = (nodeId: EntityId, parent: Object3D) => {
     const node = nodes[nodeId];
-    // Ids in state can dangle or loop.
     if (!node || visited.has(nodeId)) return;
     visited.add(nodeId);
 
@@ -121,10 +120,7 @@ export function buildStructureObject(
   return root;
 }
 
-interface GltfScenes {
-  scene: Object3D;
-  scenes: Object3D[];
-}
+type GltfScenes = Pick<GLTF, "scene" | "scenes">;
 
 // The spec uses the file's names, which GLTFLoader keeps in userData.name.
 // TODO: a scene whose name has spaces or `[].:/` won't match.
@@ -241,7 +237,6 @@ export function addMissingNormals(object: Object3D) {
 
 const smoothedGeometries = new WeakMap<BufferGeometry, BufferGeometry>();
 
-// Like Blender's Smooth by Angle, on copies shared by every model of a file.
 export function shadeSmooth(object: Object3D) {
   object.traverse((part) => {
     if (!(part instanceof Mesh)) return;

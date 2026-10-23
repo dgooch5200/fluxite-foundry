@@ -117,7 +117,6 @@ const NO_VIEW_SETTINGS: Structure3DViewSettings = {};
 
 export interface ControlParameterOption {
   ref: ParameterReference;
-  // The reference as Fluxite Codex writes it, e.g. "pan" or "frame[1]"
   label: string;
   unit?: FCUnitName;
 }
@@ -341,12 +340,8 @@ export async function importGltfModel(nodeId: EntityId) {
 
   // The user may have switched documents or removed the node while a large
   // file was stored. The orphaned asset is left for startup cleanup.
-  const state = useAppPersistentStore.getState();
-  const editor = getCurrentEditor(state);
-  if (
-    state.session.selectedDocumentId !== documentId ||
-    !editor?.structure3DNodes[nodeId]
-  ) {
+  const editor = editorIfStillSelected(documentId);
+  if (!editor?.structure3DNodes[nodeId]) {
     return;
   }
 
@@ -426,11 +421,9 @@ async function repairModel<Summary extends Record<string, number>>(
     ),
   );
 
-  // As with an import, the document may have changed meanwhile.
-  const latest = useAppPersistentStore.getState();
   if (
-    latest.session.selectedDocumentId !== documentId ||
-    getCurrentEditor(latest)?.resources[visual.resource]?.default !== file
+    editorIfStillSelected(documentId)?.resources[visual.resource]?.default !==
+    file
   ) {
     return undefined;
   }
@@ -473,6 +466,13 @@ export function deleteStructure3DNode(id: EntityId) {
 // ---------------------------------------------------------------------------
 // Utils
 // ---------------------------------------------------------------------------
+
+function editorIfStillSelected(documentId: EntityId | undefined) {
+  const state = useAppPersistentStore.getState();
+  return state.session.selectedDocumentId === documentId
+    ? getCurrentEditor(state)
+    : undefined;
+}
 
 function childIds(
   editor: Pick<DeviceClassDocument, "structure3D" | "structure3DNodes">,

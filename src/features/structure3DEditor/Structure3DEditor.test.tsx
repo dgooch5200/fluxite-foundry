@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { act, render, screen } from "test/render";
 import {
   createEmptyDeviceClassEditor,
+  currentEditor,
   resetAllStores,
   testUndoLabel,
 } from "test/utils";
@@ -13,9 +14,7 @@ import {
   addMotionParameters,
   addStructureWithRoot,
   control,
-  currentEditor,
   PAN,
-  ROOT,
 } from "./testFixtures";
 
 // happy-dom has no WebGL.
@@ -115,23 +114,6 @@ describe("Structure3DEditor", () => {
     expect(
       screen.getByRole("combobox", { name: "Parameter" }),
     ).toHaveTextContent(PAN);
-  });
-
-  it("wraps rotations into 0 to 360 degrees", async () => {
-    const user = userEvent.setup();
-    addStructureWithRoot();
-    render(<Structure3DEditor />);
-    await user.click(screen.getByRole("button", { name: "base" }));
-
-    const rotateX = screen.getByLabelText("Rotate X");
-    await user.clear(rotateX);
-    await user.type(rotateX, "-90{Enter}");
-
-    expect(currentEditor().structure3DNodes[ROOT].transform).toEqual({
-      type: "trs",
-      rotate: [270, 0, 0],
-    });
-    expect(rotateX).toHaveValue("270");
   });
 
   it("deletes a node with everything beneath it", async () => {

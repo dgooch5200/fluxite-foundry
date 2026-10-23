@@ -1,14 +1,17 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { EntityId } from "app/persistentState";
 import { loadDefaultLibraries } from "codex/libraryStore";
-import { createEmptyDeviceClassEditor, resetAllStores } from "test/utils";
+import {
+  createEmptyDeviceClassEditor,
+  currentEditor,
+  resetAllStores,
+} from "test/utils";
 import { validateStructure3D } from "./validation";
 import {
   addMotionParameters,
   addMotionResource,
   addStructureWithRoot,
   control,
-  currentEditor,
   MODEL,
   PAN,
   ROOT,
