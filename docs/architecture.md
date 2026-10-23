@@ -124,6 +124,8 @@ We use a simple hexagon icon to represent the app, defined in `src/components/ic
 
 `scripts/generate-icons.mjs` (invoked from `npm run icons`) convert this to various static forms that are needed in places like the browser favicon and desktop app icons.
 
+`index.html` also draws the mark inline as the app's loading screen, which paints before any JS runs and is replaced when React first renders. Its paths are a hand-kept copy; `AppLogoMark.test.ts` fails if they drift from the source.
+
 ## Localization
 
 All user-visible text in the application must be localized using Lingui. See [UI Localization](./ui-localization.md) for details on how we handle translating the app's UI.
