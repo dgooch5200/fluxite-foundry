@@ -74,6 +74,8 @@ export function resetAppRuntimeStore() {
     {
       dmxControllers: {},
       dmxParamStates: {},
+      dmxEditorSerializers: {},
+      dmxControllerSerializers: {},
       sacnOutput: { settings: {} },
       dmxControllerLayouts: {},
       libraries: loadDefaultLibraries(),

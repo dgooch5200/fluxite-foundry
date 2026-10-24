@@ -562,7 +562,7 @@
     "translation": "Add a command to start editing"
   },
   "deviceClassEditor.dmxController.noMapping": {
-    "message": "Add a DMX parameter mapping in the DMX editor to use the test controller.",
+    "message": "Add a DMX parameter mapping in the DMX Mapping editor to use the test controller.",
     "placeholders": {},
     "comments": [],
     "origin": [
@@ -570,7 +570,7 @@
         "src/features/deviceClassEditor/controller/DmxController.tsx"
       ]
     ],
-    "translation": "Add a DMX parameter mapping in the DMX editor to use the test controller."
+    "translation": "Add a DMX parameter mapping in the DMX Mapping editor to use the test controller."
   },
   "deviceClassEditor.dmxEditor.list.emptyState": {
     "message": "Add a DMX slot group to start editing",
@@ -582,6 +582,17 @@
       ]
     ],
     "translation": "Add a DMX slot group to start editing"
+  },
+  "deviceClassEditor.dmxEditor.noModes": {
+    "message": "Add a mode to start editing DMX mappings",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/deviceClassEditor/dmxEditor/DmxEditor.tsx"
+      ]
+    ],
+    "translation": "Add a mode to start editing DMX mappings"
   },
   "itemClasses.parameterClasses.list.emptyState": {
     "message": "Add a parameter class to start editing",
@@ -792,6 +803,17 @@
     ],
     "translation": "Add DMX Mapping Group"
   },
+  "deviceClassEditor.dmx.undo.addMode": {
+    "message": "Add DMX Mode",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/deviceClassEditor/dmxEditor/state.ts"
+      ]
+    ],
+    "translation": "Add DMX Mode"
+  },
   "deviceClassEditor.dmx.undo.addParameterMapping": {
     "message": "Add DMX Parameter Mapping",
     "placeholders": {},
@@ -857,6 +879,17 @@
       ]
     ],
     "translation": "Add media type"
+  },
+  "deviceClassEditor.dmxModeBar.add": {
+    "message": "Add Mode",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/deviceClassEditor/dmxEditor/DmxModeBar.tsx"
+      ]
+    ],
+    "translation": "Add Mode"
   },
   "navbar.addEditor": {
     "message": "Add New Editor",
@@ -1390,6 +1423,17 @@
     ],
     "translation": "Cancel"
   },
+  "deviceClassEditor.dmxModeBar.deleteConfirm.cancel": {
+    "message": "Cancel",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/deviceClassEditor/dmxEditor/DmxModeBar.tsx"
+      ]
+    ],
+    "translation": "Cancel"
+  },
   "deviceClassEditor.dmxMappingRange.cancel": {
     "message": "Cancel",
     "placeholders": {},
@@ -1530,6 +1574,17 @@
       ]
     ],
     "translation": "Change"
+  },
+  "deviceClassEditor.dmx.undo.changeModeId": {
+    "message": "Change DMX Mode ID",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/deviceClassEditor/dmxEditor/state.ts"
+      ]
+    ],
+    "translation": "Change DMX Mode ID"
   },
   "deviceClassEditor.dmx.undo.changeOffsets": {
     "message": "Change DMX Offsets",
@@ -2478,6 +2533,17 @@
     ],
     "translation": "Delete DMX Mapping Group"
   },
+  "deviceClassEditor.dmx.undo.deleteMode": {
+    "message": "Delete DMX Mode",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/deviceClassEditor/dmxEditor/state.ts"
+      ]
+    ],
+    "translation": "Delete DMX Mode"
+  },
   "deviceClassEditor.dmx.undo.deleteParameterMapping": {
     "message": "Delete DMX Parameter Mapping",
     "placeholders": {},
@@ -2532,6 +2598,39 @@
       ]
     ],
     "translation": "Delete Enum Choice"
+  },
+  "deviceClassEditor.dmxModeBar.delete": {
+    "message": "Delete Mode",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/deviceClassEditor/dmxEditor/DmxModeBar.tsx"
+      ]
+    ],
+    "translation": "Delete Mode"
+  },
+  "deviceClassEditor.dmxModeBar.deleteConfirm.confirm": {
+    "message": "Delete Mode",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/deviceClassEditor/dmxEditor/DmxModeBar.tsx"
+      ]
+    ],
+    "translation": "Delete Mode"
+  },
+  "deviceClassEditor.dmxModeBar.deleteConfirm.title": {
+    "message": "Delete Mode?",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/deviceClassEditor/dmxEditor/DmxModeBar.tsx"
+      ]
+    ],
+    "translation": "Delete Mode?"
   },
   "deviceClassEditor.structure3DEditor.tree.deleteNode": {
     "message": "Delete Node",
@@ -3011,6 +3110,28 @@
       ]
     ],
     "translation": "Driven By"
+  },
+  "deviceClassEditor.dmx.undo.duplicateMode": {
+    "message": "Duplicate DMX Mode",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/deviceClassEditor/dmxEditor/state.ts"
+      ]
+    ],
+    "translation": "Duplicate DMX Mode"
+  },
+  "deviceClassEditor.dmxModeBar.duplicate": {
+    "message": "Duplicate Mode",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/deviceClassEditor/dmxEditor/DmxModeBar.tsx"
+      ]
+    ],
+    "translation": "Duplicate Mode"
   },
   "deviceClassEditor.sequenceStep.duration": {
     "message": "Duration",
@@ -4788,6 +4909,39 @@
       ]
     ],
     "translation": "Minimum Value"
+  },
+  "deviceClassEditor.dmxModeBar.mode": {
+    "message": "Mode",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/deviceClassEditor/dmxEditor/DmxModeBar.tsx"
+      ]
+    ],
+    "translation": "Mode"
+  },
+  "deviceClassEditor.dmxController.mode": {
+    "message": "Mode",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/deviceClassEditor/controller/DmxController.tsx"
+      ]
+    ],
+    "translation": "Mode"
+  },
+  "deviceClassEditor.dmxModeBar.modeId": {
+    "message": "Mode ID",
+    "placeholders": {},
+    "comments": [],
+    "origin": [
+      [
+        "src/features/deviceClassEditor/dmxEditor/DmxModeBar.tsx"
+      ]
+    ],
+    "translation": "Mode ID"
   },
   "deviceClassEditor.structure3DNodeEditor.model": {
     "message": "Model",
@@ -7083,6 +7237,21 @@
       ]
     ],
     "translation": "The document is no longer open."
+  },
+  "deviceClassEditor.dmxModeBar.deleteConfirm.description": {
+    "message": "The mode “{codexId}” will be deleted, along with its slot groups and parameter mappings.",
+    "placeholders": {
+      "codexId": [
+        "codexId"
+      ]
+    },
+    "comments": [],
+    "origin": [
+      [
+        "src/features/deviceClassEditor/dmxEditor/DmxModeBar.tsx"
+      ]
+    ],
+    "translation": "The mode “{codexId}” will be deleted, along with its slot groups and parameter mappings."
   },
   "deviceClassEditor.structure3DNodeEditor.modelUnreadable": {
     "message": "The model can't be shown: {reason}. Only GLB files, and .gltf files with everything embedded, can be shown.",

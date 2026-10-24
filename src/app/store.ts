@@ -259,6 +259,8 @@ function getDefaultRuntimeState(): AppRuntimeState {
   return {
     dmxControllers: {},
     dmxParamStates: {},
+    dmxEditorSerializers: {},
+    dmxControllerSerializers: {},
     sacnOutput: { settings: {} },
     dmxControllerLayouts: {},
     libraries: loadDefaultLibraries(),
